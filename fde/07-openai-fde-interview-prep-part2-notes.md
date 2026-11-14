@@ -193,9 +193,6 @@ Source: https://www.educative.io/courses/openai-forward-deployed-engineer-interv
 
 > 🔒 这里原本是本人真实经历的回答，已隐去。完整版本只保留在本地（project_deep_dive 第 35 篇）。
 
-  - 中文：四句话版：用户/义务 — 我的贡献 — 结果 — 可深入方向。
-  - 中文：加上取舍、被否决的方案（自建 pipeline）、边界。
-  - 中文：讲清各阶段边界在哪里、为什么。
 - Follow-up "What numbers can you share?" (EN): "I'd rather not quote volumes; I can tell you what shipped, what I designed, and where the cross-team boundary sits."
   - 中文：不报绝对业务量，不编指标。
 
@@ -302,12 +299,10 @@ Output: []
 ```python
 from typing import TypedDict
 
-
 class ResultRecord(TypedDict):
     request_id: str
     call_id: str
     payload: str
-
 
 def correlate(request_id: str, expected_ids: list[str], records: list[ResultRecord]) -> list[str]:
     """Return complete request-bound payloads in expected-call order."""
@@ -723,7 +718,6 @@ Source: https://www.educative.io/courses/openai-forward-deployed-engineer-interv
 
 > 🔒 这里原本是本人真实经历的回答，已隐去。完整版本只保留在本地（project_deep_dive 第 35 篇）。
 
-  - 中文：客户 = 内部合作团队；对方顾虑合理 → 复用 + 清晰分工 → 说明代价 → 反思。
 - Q: "What did you actually own, and what did they do?"
   - 中文：清楚划分贡献。
 
@@ -1398,14 +1392,12 @@ DATE = "2026-06-10"
 ENTITLEMENTS = {"R1", "R2"}  # trusted exercise input, not authentication
 SUPPORTED = {"R1-v2": {"R1 version 2 states a maximum of 4%."}}
 
-
 def eligible(doc):
     # In production, missing metadata must never default to eligible
     return (doc["doc"] in ENTITLEMENTS and doc["approved"] is True
             and doc["scope"] is True
             and (doc["start"] is None or doc["start"] <= DATE)
             and (doc["end"] is None or DATE < doc["end"]))  # exclusive end drops R1-v1
-
 
 def grade(kind, result):
     trace = result.get("trace")
@@ -2183,7 +2175,7 @@ Source: https://www.educative.io/courses/forward-deployed-engineer/the-openai-fd
 | Technical session | 从 take-home 出发延伸到 LLM 系统：检索、评测、失败模式、成本 | 技能评估 |
 | Final interviews | 多场：新场景的方案设计、技术深度、HM 对话 | 终面 Final interviews |
 
-  面经只提示**练什么**，从不告诉你自己流程的顺序、时长、评分；**第二个网站转述同一份报告仍然只是一份报告**。
+面经只提示**练什么**，从不告诉你自己流程的顺序、时长、评分；**第二个网站转述同一份报告仍然只是一份报告**。
 - 三类信息权威度：评估说明 > 官方指南 > 面经。**OpenAI 开发 AI 编码工具这一事实也不代表你在评估中可以用它们**。建议**有/无 AI 助手两种都练**。
 - 六维自评表给了每档的具体描述（0 缺失 / 1 部分 / 2 具体且有支撑）：
 
