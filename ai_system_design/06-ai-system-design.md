@@ -157,16 +157,16 @@
 
 | 词 | 大白话 | 详见 |
 |---|---|---|
-| **大语言模型（LLM, large language model）** | 根据参数内知识和当前上下文（context），逐个预测词元（token）的模型。ChatGPT、Claude 等应用使用这类模型；访问数据库由应用提供的工具代码完成 | [notes/01](notes/01-llm-basics.md) |
-| **token（词元）** | 模型处理文字的单位，可以是字词片段；不同语言和分词器（tokenizer）的切法不同。**输入输出限额和用量通常按 token 计算，估算应以实际分词为准** | notes/01 |
-| **提示词（prompt）** | 本次提供给模型的指令、资料、问题与相关历史；模型同时使用参数内知识。没有被提供或经工具取回的私有资料，不能假设模型知道 | notes/01 |
-| **上下文窗口（context window）** | 模型一次最多能读多少 token。塞太多会超限、变贵，关键信息也会被淹没 | notes/02 |
-| **工具调用（tool calling / function calling）** | 模型**自己不能执行任何操作**。流程是：① 我们把可用工具的说明（名字、参数格式）放进 prompt → ② 模型输出一个结构化请求，比如 `{tool: "getOrder", args: {orderId: "123"}}` → ③ **我们的代码**检查这个请求合不合法、有没有权限（permission），然后真正去执行 → ④ 把结果放回 prompt，模型再继续。所以“模型提议、服务端决定”说的就是第 ③ 步 | [notes/04](notes/04-agent-basics.md) |
-| **MCP（Model Context Protocol，模型上下文协议）** | 一个开放标准，规定工具怎么包装才能被各种 AI 应用发现和调用。一组相关工具打包成一个 **MCP server（工具服务）**；AI 应用的配置里挂了哪些 server，模型就只能看到、只能调用那些工具 | notes/04 |
-| **RAG（retrieval-augmented generation，检索增强生成）** | 先从文档库里搜出相关段落，放进 prompt，再让模型根据这些段落回答。解决“模型不知道公司内部资料”的问题 | [notes/03](notes/03-genai-system-architecture.md)、本文 §2.2 |
-| **workflow（工作流）vs agent（智能体）** | workflow：步骤顺序由**代码**事先写死，模型只在某一步里做判断。agent：由**模型自己**决定下一步调哪个工具、什么时候停。默认先用 workflow | notes/04、本文 §2.3 |
-| **评测（eval）** | 用一批有参考答案或评分标准（rubric）的测试样本衡量模型行为，**补充而不替代单元测试（unit tests）和集成测试（integration tests）**。**离线评测（offline eval）**：上线前跑固定数据集（dataset）；**线上指标（online metrics）**：真实流量里的信号，比如用户点踩、人工推翻率（human override rate） | 本文 §2.6 |
-| **预算（budget）** | 代码里写死的硬上限：每个任务最多多少 token、多少钱、调几次工具、跑多长时间。超了就停 | 本文 §2.7 |
+| **大语言模型（LLM, large language model）** | 根据参数内知识和当前上下文（context），逐个预测词元（token）的模型。ChatGPT、Claude 等应用使用这类模型；访问数据库由应用提供的工具代码完成 | [01 LLM 是什么](notes/01-llm-basics.md) |
+| **token（词元）** | 模型处理文字的单位，可以是字词片段；不同语言和分词器（tokenizer）的切法不同。**输入输出限额和用量通常按 token 计算，估算应以实际分词为准** | [01 LLM 是什么](notes/01-llm-basics.md) |
+| **提示词（prompt）** | 本次提供给模型的指令、资料、问题与相关历史；模型同时使用参数内知识。没有被提供或经工具取回的私有资料，不能假设模型知道 | [01 LLM 是什么](notes/01-llm-basics.md) |
+| **上下文窗口（context window）** | 模型一次最多能读多少 token。塞太多会超限、变贵，关键信息也会被淹没 | [02 推理成本与估算](notes/02-inference-and-estimation.md) |
+| **工具调用（tool calling / function calling）** | 模型**自己不能执行任何操作**。流程是：① 我们把可用工具的说明（名字、参数格式）放进 prompt → ② 模型输出一个结构化请求，比如 `{tool: "getOrder", args: {orderId: "123"}}` → ③ **我们的代码**检查这个请求合不合法、有没有权限（permission），然后真正去执行 → ④ 把结果放回 prompt，模型再继续。所以“模型提议、服务端决定”说的就是第 ③ 步 | [04 Agent 入门](notes/04-agent-basics.md) |
+| **MCP（Model Context Protocol，模型上下文协议）** | 一个开放标准，规定工具怎么包装才能被各种 AI 应用发现和调用。一组相关工具打包成一个 **MCP server（工具服务）**；AI 应用的配置里挂了哪些 server，模型就只能看到、只能调用那些工具 | [04 Agent 入门](notes/04-agent-basics.md) |
+| **RAG（retrieval-augmented generation，检索增强生成）** | 先从文档库里搜出相关段落，放进 prompt，再让模型根据这些段落回答。解决“模型不知道公司内部资料”的问题 | [03 GenAI 系统架构与 RAG](notes/03-genai-system-architecture.md)、[本文 §2.2 RAG](#s2-2) |
+| **workflow（工作流）vs agent（智能体）** | workflow：步骤顺序由**代码**事先写死，模型只在某一步里做判断。agent：由**模型自己**决定下一步调哪个工具、什么时候停。默认先用 workflow | [04 Agent 入门](notes/04-agent-basics.md)、[本文 §2.3 Agents 与工具调用](#s2-3) |
+| **评测（eval）** | 用一批有参考答案或评分标准（rubric）的测试样本衡量模型行为，**补充而不替代单元测试（unit tests）和集成测试（integration tests）**。**离线评测（offline eval）**：上线前跑固定数据集（dataset）；**线上指标（online metrics）**：真实流量里的信号，比如用户点踩、人工推翻率（human override rate） | [本文 §2.6 Eval](#s2-6) |
+| **预算（budget）** | 代码里写死的硬上限：每个任务最多多少 token、多少钱、调几次工具、跑多长时间。超了就停 | [本文 §2.7 Guardrails / Safety（安全防护）](#s2-7) |
 
 还有两个框架名会反复出现：**LangGraph**（一个 Python / JS 库，把 agent 写成“节点 + 共享状态（shared state）”的流程图，§2.12 详讲）和 **Temporal**（一个通用的持久化工作流引擎（durable workflow engine），流程崩溃后能从断点继续）。
 
@@ -252,8 +252,8 @@
 
 ### 0.4 初学者阅读路线（beginner reading path） <a id="s0-4"></a> [↑ 目录](#toc)
 
-1. **建立直觉（build intuition）**：读 §0.3，再读 [notes/01](notes/01-llm-basics.md)、[03](notes/03-genai-system-architecture.md)、[04](notes/04-agent-basics.md)、[05](notes/05-agent-safety.md)。先能解释模型、资料、检索与执行之间的关系。
-2. **理解机制（understand mechanisms）**：读 §2.2 的机制补充、§2.5 和 §2.11；[notes/02](notes/02-inference-and-estimation.md)、[07](notes/07-how-models-are-trained.md) 补推理（inference）与训练基础。
+1. **建立直觉（build intuition）**：读 §0.3，再读 [01 LLM 是什么](notes/01-llm-basics.md)、[03](notes/03-genai-system-architecture.md)、[04](notes/04-agent-basics.md)、[05](notes/05-agent-safety.md)。先能解释模型、资料、检索与执行之间的关系。
+2. **理解机制（understand mechanisms）**：读 §2.2 的机制补充、§2.5 和 §2.11；[02 推理成本与估算](notes/02-inference-and-estimation.md)、[07](notes/07-how-models-are-trained.md) 补推理（inference）与训练基础。
 3. **走通案例（work through an example）**：做 §5.3，从原文一路追到答案、失败与评测；用 §5.4 检查自己能否回答“为什么”。
 4. **组织面试答案（practice interview delivery）**：用 §1 框架练设计，再讲 §4 的真实项目。首次阅读可暂缓复杂多智能体（multi-agent）通信、GraphRAG 和 §2.12 框架 API；能讲清数据流后再回来。
 
@@ -800,7 +800,7 @@ RAG 提供可用的外部证据，不保证模型必然忠实使用。提示词�
 
 | # | 面试官问 | 追问陷阱 | 本节对应 |
 |---|---|---|---|
-| Q1 | What is RAG, in your own words? | “How do you chunk? How big? Why?” | 积木表 Chunking 行；端到端流水线；[notes/03 §3.3](notes/03-genai-system-architecture.md) |
+| Q1 | What is RAG, in your own words? | “How do you chunk? How big? Why?” | 积木表 Chunking 行；端到端流水线；[03 GenAI 系统架构与 RAG §3.3](notes/03-genai-system-architecture.md) |
 | Q2 | What's the biggest weakness of plain RAG? | “Have you actually hit that?” | Contextual retrieval；逐层排查表的 Parse / Chunk / Citation 行 |
 | Q3 | Is a multi-step research flow still RAG? | — | Agentic RAG 表的“谁决定检索”一行 |
 | Q4 | Will agentic RAG replace pipeline RAG? | “How do you decide which path a query takes?” | Agentic RAG 的“默认”一条；§2.3 workflow 先行；§2.6 |
@@ -1000,7 +1000,7 @@ RAG 提供可用的外部证据，不保证模型必然忠实使用。提示词�
 - **Reflection**：每步结果先对照原目标检查，偏离就重规划，而不是带着错继续往下走。**怎么判断“偏离”**：① 能用规则就用规则，比如计划里写了这一步的预期结果（“订单状态应为 SHIPPED”），代码比对实际结果；② 不能用规则时，让 LLM 评委按目标给 1–5 分，低于 3 分触发重规划；③ 重规划次数有上限（比如 2 次），超了就停下交给人。
 - **GenAI vs Agentic 的系统差异**：单次生成是无状态的，靠加副本（replica）水平扩展（scale out）、语义缓存（semantic cache）很好用；agent 有跨步骤状态、步骤间顺序依赖，**瓶颈（bottleneck）常在 orchestrator 的状态管理和外部 API 限流（rate limiting）**，缓存也难（同一个目标，今天和昨天的正确计划可能不同）。
 - **一条 trace 贯穿所有层**：要能分清失败来自 memory 读到过期数据、planner 幻觉（hallucination），还是下游 API 超时（timeout）。
-- 人在什么位置介入（HITL / HOTL / HATL）见 [notes/05 §4](notes/05-agent-safety.md)。
+- 人在什么位置介入（HITL / HOTL / HATL）见 [05 Agent 安全与可信 §4](notes/05-agent-safety.md)。
 
 > The LLM proposes, the orchestrator disposes. The planner never calls tools directly and tools never write memory directly; every transition goes through deterministic code that enforces auth, idempotency and budgets, and emits one trace. I start from a static plan and only re-plan when a step's result deviates from what the plan expected.
 
@@ -1024,7 +1024,7 @@ RAG 提供可用的外部证据，不保证模型必然忠实使用。提示词�
 
 #### 研究案例的共同骨架：生成 → 验证 → 反思 → 选择 <a id="h20"></a> [↑ 目录](#toc)
 
-> 来源：Educative《Agentic System Design Crash Course》Ch.2 全部案例课（MACRS、Eureka + Google ADK 实现、Mulan、SkillWeaver 思考题、WebVoyager）+ Final Thoughts，2026-10-26 读。WebVoyager 已在 [notes/06 §B](notes/06-case-studies.md)，这里只抽共性。
+> 来源：Educative《Agentic System Design Crash Course》Ch.2 全部案例课（MACRS、Eureka + Google ADK 实现、Mulan、SkillWeaver 思考题、WebVoyager）+ Final Thoughts，2026-10-26 读。WebVoyager 已在 [06 两个完整案例 §B](notes/06-case-studies.md)，这里只抽共性。
 
 ![生成-验证-反思-选择循环，以及 Eureka、MACRS、Mulan、coding agent 的对应](notes/images/i06-generate-verify-loop.svg)
 
@@ -1588,7 +1588,7 @@ TriageResult parseAndValidate(String raw) {
 
 **核心原则**：**所有防护在服务端用代码强制，不靠 prompt 劝模型。** prompt 里的“请不要……”只是第二道防线（line of defense），模型被注入后就不听了。
 
-防护分布在四个检查点（checkpoint）：**输入进来时 → 模型调用工具时 → 工具执行（tool execution）时 → 输出出去时**。零基础图解见 [notes/05](notes/05-agent-safety.md)（那里讲的是“三个关口：输入、工具、输出”，这里把“工具”拆成了“选工具”和“执行工具”两步，所以是四个）。
+防护分布在四个检查点（checkpoint）：**输入进来时 → 模型调用工具时 → 工具执行（tool execution）时 → 输出出去时**。零基础图解见 [05 Agent 安全与可信](notes/05-agent-safety.md)（那里讲的是“三个关口：输入、工具、输出”，这里把“工具”拆成了“选工具”和“执行工具”两步，所以是四个）。
 
 #### ① 提示注入（prompt injection） <a id="h32"></a> [↑ 目录](#toc)
 
@@ -1771,7 +1771,7 @@ TriageResult parseAndValidate(String raw) {
 
 #### 解码策略：一句话版本 <a id="h46"></a> [↑ 目录](#toc)
 
-temperature / top-k / top-p 的零基础解释见 [notes/01 §5](notes/01-llm-basics.md)。系统设计里要记住的只有：
+temperature / top-k / top-p 的零基础解释见 [01 LLM 是什么 §5](notes/01-llm-basics.md)。系统设计里要记住的只有：
 
 - 抽取、分类、生成代码 → 低 temperature；但 **temperature = 0 也不保证可复现（reproducible）**，所以门禁靠 eval 和结构化校验（上面的回归测试），不靠“每次输出一样”。
 - top-p 按概率质量截断，候选集随模型把握大小自动伸缩，所以比固定 k 更常用。
@@ -1803,7 +1803,7 @@ temperature / top-k / top-p 的零基础解释见 [notes/01 §5](notes/01-llm-ba
 
 - 梯度同步（sync）：参数服务器（简单，但单点和带宽（bandwidth）瓶颈）vs all-reduce（无中心）；ring all-reduce 每个节点只和邻居通信，带宽利用最好但对慢节点敏感；上千卡时用分层 all-reduce（组内先聚合（aggregate），组长之间再聚合）。
 - **纠正课程的一个说法**：课程说“GPU 显存（GPU memory）够大了，训练时很少需要模型并行”。对小模型成立，对前沿 LLM 不成立——几百 B 参数的模型单卡放不下，训练要 3D 并行（3D parallelism：数据并行 + 张量并行 + 流水线并行三者组合）+ ZeRO/FSDP 分片（sharding），推理也要 TP（常再加 PP）。
-- 推理部署的口头答法：先估显存（权重 + KV cache，见 [notes/02 §3](notes/02-inference-and-estimation.md)），**TP 放满一台 8 卡机；还放不下再加 PP 跨机；吞吐不够就加 DP 副本**。MoE 模型还有专家并行（expert parallelism：不同的专家子网络放在不同的卡上）。
+- 推理部署的口头答法：先估显存（权重 + KV cache，见 [02 推理成本与估算 §3](notes/02-inference-and-estimation.md)），**TP 放满一台 8 卡机；还放不下再加 PP 跨机；吞吐不够就加 DP 副本**。MoE 模型还有专家并行（expert parallelism：不同的专家子网络放在不同的卡上）。
 - 训练侧的容错：定期 checkpoint、监控、同构集群（homogeneous cluster：所有机器 GPU 型号相同）或按算力（compute）分配负载——知道即可，Staff SWE 面试很少深挖。
 
 > For a model that doesn't fit on one GPU, I'd shard it with tensor parallelism inside a node, where NVLink makes the per-layer all-reduce cheap, add pipeline parallelism across nodes only if it still doesn't fit, and scale throughput with data-parallel replicas behind the router. The sizing starts from weights plus KV cache, not from FLOPs.
@@ -1854,7 +1854,7 @@ temperature / top-k / top-p 的零基础解释见 [notes/01 §5](notes/01-llm-ba
 
 并行化（parallelize）独立的工具调用（tool calling）、减少轮数、给工具设比整体 deadline 更短的超时（timeout）。
 
-**自托管（self-hosted）模型时的 GPU 数估算**（零基础推导见 [notes/02 §5](notes/02-inference-and-estimation.md)）：
+**自托管（self-hosted）模型时的 GPU 数估算**（零基础推导见 [02 推理成本与估算 §5](notes/02-inference-and-estimation.md)）：
 
 - 常见教材公式 `参数 × 2 × 输出 token 数 ÷ 峰值 FLOPS` 只给出**算力下限**，会严重低估延迟。decode 是**显存带宽（memory bandwidth）**瓶颈：batch=1 时每个 token 都要读一遍全部权重（例：3B FP16 = 6GB，A100 80GB SXM 带宽 2,039 GB/s → 每 token ≥ ~2.9 ms），吞吐靠 batching 撑起来，batch 上限又被 KV cache 显存卡住。
 - 所以容量（capacity）按**压测（load testing）得到的单卡 tokens/s（在目标延迟下）** × 峰值（peak）流量 × 冗余（headroom / redundancy）来算，不按平均 QPS，也不按峰值 FLOPS。
@@ -1940,7 +1940,7 @@ request  trace_id=7f3a  user=hash(u123)  prompt_version=triage.v14  model=model-
 
 > **基础自测（basic self-check）**：[两道追问与中英文参考答案](#drill-211)；先解释机制，再背术语。
 
-> 微调（fine-tuning）到底是哪一步、模型是怎么训练出来的（预训练 → SFT → RLHF / DPO），零基础解释见 [notes/07](notes/07-how-models-are-trained.md)。
+> 微调（fine-tuning）到底是哪一步、模型是怎么训练出来的（预训练 → SFT → RLHF / DPO），零基础解释见 [07 模型怎么训练、跑在什么硬件上](notes/07-how-models-are-trained.md)。
 
 **机制补充：给模型看资料，和训练模型有什么不同？**
 
@@ -2874,12 +2874,12 @@ expense-process-v1#steps：提交材料后由财务审核，再付款。
 
 | 课程 | 读了 | 写进哪里 | 跳过及原因 |
 |---|---|---|---|
-| Grokking the Generative AI System Design | Ch.1 Intro；Ch.2 Preliminary ML、Evaluation Metrics、Parallelism、Inference Optimization、Key Concepts；Ch.3 BOTEC ×2；Ch.4 Interview Preparation、SCALED；Ch.5 文本生成系统训练与部署；Ch.11 Introduction to RAG、RAG System Design；Ch.12 Wrap-up；Ch.13 How LLMs Learn、CPU vs GPU vs TPU、Sampling、Semantic Caching、LLM Tool Calling、Regression Testing、Agentic AI Architecture、Agentic vs GenAI | notes/01–03、07（LLM 原理、推理与估算、对话 / RAG 架构、训练与硬件）；本文件 §2.3 工具调用形态 / 控制面（control plane）、§2.6 指标速查 / 回归测试、§2.8 语义缓存（semantic cache）/ 解码（decoding）/ 并行、§2.9 GPU 估算 | 图像 / 音频 / 视频 / 字幕 / ASR 各章和 Ch.13 里偏 ML 工程的几课（VAE、扩散、音频、CLIP、VLM）；4 个 mock interview 留到 Phase 2 |
-| Agentic System Design | Ch.1 全部 6 课；三个思考题（智能停车、自我改进网页 agent、AI 医院）；Ch.7 Web Agent Challenge、WebVoyager 架构与评估；Ch.11 OpenClaw；附录 Cheatsheet、Glossary、Landscape Guide | notes/04–06、08（agent 入门、安全、两个案例、三道练习）；本文件题库第 16、17 题 | 论文复述案例与 Google ADK / AutoGen 动手实现：可迁移的模式已由下一门课覆盖 |
-| Agentic System Design Crash Course | 11 课全读（ADK 实现和 Mulan 只看架构与结论） | 本文件 §2.3 “生成 → 验证 → 反思（reflection） → 选择”共同骨架（Eureka、MACRS、Mulan、技能库、六步框架，连到 06c Q3 coding agent） | 前 3 课与 notes/04、05 重复，只链接；“Design Your First Agent” 是 AI breakout，不读 |
+| Grokking the Generative AI System Design | Ch.1 Intro；Ch.2 Preliminary ML、Evaluation Metrics、Parallelism、Inference Optimization、Key Concepts；Ch.3 BOTEC ×2；Ch.4 Interview Preparation、SCALED；Ch.5 文本生成系统训练与部署；Ch.11 Introduction to RAG、RAG System Design；Ch.12 Wrap-up；Ch.13 How LLMs Learn、CPU vs GPU vs TPU、Sampling、Semantic Caching、LLM Tool Calling、Regression Testing、Agentic AI Architecture、Agentic vs GenAI | [01 LLM 是什么](notes/01-llm-basics.md)、[02 推理成本与估算](notes/02-inference-and-estimation.md)、[03 GenAI 系统架构与 RAG](notes/03-genai-system-architecture.md)、07（LLM 原理、推理与估算、对话 / RAG 架构、训练与硬件）；本文件 §2.3 工具调用形态 / 控制面（control plane）、§2.6 指标速查 / 回归测试、§2.8 语义缓存（semantic cache）/ 解码（decoding）/ 并行、§2.9 GPU 估算 | 图像 / 音频 / 视频 / 字幕 / ASR 各章和 Ch.13 里偏 ML 工程的几课（VAE、扩散、音频、CLIP、VLM）；4 个 mock interview 留到 Phase 2 |
+| Agentic System Design | Ch.1 全部 6 课；三个思考题（智能停车、自我改进网页 agent、AI 医院）；Ch.7 Web Agent Challenge、WebVoyager 架构与评估；Ch.11 OpenClaw；附录 Cheatsheet、Glossary、Landscape Guide | [04 Agent 入门](notes/04-agent-basics.md)、[05 Agent 安全与可信](notes/05-agent-safety.md)、[06 两个完整案例](notes/06-case-studies.md)、08（agent 入门、安全、两个案例、三道练习）；本文件题库第 16、17 题 | 论文复述案例与 Google ADK / AutoGen 动手实现：可迁移的模式已由下一门课覆盖 |
+| Agentic System Design Crash Course | 11 课全读（ADK 实现和 Mulan 只看架构与结论） | 本文件 §2.3 “生成 → 验证 → 反思（reflection） → 选择”共同骨架（Eureka、MACRS、Mulan、技能库、六步框架，连到 06c Q3 coding agent） | 前 3 课与 [04 Agent 入门](notes/04-agent-basics.md)、05 重复，只链接；“Design Your First Agent” 是 AI breakout，不读 |
 | Grokking Modern SD 里的 AI 课（ChatGPT、AI 数据基础设施、客服 bot、代码助手） | 未读 | — | 06c 的 Q2、Q3 已有对应题目，可选；读之前先 grep 避免重复 |
 
-**课程说法的纠正**（已在正文标注）：GPU 估算的“参数 × 2 ÷ 峰值（peak） FLOPS”公式严重低估 decode 延迟（§2.9、notes/02 §5.2）；FID 公式被简化（真 FID 用协方差）；“模型并行在训练中已不太需要”对前沿 LLM 不成立；语义缓存的延迟和省钱比例是课程给的量级，未独立核实；LangChain “AgentExecutor” 已过时（§2.12）。
+**课程说法的纠正**（已在正文标注）：GPU 估算的“参数 × 2 ÷ 峰值（peak） FLOPS”公式严重低估 decode 延迟（§2.9、[02 推理成本与估算](notes/02-inference-and-estimation.md) §5.2）；FID 公式被简化（真 FID 用协方差）；“模型并行在训练中已不太需要”对前沿 LLM 不成立；语义缓存的延迟和省钱比例是课程给的量级，未独立核实；LangChain “AgentExecutor” 已过时（§2.12）。
 
 
 <small>
@@ -2921,13 +2921,13 @@ expense-process-v1#steps：提交材料后由财务审核，再付款。
 - [ ] 口头回答 “LangGraph vs hand-rolled loop vs Temporal”，90 秒内，包含两种 durability 的区别和 lock-in 的应对
 - [ ] 用 §2.2 的逐层排查（troubleshooting / investigation）表讲一次 “our RAG answers are wrong — debug it”：从 oracle 测试开始，至少走到 4 层
 - [ ] 按 §2.2 “追问链演练”遮住英文口答 Q1–Q5，每题 60 秒内；Q2 的追问要用自己项目里一次真实的检索失败来答
-- [ ] 做第 16 题（常驻个人助理）45 分钟：必须讲出“常驻（always-on） vs serverless”的取舍（trade-off）和承重墙（load-bearing） / 可替换决策（[notes/06 §A](notes/06-case-studies.md)）
-- [ ] 用 [notes/02 §5.3](notes/02-inference-and-estimation.md) 的模板现场估一次 GPU 数，并说清为什么不用峰值（peak） FLOPS 算
+- [ ] 做第 16 题（常驻个人助理）45 分钟：必须讲出“常驻（always-on） vs serverless”的取舍（trade-off）和承重墙（load-bearing） / 可替换决策（[06 两个完整案例 §A](notes/06-case-studies.md)）
+- [ ] 用 [02 推理成本与估算 §5.3](notes/02-inference-and-estimation.md) 的模板现场估一次 GPU 数，并说清为什么不用峰值（peak） FLOPS 算
 - [ ] 口头回答 “How do you regression-test a non-deterministic LLM feature?”，60 秒内说出：多次运行 + 置信区间（confidence interval）、逐项退化阈值（degradation threshold）、smoke/full 两级、组合回滚（rollback）（§2.6）
 - [ ] 白板画 §2.8 的两层缓存（cache），并说出 3 个上线必备项（namespace、失效、错误命中率）
 - [ ] 回答 “serve a model that doesn't fit on one GPU”：TP / PP / DP 各放在哪一层（§2.8 并行）
 - [ ] 用 §2.3 的“生成 → 验证 → 反思（reflection） → 选择”骨架讲一次 coding agent（06c Q3），并说出“验证器（verifier）越可靠越敢放开自主度（autonomy）”
-- [ ] 做 [notes/08](notes/08-design-exercises.md) 的三道练习，每道 20–30 分钟先自己讲，再对照“我的改法”（重点：支付走 saga + 幂等键，不走 agent）
+- [ ] 做 [08 三道 Agent 设计练习](notes/08-design-exercises.md) 的三道练习，每道 20–30 分钟先自己讲，再对照“我的改法”（重点：支付走 saga + 幂等键，不走 agent）
 
 ---
 

@@ -104,7 +104,7 @@
 **English question:** What is an LLM agent, and how is it different from a plain LLM chat and from a fixed workflow?
 （难度：必考 · 题目后半句按截断前文补全）
 
-**现有笔记：** [notes/04](notes/04-agent-basics.md) 讲了"Agent = LLM + 工具 + 记忆（memory） + 循环（loop）"和模型/agent 对比表；[06 §2.3](06-ai-system-design.md#s2-3) 讲了 Anthropic 的 workflow vs agent 区分和"默认从 workflow 起步"。本题把三者放在一条"谁决定下一步"的轴上。
+**现有笔记：** [04 Agent 入门](notes/04-agent-basics.md) 讲了"Agent = LLM + 工具 + 记忆（memory） + 循环（loop）"和模型/agent 对比表；[06 §2.3](06-ai-system-design.md#s2-3) 讲了 Anthropic 的 workflow vs agent 区分和"默认从 workflow 起步"。本题把三者放在一条"谁决定下一步"的轴上。
 
 **答案要点**
 1. **增强型大模型（augmented LLM）**：模型加上检索（retrieval）、工具、记忆三样能力，能自己生成搜索词、挑工具、决定记什么。Anthropic 把它当成所有 agent 系统的基本积木。
@@ -338,7 +338,7 @@ ToolResult executeGuarded(ToolCall toolCall, Set<String> seenCallKeys) {
 **English question:** What are the trade-offs of plan-then-execute architectures like ReWOO and LLMCompiler compared with ReAct?
 （难度：进阶 · 题目后半句按截断前文补全）
 
-**现有笔记：** [06 §2.3 控制面](06-ai-system-design.md#h19) 讲了静态规划（planning）和动态规划，以及"先走静态计划，偏离时才重规划（replanning）"的混合做法；[notes/04](notes/04-agent-basics.md) 第 4 节列了 plan-and-execute 的适用场景。本题补两篇论文的机制和数字。
+**现有笔记：** [06 §2.3 控制面](06-ai-system-design.md#h19) 讲了静态规划（planning）和动态规划，以及"先走静态计划，偏离时才重规划（replanning）"的混合做法；[04 Agent 入门](notes/04-agent-basics.md) 第 4 节列了 plan-and-execute 的适用场景。本题补两篇论文的机制和数字。
 
 **答案要点**
 1. **ReAct 的两个成本问题**：一是串行（serial），每一步都要调一次模型。二是每次调用都要重发全部历史，输入 token 大致随步数平方增长（ReWOO 论文原话是 quadratically）。
@@ -920,7 +920,7 @@ ToolResult callTool(ToolCall toolCall, Principal principal)
 **English question:** What is the difference between context engineering and prompt engineering, and what exactly does context engineering manage?
 （难度：必考 · 题目后半句按截断前文补全）
 
-**现有笔记：** [06 §2.4 · 长时运行的多 agent 流水线](06-ai-system-design.md#h21) 和 [具体怎么做](06-ai-system-design.md#h22) 讲了上下文（context）契约、压缩（compaction）快照（snapshot）、状态外化（state externalization），属于上下文工程（context engineering）的具体做法，但没有给出概念定义；[notes/04](notes/04-agent-basics.md) 讲了 agent 的三层记忆（memory）。本题补定义和框架。
+**现有笔记：** [06 §2.4 · 长时运行的多 agent 流水线](06-ai-system-design.md#h21) 和 [具体怎么做](06-ai-system-design.md#h22) 讲了上下文（context）契约、压缩（compaction）快照（snapshot）、状态外化（state externalization），属于上下文工程（context engineering）的具体做法，但没有给出概念定义；[04 Agent 入门](notes/04-agent-basics.md) 讲了 agent 的三层记忆（memory）。本题补定义和框架。
 
 **答案要点**
 1. **定义（Anthropic 2025-09-29）**：
@@ -1165,7 +1165,7 @@ ToolResult callTool(ToolCall toolCall, Principal principal)
 **English question:** What do short-term and long-term memory mean for an LLM agent, and how does the CoALA framework categorize agent memory?
 （难度：必考 · 题目后半句按截断前文补全）
 
-**现有笔记：** [06 §2.4](06-ai-system-design.md#s2-4) 按"会话（session）内 / 跨会话 / 知识 / 流程状态"四类讲了存什么、PII 不进长期记忆（long-term memory）、一致性（consistency）怎么选；[notes/04](notes/04-agent-basics.md) 有"三层记忆（memory）"入门表。本题补上 CoALA 的正式分类和"记忆也是动作"这层意思。
+**现有笔记：** [06 §2.4](06-ai-system-design.md#s2-4) 按"会话（session）内 / 跨会话 / 知识 / 流程状态"四类讲了存什么、PII 不进长期记忆（long-term memory）、一致性（consistency）怎么选；[04 Agent 入门](notes/04-agent-basics.md) 有"三层记忆（memory）"入门表。本题补上 CoALA 的正式分类和"记忆也是动作"这层意思。
 
 **答案要点**
 1. **短期记忆（short-term memory）**：这一次任务里模型"眼前看得到"的东西，也就是上下文窗口（context window：模型一次能读进去的全部 token）里的对话、工具结果（tool result）、草稿。会话结束或上下文（context）被压缩（compaction）就没了。**长期记忆（long-term memory）**：存在模型外部（数据库、向量库（vector database）、文件），跨会话还在，需要时再取回来放进上下文。
@@ -1454,7 +1454,7 @@ MemoryDecision gate(CandidateFact candidateFact)
 **English question:** What is the basic RAG pipeline, and why does an agent need RAG instead of fine-tuning the knowledge into the model or putting everything into the context window?
 （难度：必考 · 题目后半句按截断前文补全）
 
-**现有笔记：** [06 §2.2](06-ai-system-design.md#s2-2) 的环节表 + [端到端流水线](06-ai-system-design.md#h8)；[长上下文 vs RAG](06-ai-system-design.md#h14) 对比表；[06 §2.11](06-ai-system-design.md#s2-11) 讲 prompting / RAG / 微调（fine-tuning）怎么选；[06 §5.3](06-ai-system-design.md#s5-3) 是一个手工推演的政策问答完整案例；[notes/03](notes/03-genai-system-architecture.md) 有入门版两条流水线（pipeline）。
+**现有笔记：** [06 §2.2](06-ai-system-design.md#s2-2) 的环节表 + [端到端流水线](06-ai-system-design.md#h8)；[长上下文 vs RAG](06-ai-system-design.md#h14) 对比表；[06 §2.11](06-ai-system-design.md#s2-11) 讲 prompting / RAG / 微调（fine-tuning）怎么选；[06 §5.3](06-ai-system-design.md#s5-3) 是一个手工推演的政策问答完整案例；[03 GenAI 系统架构与 RAG](notes/03-genai-system-architecture.md) 有入门版两条流水线（pipeline）。
 
 **答案要点**
 1. **RAG（retrieval-augmented generation，检索增强生成）**：先从文档里搜出相关段落（passage），再让模型根据这些段落回答。分两条流水线：
@@ -1751,7 +1751,7 @@ Map<String, Double> reciprocalRankFusion(List<List<String>> rankedLists, int ran
 **English question:** What are Chain-of-Thought, Tree-of-Thoughts and Plan-and-Execute, and what does "planning" concretely mean inside an agent?
 （难度：必考 · 题目后半句按截断前文补全）
 
-**现有笔记：** [06 §2.3 控制面](06-ai-system-design.md#h19) 讲了 planner 产出子任务（subtask） DAG、静态 vs 动态规划（planning）、偏离就重规划（replanning）；[notes/04](notes/04-agent-basics.md) 的编排（orchestration）方式表有 plan-and-execute 一行。CoT / ToT 是本题新补。
+**现有笔记：** [06 §2.3 控制面](06-ai-system-design.md#h19) 讲了 planner 产出子任务（subtask） DAG、静态 vs 动态规划（planning）、偏离就重规划（replanning）；[04 Agent 入门](notes/04-agent-basics.md) 的编排（orchestration）方式表有 plan-and-execute 一行。CoT / ToT 是本题新补。
 
 **答案要点**
 1. **CoT（chain-of-thought，思维链）**：让模型先写出中间推理（reasoning）步骤再给答案。Wei 等 2022 用几个带推理过程的示例（few-shot）做提示；Kojima 等 2022 发现只加一句 "Let's think step by step" 也有效（zero-shot CoT）。本质是**一条线性的推理路径**，多花输出 token 换准确率。
@@ -1917,7 +1917,7 @@ Map<String, Double> reciprocalRankFusion(List<List<String>> rankedLists, int ran
 **English question:** How are model providers using agentic reinforcement learning to train tool-use capabilities, and what does that mean for people building agents?
 （难度：进阶 · 题目后半句按截断前文补全）
 
-**现有笔记：** 无，本题新补。（[notes/07](notes/07-how-models-are-trained.md) 讲模型训练流程的入门背景。）
+**现有笔记：** 无，本题新补。（[07 模型怎么训练、跑在什么硬件上](notes/07-how-models-are-trained.md) 讲模型训练流程的入门背景。）
 
 **答案要点**
 1. **什么是 Agentic RL**：传统的 LLM 强化学习多是"单步"：给一个 prompt，生成一个回答，打一个分。Agentic RL 把训练放进**多轮环境**里：模型在一条轨迹里多次调用工具（搜索、代码执行、浏览器、终端），环境返回结果，任务结束时按结果给奖励（reward）。综述《The Landscape of Agentic Reinforcement Learning for LLMs》把它形式化为从单步 MDP 到部分可观测马尔可夫决策过程（POMDP：智能体看不到环境全貌，只能靠观察逐步推断）的转变。
@@ -2491,7 +2491,7 @@ ToolResult executeStep(TaskState taskState, ToolCall toolCall)
 **English question:** What are Agent Skills, how does progressive disclosure work, and how do Skills relate to MCP?
 （难度：核心 · 题目后半句按截断前文补全）
 
-**现有笔记：** [06 §2.3 研究案例](06-ai-system-design.md#h20) 有 SkillWeaver 式"技能库"（把成功轨迹（trajectory）存成带参数的函数），和 Agent Skills 是不同的东西；[notes/08](notes/08-design-exercises.md) 练习 2 也是 SkillWeaver。Agent Skills 规范本题新补。
+**现有笔记：** [06 §2.3 研究案例](06-ai-system-design.md#h20) 有 SkillWeaver 式"技能库"（把成功轨迹（trajectory）存成带参数的函数），和 Agent Skills 是不同的东西；[08 三道 Agent 设计练习](notes/08-design-exercises.md) 练习 2 也是 SkillWeaver。Agent Skills 规范本题新补。
 
 **答案要点**
 1. **时间线**：Anthropic 2025-10-16 发布 Agent Skills；2025-12-18 作为开放标准发布，规范放在 agentskills.io。OpenAI Agents SDK 2026-04 的更新也支持 skills（原文说用 skills 实现"渐进式披露（progressive disclosure）"），说明已经跨厂商（vendor）。
@@ -2681,7 +2681,7 @@ ToolResult executeStep(TaskState taskState, ToolCall toolCall)
 **English question:** What's your take on the claim that agents have caught up with the human baseline on OSWorld?
 （难度：开放 · 题目后半句按截断前文补全）
 
-**现有笔记：** [notes/06](notes/06-case-studies.md) B 部分 WebVoyager 案例讲了网页 agent 的 grounding、评估方法和失败分类；[06c](06c-ai-sd-question-bank.md) Q17 浏览器 agent 讲循环检测、完成前校验（validation）、高风险动作人工确认（human confirmation）。OSWorld 基线本题新补。
+**现有笔记：** [06 两个完整案例](notes/06-case-studies.md) B 部分 WebVoyager 案例讲了网页 agent 的 grounding、评估方法和失败分类；[06c](06c-ai-sd-question-bank.md) Q17 浏览器 agent 讲循环检测、完成前校验（validation）、高风险动作人工确认（human confirmation）。OSWorld 基线本题新补。
 
 **答案要点**
 1. **OSWorld 是什么**：2024 年的基准，在真实的 Ubuntu 桌面上做 369 个开放任务（跨应用、文件操作等），agent 只能通过截图和键盘鼠标操作，由脚本检查最终状态是否正确。
@@ -3007,7 +3007,7 @@ ToolResult executeStep(TaskState taskState, ToolCall toolCall)
 **English question:** What is indirect prompt injection, and why is it much more dangerous in agents than in chatbots?
 （难度：必考 · 题目后半句按截断前文补全）
 
-**现有笔记：** [06 ① 提示注入](06-ai-system-design.md#h32) 讲了攻击样例和五个控制手段，其中能力隔离（isolation）最重要；[notes/05](notes/05-agent-safety.md) 是零基础版的护栏（guardrails）三关口；[06c Q14](06c-ai-sd-question-bank.md) 讲了替用户执行操作的 agent 怎么防护。
+**现有笔记：** [06 ① 提示注入](06-ai-system-design.md#h32) 讲了攻击样例和五个控制手段，其中能力隔离（isolation）最重要；[05 Agent 安全与可信](notes/05-agent-safety.md) 是零基础版的护栏（guardrails）三关口；[06c Q14](06c-ai-sd-question-bank.md) 讲了替用户执行操作的 agent 怎么防护。
 
 **答案要点**
 1. **定义。**

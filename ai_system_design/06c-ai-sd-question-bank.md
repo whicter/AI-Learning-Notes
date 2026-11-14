@@ -635,7 +635,7 @@
 ## Q8 大模型推理服务（LLM inference serving）
 
 **题目在问什么**：公司要自己部署大模型，提供 API 给内部用。怎么设计推理服务，做到延迟低、吞吐（throughput）高、GPU 不浪费？
-**面试官想考什么**：prefill 和 decode 的不同瓶颈；KV cache（键值缓存）和显存（GPU memory）；批处理（batch processing）；扩缩容（scaling）按什么指标。零基础解释见 [notes/02](notes/02-inference-and-estimation.md)。
+**面试官想考什么**：prefill 和 decode 的不同瓶颈；KV cache（键值缓存）和显存（GPU memory）；批处理（batch processing）；扩缩容（scaling）按什么指标。零基础解释见 [02 推理成本与估算](notes/02-inference-and-estimation.md)。
 
 ![Q8 架构](notes/images/q08-llm-serving.svg)
 
@@ -1250,7 +1250,7 @@
 
 ## Q16 常驻个人 AI 助理（always-on personal assistant）
 
-**题目在问什么**：一个一直在线的个人助理，能读邮件、看日历、管文件，还能主动提醒（"你 10 分钟后有会，材料还没看"）。案例详解见 [notes/06 §A](notes/06-case-studies.md)。
+**题目在问什么**：一个一直在线的个人助理，能读邮件、看日历、管文件，还能主动提醒（"你 10 分钟后有会，材料还没看"）。案例详解见 [06 两个完整案例 §A](notes/06-case-studies.md)。
 **面试官想考什么**：常驻进程（always-on process） vs serverless；记忆（memory）管理；主动触发；写操作确认。
 
 ![Q16 架构](notes/images/q16-personal-assistant.svg)
@@ -1327,7 +1327,7 @@
 
 ## Q17 替用户在网页上完成任务的 agent（browser / web agent）
 
-**题目在问什么**：agent 打开真实网站，像人一样点击、输入，帮用户完成任务（订票、填表）。案例详解见 [notes/06 §B](notes/06-case-studies.md)。
+**题目在问什么**：agent 打开真实网站，像人一样点击、输入，帮用户完成任务（订票、填表）。案例详解见 [06 两个完整案例 §B](notes/06-case-studies.md)。
 **面试官想考什么**：grounding（模型怎么准确指出点哪里）；循环检测（loop detection）；怎么判断真的完成了；高风险动作。
 
 ![Q17 架构](notes/images/q17-browser-agent.svg)
@@ -1351,9 +1351,9 @@
 
 | 决策 | 选择 | 为什么 / 具体怎么做 |
 |---|---|---|
-| grounding | 截图 + 元素编号 + 文字清单，模型按编号行动 | 让模型说坐标或描述很容易点错；编号是精确的。即使有编号，"看错页面元素"（grounding 错误）仍占 WebVoyager 失败案例的 24.8%（见 [notes/06 §B](notes/06-case-studies.md#b4-结果和失败分析论文数字)），所以文字清单里还要带上 DOM 信息（元素类型、文字、所在区域）帮模型对上号 |
+| grounding | 截图 + 元素编号 + 文字清单，模型按编号行动 | 让模型说坐标或描述很容易点错；编号是精确的。即使有编号，"看错页面元素"（grounding 错误）仍占 WebVoyager 失败案例的 24.8%（见 [06 两个完整案例 §B](notes/06-case-studies.md#b4-结果和失败分析论文数字)），所以文字清单里还要带上 DOM 信息（元素类型、文字、所在区域）帮模型对上号 |
 | 截图历史 | 只留最近几张 | 截图很占 token，太多会撑爆上下文 |
-| 循环 | 记录最近 N 个动作，重复就停；总步数上限 | 网页 agent 失败最常见的原因是"卡住、出错后不会恢复"：WebVoyager 失败案例中占 44.4%（见 [notes/06 §B](notes/06-case-studies.md#b4-结果和失败分析论文数字)） |
+| 循环 | 记录最近 N 个动作，重复就停；总步数上限 | 网页 agent 失败最常见的原因是"卡住、出错后不会恢复"：WebVoyager 失败案例中占 44.4%（见 [06 两个完整案例 §B](notes/06-case-studies.md#b4-结果和失败分析论文数字)） |
 | 完成判断 | 代码检查页面状态，不信模型说"完成了" | "以为做完了其实没做完"是另一大类失败，占失败案例的 21.8%（同上） |
 | 高风险 | 付款、登录、提交 → 人工确认 | 不可逆 |
 | 评估 | 看最终结果，不看是否走了"标准路径" | 同一个任务有很多种正确做法 |
