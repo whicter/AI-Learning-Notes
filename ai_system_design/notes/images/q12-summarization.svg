@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 500" font-family="-apple-system, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+<rect width="1100" height="500" fill="#ffffff"/>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#475569"/></marker><marker id="r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#dc2626"/></marker></defs>
+<text x="24" y="34" font-size="18" font-weight="700" fill="#0f172a">Q12 大规模摘要（meeting / ticket summarization at scale）</text>
+<line x1="162" y1="148" x2="177" y2="148" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<line x1="322" y1="148" x2="337" y2="148" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<line x1="492" y1="148" x2="507" y2="148" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<line x1="672" y1="148" x2="687" y2="148" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<line x1="852" y1="148" x2="867" y2="148" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<line x1="975" y1="179" x2="975" y2="277" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<line x1="868" y1="308" x2="853" y2="308" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<line x1="668" y1="308" x2="603" y2="308" stroke="#475569" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<rect x="620" y="300" width="32" height="17" rx="4" fill="#ffffff" stroke="none" opacity="0.95"/>
+<text x="636" y="312" font-size="11" text-anchor="middle" fill="#475569">抽样</text>
+<rect x="20" y="120" width="140" height="57" rx="10" fill="#f8fafc" stroke="#94a3b8" stroke-width="2"/>
+<text x="90.0" y="146" font-size="13" font-weight="700" text-anchor="middle" fill="#334155">来源 sources</text>
+<text x="90.0" y="164" font-size="11" text-anchor="middle" fill="#475569">会议转写 · 工单</text>
+<rect x="180" y="120" width="140" height="57" rx="10" fill="#eef2ff" stroke="#4f46e5" stroke-width="2"/>
+<text x="250.0" y="146" font-size="13" font-weight="700" text-anchor="middle" fill="#3730a3">队列 queue</text>
+<text x="250.0" y="164" font-size="11" text-anchor="middle" fill="#475569">离线 → batch API</text>
+<rect x="340" y="120" width="150" height="57" rx="10" fill="#eef2ff" stroke="#4f46e5" stroke-width="2"/>
+<text x="415.0" y="146" font-size="13" font-weight="700" text-anchor="middle" fill="#3730a3">切段 chunk</text>
+<text x="415.0" y="164" font-size="11" text-anchor="middle" fill="#475569">按发言人 / 时间</text>
+<rect x="510" y="120" width="160" height="57" rx="10" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+<text x="590.0" y="146" font-size="13" font-weight="700" text-anchor="middle" fill="#047857">分段摘要 map</text>
+<text x="590.0" y="164" font-size="11" text-anchor="middle" fill="#475569">每段一份小摘要</text>
+<rect x="690" y="120" width="160" height="57" rx="10" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+<text x="770.0" y="146" font-size="13" font-weight="700" text-anchor="middle" fill="#047857">合并摘要 reduce</text>
+<text x="770.0" y="164" font-size="11" text-anchor="middle" fill="#475569">小摘要 → 总摘要</text>
+<rect x="870" y="120" width="210" height="57" rx="10" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+<text x="975.0" y="146" font-size="13" font-weight="700" text-anchor="middle" fill="#047857">结构化抽取 extract</text>
+<text x="975.0" y="164" font-size="11" text-anchor="middle" fill="#475569">待办 · 负责人 · 截止日</text>
+<rect x="870" y="280" width="210" height="57" rx="10" fill="#fef2f2" stroke="#dc2626" stroke-width="2"/>
+<text x="975.0" y="306" font-size="13" font-weight="700" text-anchor="middle" fill="#991b1b">schema 校验</text>
+<text x="975.0" y="324" font-size="11" text-anchor="middle" fill="#475569">负责人必须在参会名单里</text>
+<rect x="670" y="280" width="180" height="57" rx="10" fill="#fff7ed" stroke="#f97316" stroke-width="2"/>
+<text x="760.0" y="306" font-size="13" font-weight="700" text-anchor="middle" fill="#c2410c">存储 store</text>
+<text x="760.0" y="324" font-size="11" text-anchor="middle" fill="#475569">摘要 · 原文链接</text>
+<rect x="330" y="280" width="270" height="57" rx="10" fill="#fdf2f8" stroke="#db2777" stroke-width="2"/>
+<text x="465.0" y="306" font-size="13" font-weight="700" text-anchor="middle" fill="#9d174d">抽样人工评估</text>
+<text x="465.0" y="324" font-size="11" text-anchor="middle" fill="#475569">漏了关键决定吗？编了人名吗？</text>
+<rect x="24" y="474" width="14" height="14" rx="3" fill="#eef2ff" stroke="#4f46e5" stroke-width="1.5"/>
+<text x="44" y="485" font-size="11" fill="#475569">确定性代码 code</text>
+<rect x="142.04" y="474" width="14" height="14" rx="3" fill="#ecfdf5" stroke="#10b981" stroke-width="1.5"/>
+<text x="162.04" y="485" font-size="11" fill="#475569">模型 LLM</text>
+<rect x="223.33999999999997" y="474" width="14" height="14" rx="3" fill="#fff7ed" stroke="#f97316" stroke-width="1.5"/>
+<text x="243.33999999999997" y="485" font-size="11" fill="#475569">数据 / 存储 data</text>
+<rect x="343.79999999999995" y="474" width="14" height="14" rx="3" fill="#fef2f2" stroke="#dc2626" stroke-width="1.5"/>
+<text x="363.79999999999995" y="485" font-size="11" fill="#475569">安全检查 guard</text>
+<rect x="457.21999999999997" y="474" width="14" height="14" rx="3" fill="#fdf2f8" stroke="#db2777" stroke-width="1.5"/>
+<text x="477.21999999999997" y="485" font-size="11" fill="#475569">人工 human</text>
+<rect x="551.28" y="474" width="14" height="14" rx="3" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5"/>
+<text x="571.28" y="485" font-size="11" fill="#475569">外部系统 external</text>
+</svg>

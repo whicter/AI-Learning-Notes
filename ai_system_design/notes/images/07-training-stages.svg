@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 400" font-family="-apple-system, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+  <rect width="940" height="400" fill="#ffffff"/>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#475569"/></marker>
+  </defs>
+  <text x="30" y="34" font-size="18" font-weight="700" fill="#0f172a">一个聊天助手是怎么炼成的：三个阶段（课程只讲了第一段，后两段是我补的）</text>
+
+  <g font-size="12" fill="#0f172a">
+    <rect x="30" y="60" width="270" height="250" rx="12" fill="#eff6ff" stroke="#3b82f6" stroke-width="2"/>
+    <text x="165" y="88" text-anchor="middle" font-size="16" font-weight="700" fill="#1e3a8a">① 预训练 pre-training</text>
+    <text x="46" y="118" font-weight="700">数据：</text><text x="86" y="118">海量无标注文本（书、网页、代码）</text>
+    <text x="46" y="142" font-weight="700">目标：</text><text x="86" y="142">预测下一个 token</text>
+    <text x="46" y="166" font-weight="700">花费：</text><text x="86" y="166">绝大部分算力都花在这里</text>
+    <text x="46" y="190" font-weight="700">产出：</text><text x="86" y="190">基座模型 base model</text>
+    <text x="46" y="222" fill="#475569">会"续写"，但不会好好回答问题：</text>
+    <text x="46" y="242" fill="#475569">问"法国首都是？"它可能接着出</text>
+    <text x="46" y="262" fill="#475569">"德国首都是？"（像在续写一张考卷）</text>
+
+    <rect x="335" y="60" width="270" height="250" rx="12" fill="#f5f3ff" stroke="#8b5cf6" stroke-width="2"/>
+    <text x="470" y="88" text-anchor="middle" font-size="16" font-weight="700" fill="#5b21b6">② 指令微调 SFT</text>
+    <text x="470" y="106" text-anchor="middle" font-size="11" fill="#5b21b6">supervised fine-tuning / instruction tuning</text>
+    <text x="351" y="134" font-weight="700">数据：</text><text x="391" y="134">人写的"问题 → 好回答"示范</text>
+    <text x="351" y="158" font-weight="700">目标：</text><text x="391" y="158">学会按指令作答的格式和语气</text>
+    <text x="351" y="182" font-weight="700">规模：</text><text x="391" y="182">数据量比预训练小得多</text>
+    <text x="351" y="206" font-weight="700">产出：</text><text x="391" y="206">指令模型 instruct model</text>
+    <text x="351" y="238" fill="#475569">课程里"用问答对训练"的那段，</text>
+    <text x="351" y="258" fill="#475569">本质上属于这一步</text>
+
+    <rect x="640" y="60" width="270" height="250" rx="12" fill="#f0fdf4" stroke="#22c55e" stroke-width="2"/>
+    <text x="775" y="88" text-anchor="middle" font-size="16" font-weight="700" fill="#166534">③ 偏好对齐</text>
+    <text x="775" y="106" text-anchor="middle" font-size="11" fill="#166534">preference tuning：RLHF / DPO</text>
+    <text x="656" y="134" font-weight="700">数据：</text><text x="696" y="134">人比较两个回答"哪个更好"</text>
+    <text x="656" y="158" font-weight="700">目标：</text><text x="696" y="158">更有帮助、更诚实、更安全</text>
+    <text x="656" y="182" font-weight="700">做法：</text><text x="696" y="182">RLHF 先训奖励模型再强化学习；</text>
+    <text x="696" y="202">DPO 直接用偏好对优化</text>
+    <text x="656" y="226" font-weight="700">产出：</text><text x="696" y="226">聊天助手 chat assistant</text>
+    <text x="656" y="258" fill="#475569">ChatGPT 这类产品 = ① + ② + ③</text>
+  </g>
+  <g stroke="#475569" stroke-width="2.5"><line x1="302" y1="185" x2="331" y2="185" marker-end="url(#a)"/><line x1="607" y1="185" x2="636" y2="185" marker-end="url(#a)"/></g>
+
+  <rect x="30" y="326" width="880" height="60" rx="10" fill="#fef3c7" stroke="#f59e0b"/>
+  <text x="46" y="350" font-size="13" font-weight="700" fill="#92400e">SWE 面试里你几乎不会被要求设计 ①。常考的是：</text>
+  <text x="46" y="372" font-size="13" fill="#0f172a">要不要在现成模型上做 ② 式微调（vs prompt / RAG，见 06 §2.11）；以及微调后怎么评估、怎么上线、怎么回滚。</text>
+</svg>

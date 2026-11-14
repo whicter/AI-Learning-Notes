@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 380" font-family="-apple-system, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+  <rect width="920" height="380" fill="#ffffff"/>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#475569"/></marker>
+  </defs>
+  <text x="30" y="34" font-size="18" font-weight="700" fill="#0f172a">Agent 的三层记忆（memory layers）</text>
+  <g font-size="13" fill="#0f172a">
+    <rect x="30" y="56" width="270" height="190" rx="12" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.5"/>
+    <text x="50" y="86" font-size="16" font-weight="700" fill="#1e3a8a">📝 短期记忆 short-term = 便签</text>
+    <text x="50" y="114">存：这次对话刚说过的话、</text><text x="50" y="134">刚拿到的工具结果</text>
+    <text x="50" y="162">放哪：上下文窗口 context window</text>
+    <text x="50" y="190">寿命：一次会话</text>
+    <text x="50" y="222" fill="#b91c1c">坑：窗口有限，聊久了要压缩/摘要</text>
+
+    <rect x="325" y="56" width="270" height="190" rx="12" fill="#f5f3ff" stroke="#8b5cf6" stroke-width="1.5"/>
+    <text x="345" y="86" font-size="16" font-weight="700" fill="#5b21b6">🗄 长期记忆 long-term = 档案柜</text>
+    <text x="345" y="114">存：用户偏好、上次订的酒店、</text><text x="345" y="134">历史结论</text>
+    <text x="345" y="162">放哪：数据库 / 向量库 vector DB</text>
+    <text x="345" y="190">寿命：跨会话</text>
+    <text x="345" y="222" fill="#b91c1c">坑：PII、过期信息、写错难删</text>
+
+    <rect x="620" y="56" width="270" height="190" rx="12" fill="#f0fdf4" stroke="#22c55e" stroke-width="1.5"/>
+    <text x="640" y="86" font-size="16" font-weight="700" fill="#166534">📚 外部知识 external = 图书馆</text>
+    <text x="640" y="114">存：文档、知识库、实时数据</text>
+    <text x="640" y="142">怎么用：需要时去查（RAG / API）</text>
+    <text x="640" y="170">不用"记住"，用时检索</text>
+    <text x="640" y="198">寿命：随数据源更新</text>
+    <text x="640" y="222" fill="#b91c1c">坑：检索不准、权限过滤</text>
+  </g>
+
+  <!-- timeline -->
+  <text x="30" y="286" font-size="15" font-weight="700" fill="#0f172a">记忆在循环里的位置</text>
+  <g font-size="13" text-anchor="middle" fill="#0f172a">
+    <rect x="30" y="300" width="250" height="50" rx="8" fill="#f1f5f9" stroke="#94a3b8"/><text x="155" y="321">推理前：取 retrieve</text><text x="155" y="340" font-size="12" fill="#475569">查相关历史 / 文档</text>
+    <rect x="335" y="300" width="250" height="50" rx="8" fill="#f1f5f9" stroke="#94a3b8"/><text x="460" y="321">推理中：放进上下文 inject</text><text x="460" y="340" font-size="12" fill="#475569">让模型"看到"</text>
+    <rect x="640" y="300" width="250" height="50" rx="8" fill="#f1f5f9" stroke="#94a3b8"/><text x="765" y="321">行动后：写回 write back</text><text x="765" y="340" font-size="12" fill="#475569">先过滤 PII、设过期时间</text>
+  </g>
+  <g stroke="#475569" stroke-width="2"><line x1="282" y1="325" x2="331" y2="325" marker-end="url(#a)"/><line x1="587" y1="325" x2="636" y2="325" marker-end="url(#a)"/></g>
+</svg>

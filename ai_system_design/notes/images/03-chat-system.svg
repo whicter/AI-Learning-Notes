@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540" font-family="-apple-system, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+  <rect width="960" height="540" fill="#ffffff"/>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#475569"/></marker>
+    <marker id="g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#16a34a"/></marker>
+  </defs>
+  <text x="30" y="34" font-size="18" font-weight="700" fill="#0f172a">一个 ChatGPT 式对话服务的整体架构（课程方案，作者重画）</text>
+
+  <!-- top row -->
+  <g font-size="14" fill="#0f172a" text-anchor="middle">
+    <rect x="30" y="60" width="130" height="50" rx="10" fill="#f1f5f9" stroke="#94a3b8"/><text x="95" y="82">用户 user</text><text x="95" y="100" font-size="12" fill="#475569">Web / App</text>
+    <rect x="220" y="60" width="170" height="50" rx="10" fill="#f1f5f9" stroke="#94a3b8"/><text x="305" y="82">API 网关 gateway</text><text x="305" y="100" font-size="12" fill="#475569">鉴权 · 限流 · 路由</text>
+    <rect x="450" y="60" width="150" height="50" rx="10" fill="#f1f5f9" stroke="#94a3b8"/><text x="525" y="82">负载均衡 LB</text><text x="525" y="100" font-size="12" fill="#475569">分发到各服务实例</text>
+  </g>
+  <g stroke="#475569" stroke-width="2"><line x1="162" y1="85" x2="216" y2="85" marker-end="url(#a)"/><line x1="392" y1="85" x2="446" y2="85" marker-end="url(#a)"/></g>
+  <path d="M525,112 L525,135 L165,135 L165,156" fill="none" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+
+  <!-- subsystem 1 -->
+  <rect x="30" y="160" width="270" height="250" rx="12" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.5"/>
+  <text x="50" y="188" font-size="15" font-weight="700" fill="#1e3a8a">① Prompt 处理</text>
+  <g font-size="13" fill="#0f172a">
+    <rect x="50" y="202" width="230" height="40" rx="8" fill="#fff" stroke="#93c5fd"/><text x="62" y="220">输入过滤 input filter</text><text x="62" y="236" font-size="11" fill="#475569">违规 / 注入 / 非法输入先挡掉</text>
+    <rect x="50" y="252" width="230" height="40" rx="8" fill="#fff" stroke="#93c5fd"/><text x="62" y="270">Embedding 服务</text><text x="62" y="286" font-size="11" fill="#475569">问题 → 向量</text>
+    <rect x="50" y="302" width="230" height="40" rx="8" fill="#fff" stroke="#93c5fd"/><text x="62" y="320">语义缓存 semantic cache</text><text x="62" y="336" font-size="11" fill="#475569">相似问题见过？直接复用答案</text>
+    <rect x="50" y="352" width="230" height="40" rx="8" fill="#fff" stroke="#93c5fd"/><text x="62" y="370">数据过滤 data filter</text><text x="62" y="386" font-size="11" fill="#475569">只把相关、干净的上下文往后传</text>
+  </g>
+
+  <!-- subsystem 2 -->
+  <rect x="340" y="160" width="290" height="250" rx="12" fill="#f5f3ff" stroke="#8b5cf6" stroke-width="1.5"/>
+  <text x="360" y="188" font-size="15" font-weight="700" fill="#5b21b6">② 上下文与记忆 context &amp; memory</text>
+  <g font-size="13" fill="#0f172a">
+    <rect x="360" y="202" width="250" height="40" rx="8" fill="#fff" stroke="#c4b5fd"/><text x="372" y="220">上下文检索引擎 context retrieval</text><text x="372" y="236" font-size="11" fill="#475569">按相似度取历史、偏好、知识</text>
+    <rect x="360" y="252" width="120" height="40" rx="8" fill="#fff" stroke="#c4b5fd"/><text x="372" y="270">会话缓存 session</text><text x="372" y="286" font-size="11" fill="#475569">Redis</text>
+    <rect x="490" y="252" width="120" height="40" rx="8" fill="#fff" stroke="#c4b5fd"/><text x="502" y="270">用户画像 profile</text><text x="502" y="286" font-size="11" fill="#475569">NoSQL</text>
+    <rect x="360" y="302" width="120" height="40" rx="8" fill="#fff" stroke="#c4b5fd"/><text x="372" y="320">长期记忆</text><text x="372" y="336" font-size="11" fill="#475569">long-term · 向量库</text>
+    <rect x="490" y="302" width="120" height="40" rx="8" fill="#fff" stroke="#c4b5fd"/><text x="502" y="320">知识图谱 KG</text><text x="502" y="336" font-size="11" fill="#475569">可选，图数据库</text>
+    <rect x="360" y="352" width="250" height="40" rx="8" fill="#fef2f2" stroke="#fca5a5"/><text x="372" y="370">隐私控制 privacy controls</text><text x="372" y="386" font-size="11" fill="#475569">取数据前先查用户授权 / 合规规则</text>
+  </g>
+
+  <!-- subsystem 3 -->
+  <rect x="670" y="160" width="260" height="250" rx="12" fill="#fff7ed" stroke="#f97316" stroke-width="1.5"/>
+  <text x="690" y="188" font-size="15" font-weight="700" fill="#9a3412">③ 模型服务与审核 serving</text>
+  <g font-size="13" fill="#0f172a">
+    <rect x="690" y="202" width="220" height="40" rx="8" fill="#fff" stroke="#fdba74"/><text x="702" y="220">模型加载器 model loader</text><text x="702" y="236" font-size="11" fill="#475569">按套餐 / 版本选模型，支持回滚</text>
+    <rect x="690" y="252" width="220" height="40" rx="8" fill="#fff" stroke="#fdba74"/><text x="702" y="270">模型存储 model store</text><text x="702" y="286" font-size="11" fill="#475569">权重文件：对象存储</text>
+    <rect x="690" y="302" width="220" height="40" rx="8" fill="#ffedd5" stroke="#f97316"/><text x="702" y="320" font-weight="600">GPU 推理集群 inference cluster</text><text x="702" y="336" font-size="11" fill="#475569">真正生成答案的地方</text>
+    <rect x="690" y="352" width="220" height="40" rx="8" fill="#fef2f2" stroke="#fca5a5"/><text x="702" y="370">实时内容审核 moderation</text><text x="702" y="386" font-size="11" fill="#475569">输出违规 / 泄露 → 拦截</text>
+  </g>
+
+  <g stroke="#475569" stroke-width="2.5"><line x1="302" y1="285" x2="336" y2="285" marker-end="url(#a)"/><line x1="632" y1="285" x2="666" y2="285" marker-end="url(#a)"/></g>
+  <text x="305" y="275" font-size="11" fill="#475569">问题</text>
+
+  <!-- return path -->
+  <path d="M800,412 L800,460 L16,460 L16,85 L26,85" fill="none" stroke="#16a34a" stroke-width="2.5" marker-end="url(#g)"/>
+  <text x="450" y="452" text-anchor="middle" font-size="13" fill="#166534">流式返回 streaming（逐 token 推给用户）</text>
+  <path d="M165,412 L165,440 L18,440" fill="none" stroke="#16a34a" stroke-width="1.8" stroke-dasharray="5 4"/>
+  <text x="172" y="432" font-size="11" fill="#166534">缓存命中 cache hit：直接返回</text>
+
+  <text x="30" y="500" font-size="13" fill="#475569">读法：用户请求 → 网关 → ① 把问题变成向量、查缓存 → ② 补上"这个用户是谁、之前聊过什么、相关知识" → ③ 模型生成 + 审核 → 流式返回。</text>
+  <text x="30" y="522" font-size="13" fill="#475569">非功能需求怎么满足：多副本 + 自动扩缩容（扩展性）、多区域部署（可用性）、量化 + 缓存（性能）、加密 + 权限 + 注入防护（安全）。</text>
+</svg>

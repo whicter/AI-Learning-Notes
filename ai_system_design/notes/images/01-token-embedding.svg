@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 400" font-family="-apple-system, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+  <rect width="920" height="400" fill="#ffffff"/>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#475569"/></marker>
+  </defs>
+  <text x="30" y="34" font-size="18" font-weight="700" fill="#0f172a">文字 text → token → 编号 token ID → 向量 embedding</text>
+
+  <!-- step 1 -->
+  <text x="30" y="76" font-size="14" fill="#475569">原文</text><text x="30" y="92" font-size="11" fill="#94a3b8">raw text</text>
+  <rect x="110" y="58" width="300" height="36" rx="8" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+  <text x="260" y="82" text-anchor="middle" font-size="16" fill="#0f172a">"Unbelievable cats!"</text>
+  <line x1="260" y1="96" x2="260" y2="118" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+
+  <!-- step 2 tokens -->
+  <text x="30" y="142" font-size="14" fill="#475569">切成 token</text><text x="30" y="158" font-size="11" fill="#94a3b8">tokenize</text>
+  <g font-size="15" fill="#0f172a" text-anchor="middle">
+    <rect x="110" y="124" width="52" height="34" rx="6" fill="#dbeafe" stroke="#3b82f6"/><text x="136" y="146">Un</text>
+    <rect x="168" y="124" width="72" height="34" rx="6" fill="#dbeafe" stroke="#3b82f6"/><text x="204" y="146">believ</text>
+    <rect x="246" y="124" width="56" height="34" rx="6" fill="#dbeafe" stroke="#3b82f6"/><text x="274" y="146">able</text>
+    <rect x="308" y="124" width="60" height="34" rx="6" fill="#dbeafe" stroke="#3b82f6"/><text x="338" y="146">␣cats</text>
+    <rect x="374" y="124" width="36" height="34" rx="6" fill="#dbeafe" stroke="#3b82f6"/><text x="392" y="146">!</text>
+  </g>
+  <line x1="260" y1="160" x2="260" y2="182" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+
+  <!-- step 3 ids -->
+  <text x="30" y="206" font-size="14" fill="#475569">查词表编号</text><text x="30" y="221" font-size="11" fill="#94a3b8">vocab lookup</text>
+  <g font-size="14" fill="#0f172a" text-anchor="middle" font-family="Menlo, monospace">
+    <rect x="110" y="188" width="52" height="34" rx="6" fill="#ede9fe" stroke="#8b5cf6"/><text x="136" y="210">403</text>
+    <rect x="168" y="188" width="72" height="34" rx="6" fill="#ede9fe" stroke="#8b5cf6"/><text x="204" y="210">5521</text>
+    <rect x="246" y="188" width="56" height="34" rx="6" fill="#ede9fe" stroke="#8b5cf6"/><text x="274" y="210">481</text>
+    <rect x="308" y="188" width="60" height="34" rx="6" fill="#ede9fe" stroke="#8b5cf6"/><text x="338" y="210">19907</text>
+    <rect x="374" y="188" width="36" height="34" rx="6" fill="#ede9fe" stroke="#8b5cf6"/><text x="392" y="210">0</text>
+  </g>
+  <text x="30" y="236" font-size="11" fill="#94a3b8">（编号为示意）</text>
+  <line x1="260" y1="224" x2="260" y2="246" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+
+  <!-- step 4 vectors -->
+  <text x="30" y="270" font-size="14" fill="#475569">变成向量</text><text x="30" y="286" font-size="11" fill="#94a3b8">embed</text>
+  <g font-size="13" fill="#0f172a" font-family="Menlo, monospace">
+    <rect x="110" y="252" width="300" height="30" rx="6" fill="#ffedd5" stroke="#f97316"/><text x="120" y="272">␣cats → [0.21, -0.73, 0.05, … ]</text>
+    <rect x="110" y="288" width="300" height="30" rx="6" fill="#ffedd5" stroke="#f97316"/><text x="120" y="308">able  → [-0.40, 0.11, 0.88, … ]</text>
+  </g>
+  <text x="110" y="344" font-size="13" fill="#475569">每个 token 变成一串几百到几千个数字；</text>
+  <text x="110" y="364" font-size="13" fill="#475569">这串数字就是它在"意思空间"里的坐标。</text>
+
+  <!-- right: semantic map -->
+  <rect x="490" y="58" width="400" height="310" rx="10" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="510" y="84" font-size="15" font-weight="600" fill="#0f172a">意思空间 embedding space（2 维示意）</text>
+  <g font-size="14" fill="#0f172a">
+    <circle cx="560" cy="140" r="5" fill="#3b82f6"/><text x="570" y="145">cold</text>
+    <circle cx="590" cy="170" r="5" fill="#3b82f6"/><text x="600" y="175">cool</text>
+    <circle cx="545" cy="185" r="5" fill="#3b82f6"/><text x="500" y="205">ice</text>
+    <ellipse cx="567" cy="164" rx="62" ry="46" fill="none" stroke="#3b82f6" stroke-dasharray="4 4"/>
+
+    <circle cx="760" cy="150" r="5" fill="#f97316"/><text x="770" y="155">cat</text>
+    <circle cx="800" cy="180" r="5" fill="#f97316"/><text x="810" y="185">kitten</text>
+    <circle cx="745" cy="195" r="5" fill="#f97316"/><text x="755" y="200">dog</text>
+    <ellipse cx="780" cy="174" rx="66" ry="44" fill="none" stroke="#f97316" stroke-dasharray="4 4"/>
+
+    <circle cx="640" cy="300" r="5" fill="#8b5cf6"/><text x="650" y="305">king</text>
+    <circle cx="720" cy="310" r="5" fill="#8b5cf6"/><text x="730" y="315">queen</text>
+  </g>
+  <text x="510" y="352" font-size="13" fill="#475569">意思相近 → 距离近。RAG 检索 = nearest-neighbor search</text>
+</svg>

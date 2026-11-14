@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 380" font-family="-apple-system, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+  <rect width="920" height="380" fill="#ffffff"/>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#475569"/></marker>
+  </defs>
+  <text x="30" y="34" font-size="18" font-weight="700" fill="#0f172a">LLM 怎么"写"答案：每次只猜下一个 token（next-token prediction）</text>
+
+  <rect x="30" y="90" width="190" height="60" rx="10" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+  <text x="125" y="116" text-anchor="middle" font-size="14" fill="#475569">目前的文本 context</text>
+  <text x="125" y="138" text-anchor="middle" font-size="16" fill="#0f172a">"今天天气很"</text>
+  <line x1="222" y1="120" x2="268" y2="120" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+
+  <rect x="270" y="85" width="120" height="70" rx="12" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+  <text x="330" y="118" text-anchor="middle" font-size="18" font-weight="700" fill="#1e3a8a">LLM</text>
+  <text x="330" y="136" text-anchor="middle" font-size="12" fill="#1e3a8a">一次前向计算</text><text x="330" y="150" text-anchor="middle" font-size="11" fill="#1e3a8a">forward pass</text>
+  <line x1="392" y1="120" x2="438" y2="120" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+
+  <!-- probability bars -->
+  <text x="445" y="72" font-size="14" fill="#475569">下一个 token 的概率 probability（示意）</text>
+  <g font-size="15" fill="#0f172a">
+    <text x="445" y="100">好</text><rect x="470" y="86" width="186" height="18" rx="3" fill="#f97316"/><text x="662" y="100" font-size="13" fill="#475569">62%</text>
+    <text x="445" y="126">热</text><rect x="470" y="112" width="63" height="18" rx="3" fill="#fdba74"/><text x="539" y="126" font-size="13" fill="#475569">21%</text>
+    <text x="445" y="152">冷</text><rect x="470" y="138" width="27" height="18" rx="3" fill="#fdba74"/><text x="503" y="152" font-size="13" fill="#475569">9%</text>
+    <text x="445" y="178">糟</text><rect x="470" y="164" width="15" height="18" rx="3" fill="#fdba74"/><text x="491" y="178" font-size="13" fill="#475569">5%</text>
+  </g>
+  <line x1="700" y1="120" x2="746" y2="120" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+  <rect x="748" y="92" width="140" height="56" rx="10" fill="#dcfce7" stroke="#22c55e" stroke-width="2"/>
+  <text x="818" y="116" text-anchor="middle" font-size="14" fill="#166534">采样 sampling</text>
+  <text x="818" y="137" text-anchor="middle" font-size="16" font-weight="700" fill="#166534">"好"</text>
+
+  <!-- loop back -->
+  <path d="M818,150 L818,215 L125,215 L125,154" fill="none" stroke="#22c55e" stroke-width="2.5" marker-end="url(#a)"/>
+  <text x="471" y="207" text-anchor="middle" font-size="14" fill="#166534">接到末尾 → "今天天气很好" → 再猜下一个……直到输出"结束"标记（EOS）</text>
+
+  <!-- sampling knobs -->
+  <rect x="30" y="245" width="860" height="115" rx="10" fill="#f8fafc" stroke="#cbd5e1"/>
+  <text x="50" y="272" font-size="15" font-weight="700" fill="#0f172a">"按规则选"的旋钮（sampling）</text>
+  <text x="50" y="298" font-size="14" fill="#0f172a">• temperature 低 → 几乎总选最高概率的词（稳定、重复）；高 → 更敢选低概率词（多样、也更容易胡说）</text>
+  <text x="50" y="322" font-size="14" fill="#0f172a">• top-k / top-p → 只在概率最高的一小撮里抽，砍掉离谱的尾巴</text>
+  <text x="50" y="346" font-size="14" fill="#0f172a">• 系统设计含义：答案是一个 token 一个 token 出来的 → 输出越长越慢、越贵；所以要流式返回（streaming）</text>
+</svg>

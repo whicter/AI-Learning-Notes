@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 330" font-family="-apple-system, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+  <rect width="940" height="330" fill="#ffffff"/>
+  <text x="30" y="34" font-size="18" font-weight="700" fill="#0f172a">三种切块 chunking 方式：同一段文字怎么切</text>
+
+  <!-- fixed -->
+  <text x="30" y="76" font-size="14" font-weight="700" fill="#0f172a">固定长度 fixed-length</text>
+  <g font-size="12" fill="#0f172a">
+    <rect x="220" y="58" width="220" height="30" fill="#dbeafe" stroke="#3b82f6"/><text x="230" y="78">退款需提交订单号，审核通过后</text>
+    <rect x="440" y="58" width="220" height="30" fill="#bfdbfe" stroke="#3b82f6"/><text x="450" y="78">3–5 个工作日到账。如超过 7 天</text>
+    <rect x="660" y="58" width="220" height="30" fill="#dbeafe" stroke="#3b82f6"/><text x="670" y="78">未到账，请联系客服……</text>
+  </g>
+  <text x="220" y="106" font-size="12" fill="#b91c1c">✘ 一句话被拦腰切断："审核通过后 | 3–5 个工作日" 分到两块，单独看哪块都答不全</text>
+
+  <!-- semantic -->
+  <text x="30" y="148" font-size="14" font-weight="700" fill="#0f172a">按语义 semantic</text>
+  <g font-size="12" fill="#0f172a">
+    <rect x="220" y="130" width="400" height="30" fill="#dcfce7" stroke="#22c55e"/><text x="230" y="150">退款需提交订单号，审核通过后 3–5 个工作日到账。</text>
+    <rect x="620" y="130" width="260" height="30" fill="#bbf7d0" stroke="#22c55e"/><text x="630" y="150">如超过 7 天未到账，请联系客服……</text>
+  </g>
+  <text x="220" y="178" font-size="12" fill="#166534">✔ 按句子 / 段落 / 标题切，每块意思完整；块大小不均匀</text>
+
+  <!-- overlap -->
+  <text x="30" y="220" font-size="14" font-weight="700" fill="#0f172a">重叠 overlapping</text>
+  <g font-size="12" fill="#0f172a">
+    <rect x="220" y="202" width="440" height="30" fill="#ffedd5" stroke="#f97316"/><text x="230" y="222">退款需提交订单号，审核通过后 3–5 个工作日到账。如超过 7 天</text>
+    <rect x="500" y="238" width="380" height="30" fill="#fed7aa" stroke="#f97316"/><text x="510" y="258">到账。如超过 7 天未到账，请联系客服……</text>
+    <rect x="500" y="202" width="160" height="66" fill="none" stroke="#c2410c" stroke-dasharray="4 3"/>
+  </g>
+  <text x="670" y="196" font-size="11" fill="#9a3412">重叠部分</text>
+  <text x="220" y="290" font-size="12" fill="#9a3412">✔ 边界附近的信息两块都有，不怕切断；代价是索引变大、检索结果可能重复</text>
+
+  <text x="30" y="318" font-size="13" fill="#475569">块小 → 检索准 precision，但上下文不够；块大 → 上下文全，但混进无关内容。实务：按结构切 + 少量重叠，再用 eval 调大小。</text>
+</svg>

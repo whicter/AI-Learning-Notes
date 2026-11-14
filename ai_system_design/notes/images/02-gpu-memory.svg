@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 360" font-family="-apple-system, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+  <rect width="920" height="360" fill="#ffffff"/>
+  <text x="30" y="34" font-size="18" font-weight="700" fill="#0f172a">80GB 显卡（GPU memory）装什么？示意：30B 模型、开销按 4GB 假设</text>
+
+  <!-- legend -->
+  <g font-size="13" fill="#0f172a">
+    <rect x="30" y="52" width="16" height="16" fill="#3b82f6"/><text x="52" y="65">模型权重 weights = 参数量 × 每参数字节</text>
+    <rect x="320" y="52" width="16" height="16" fill="#94a3b8"/><text x="342" y="65">运行时开销 overhead</text>
+    <rect x="490" y="52" width="16" height="16" fill="#f97316"/><text x="512" y="65">剩下给 KV cache = 并发数 concurrency × 上下文长度</text>
+  </g>
+
+  <!-- scale 9.5 px per GB, x0=150 -->
+  <g font-size="14" fill="#0f172a">
+    <text x="30" y="118">FP16（2 字节）</text>
+    <rect x="150" y="98" width="570" height="32" fill="#3b82f6"/><text x="435" y="119" text-anchor="middle" fill="#fff">权重 60GB</text>
+    <rect x="720" y="98" width="38" height="32" fill="#94a3b8"/>
+    <rect x="758" y="98" width="152" height="32" fill="#f97316"/><text x="834" y="119" text-anchor="middle" fill="#fff">KV 16GB</text>
+
+    <text x="30" y="178">INT8（1 字节）</text>
+    <rect x="150" y="158" width="285" height="32" fill="#3b82f6"/><text x="292" y="179" text-anchor="middle" fill="#fff">权重 30GB</text>
+    <rect x="435" y="158" width="38" height="32" fill="#94a3b8"/>
+    <rect x="473" y="158" width="437" height="32" fill="#f97316"/><text x="691" y="179" text-anchor="middle" fill="#fff">KV 46GB</text>
+
+    <text x="30" y="238">INT4（0.5 字节）</text>
+    <rect x="150" y="218" width="142" height="32" fill="#3b82f6"/><text x="221" y="239" text-anchor="middle" fill="#fff">权重 15GB</text>
+    <rect x="292" y="218" width="38" height="32" fill="#94a3b8"/>
+    <rect x="330" y="218" width="580" height="32" fill="#f97316"/><text x="620" y="239" text-anchor="middle" fill="#fff">KV 61GB</text>
+  </g>
+  <line x1="150" y1="264" x2="910" y2="264" stroke="#cbd5e1"/>
+  <g font-size="12" fill="#94a3b8" text-anchor="middle"><text x="150" y="280">0</text><text x="530" y="280">40GB</text><text x="910" y="280" text-anchor="end">80GB</text></g>
+
+  <text x="30" y="314" font-size="14" fill="#0f172a">量化（quantization）的真正价值：不只是"模型变小"，而是把显存让给 KV cache → 同一张卡能并发更多请求。</text>
+  <text x="30" y="338" font-size="14" fill="#475569">代价：精度（accuracy）可能下降，必须用自己的 eval 集验证；不能默认"几乎无损"。</text>
+</svg>

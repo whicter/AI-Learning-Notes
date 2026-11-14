@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 500" font-family="-apple-system, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+  <rect width="960" height="500" fill="#ffffff"/>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#475569"/></marker>
+  </defs>
+  <text x="30" y="34" font-size="18" font-weight="700" fill="#0f172a">练习 1：智能停车 smart parking —— 课程答案 + 我的改法</text>
+
+  <rect x="30" y="60" width="150" height="60" rx="10" fill="#f1f5f9" stroke="#94a3b8"/>
+  <text x="105" y="84" text-anchor="middle" font-size="14" fill="#0f172a">司机 App</text>
+  <text x="105" y="104" text-anchor="middle" font-size="11" fill="#475569">"便宜、有顶棚、市中心"</text>
+  <line x1="182" y1="90" x2="218" y2="90" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+
+  <rect x="222" y="56" width="170" height="70" rx="10" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+  <text x="307" y="80" text-anchor="middle" font-size="14" font-weight="700" fill="#1e3a8a">DriverAgent</text>
+  <text x="307" y="98" text-anchor="middle" font-size="11" fill="#0f172a">理解需求、追问 · ReAct</text>
+  <text x="307" y="114" text-anchor="middle" font-size="11" fill="#475569">记：会话 + 用户偏好</text>
+  <line x1="394" y1="90" x2="430" y2="90" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+
+  <rect x="434" y="56" width="190" height="70" rx="10" fill="#ffedd5" stroke="#f97316" stroke-width="2"/>
+  <text x="529" y="80" text-anchor="middle" font-size="14" font-weight="700" fill="#9a3412">Manager（中心编排）</text>
+  <text x="529" y="98" text-anchor="middle" font-size="11" fill="#0f172a">拆任务、问各区域、汇总</text>
+  <text x="529" y="114" text-anchor="middle" font-size="11" fill="#475569">manager-worker 为主</text>
+
+  <!-- zones -->
+  <rect x="390" y="170" width="140" height="74" rx="10" fill="#dcfce7" stroke="#22c55e" stroke-width="2"/>
+  <text x="460" y="194" text-anchor="middle" font-size="13" font-weight="700" fill="#166534">ZoneAgent A</text>
+  <text x="460" y="212" text-anchor="middle" font-size="11" fill="#0f172a">传感器 + 活动 + 路况</text>
+  <text x="460" y="228" text-anchor="middle" font-size="11" fill="#0f172a">动态定价 · plan-execute</text>
+  <rect x="560" y="170" width="140" height="74" rx="10" fill="#dcfce7" stroke="#22c55e" stroke-width="2"/>
+  <text x="630" y="194" text-anchor="middle" font-size="13" font-weight="700" fill="#166534">ZoneAgent B</text>
+  <text x="630" y="212" text-anchor="middle" font-size="11" fill="#0f172a">满了 → 直接交给邻区</text>
+  <text x="630" y="228" text-anchor="middle" font-size="11" fill="#0f172a">handoff（去中心）</text>
+  <path d="M532,207 L556,207" stroke="#16a34a" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#a)"/>
+  <line x1="500" y1="128" x2="470" y2="166" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+  <line x1="560" y1="128" x2="610" y2="166" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+
+  <!-- reservation -->
+  <rect x="720" y="56" width="210" height="70" rx="10" fill="#fef2f2" stroke="#ef4444" stroke-width="2"/>
+  <text x="825" y="80" text-anchor="middle" font-size="14" font-weight="700" fill="#991b1b">Reservation（预订 + 支付）</text>
+  <text x="825" y="98" text-anchor="middle" font-size="11" fill="#0f172a">验证 → 锁位 → 扣款 → 确认</text>
+  <text x="825" y="114" text-anchor="middle" font-size="11" fill="#475569">失败就回滚（解锁车位）</text>
+  <line x1="626" y1="90" x2="716" y2="90" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+
+  <!-- critique -->
+  <rect x="30" y="270" width="900" height="210" rx="12" fill="#fff7ed" stroke="#f59e0b"/>
+  <text x="46" y="298" font-size="15" font-weight="700" fill="#92400e">我的改法（Staff 级加分点）</text>
+  <g font-size="13" fill="#0f172a">
+    <text x="46" y="326">① 预订 + 支付这一段<tspan font-weight="700">不要让 LLM 驱动</tspan>：做成确定性的 workflow / saga（每步有补偿动作 compensation），LLM 只负责前面的理解和推荐。</text>
+    <text x="46" y="352">② 防重复扣款靠<tspan font-weight="700">幂等键 idempotency key</tspan>，不是课程说的"限频 rate limit"：重试时带同一个 key，支付网关只扣一次。</text>
+    <text x="46" y="378">③ 锁位要有<tspan font-weight="700">过期时间 TTL</tspan>：扣款超时、用户放弃时自动释放，防"锁死"车位。</text>
+    <text x="46" y="404">④ 动态定价要有<tspan font-weight="700">上下限 + 审计</tspan>：模型建议价格，规则卡住范围（防演唱会夜价格失控），每次改价可追溯。</text>
+    <text x="46" y="430">⑤ 位置轨迹、车牌是 PII：最小化存储、日志脱敏（课程的护栏 1）；传感器坏了要标"不确定"，不能猜成"空位"。</text>
+    <text x="46" y="458" fill="#475569">一句话：agent 放在"需要判断"的地方（理解需求、推荐、异常推理），钱和库存交给确定性代码。</text>
+  </g>
+</svg>

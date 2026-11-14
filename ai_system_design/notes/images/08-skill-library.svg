@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 440" font-family="-apple-system, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+  <rect width="960" height="440" fill="#ffffff"/>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#475569"/></marker>
+  </defs>
+  <text x="30" y="34" font-size="18" font-weight="700" fill="#0f172a">练习 2：会自我改进的网页 agent —— 把成功经验变成技能库 skill library</text>
+
+  <g font-size="12" fill="#0f172a" text-anchor="middle">
+    <rect x="30" y="64" width="200" height="110" rx="12" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+    <text x="130" y="90" font-size="14" font-weight="700" fill="#1e3a8a">① 练习 practice</text>
+    <text x="130" y="114">用 ReAct 一步步做成一次</text>
+    <text x="130" y="134">"LAX → JFK 查航班"</text>
+    <text x="130" y="158" fill="#475569">产出：成功轨迹 trajectory</text>
+
+    <rect x="270" y="64" width="200" height="110" rx="12" fill="#ede9fe" stroke="#8b5cf6" stroke-width="2"/>
+    <text x="370" y="90" font-size="14" font-weight="700" fill="#5b21b6">② 抽象 API synthesis</text>
+    <text x="370" y="114">LLM 把轨迹改写成函数，</text>
+    <text x="370" y="134">具体值 → 参数</text>
+    <text x="370" y="158" font-family="Menlo, monospace" font-size="11" fill="#475569">find_flight(origin, dest)</text>
+
+    <rect x="510" y="64" width="200" height="110" rx="12" fill="#ffedd5" stroke="#f97316" stroke-width="2"/>
+    <text x="610" y="90" font-size="14" font-weight="700" fill="#9a3412">③ 打磨 honing</text>
+    <text x="610" y="114">生成测试用例，沙箱里跑</text>
+    <text x="610" y="134">报错回给 LLM 修</text>
+    <text x="610" y="158" fill="#475569">测试通过才入库</text>
+
+    <rect x="750" y="64" width="180" height="110" rx="12" fill="#dcfce7" stroke="#22c55e" stroke-width="2"/>
+    <text x="840" y="90" font-size="14" font-weight="700" fill="#166534">④ 技能库 library</text>
+    <text x="840" y="114">签名 + docstring</text>
+    <text x="840" y="134">+ 使用记录 usage log</text>
+    <text x="840" y="158" fill="#475569">+ 版本 version（我补）</text>
+  </g>
+  <g stroke="#475569" stroke-width="2.5"><line x1="232" y1="119" x2="266" y2="119" marker-end="url(#a)"/><line x1="472" y1="119" x2="506" y2="119" marker-end="url(#a)"/><line x1="712" y1="119" x2="746" y2="119" marker-end="url(#a)"/></g>
+
+  <!-- next time -->
+  <rect x="30" y="200" width="900" height="80" rx="12" fill="#f8fafc" stroke="#cbd5e1"/>
+  <text x="46" y="226" font-size="14" font-weight="700" fill="#0f172a">下次来新任务 "SFO → MIA"：技能选择 skill selection</text>
+  <text x="46" y="250" font-size="13" fill="#0f172a">LLM 当路由器 router：看任务 + 技能库里的签名和说明 → 命中就一次调用 find_flight("SFO","MIA",…)；没命中再走 ReAct。</text>
+  <text x="46" y="270" font-size="13" fill="#166534">效果：5–7 次 LLM 调用 → 1 次（课程估计）；更快、更便宜、出错机会更少。</text>
+
+  <rect x="30" y="296" width="900" height="130" rx="12" fill="#fff7ed" stroke="#f59e0b"/>
+  <text x="46" y="322" font-size="15" font-weight="700" fill="#92400e">我补的上线问题</text>
+  <g font-size="13" fill="#0f172a">
+    <text x="46" y="348">• 网站改版 → 技能失效：调用失败率超阈值就降级回 ReAct，并触发重新打磨；技能带版本，能回滚。</text>
+    <text x="46" y="372">• 生成的代码是不可信代码：只能在沙箱 sandbox 里跑，限制网络和权限；写操作（下单、付款）的技能要人审。</text>
+    <text x="46" y="396">• 技能太多 → 选择变难：按网站 / 意图分组检索，只把相关的几个放进上下文（和 06 §2.3 "工具按需加载"同理）。</text>
+  </g>
+</svg>

@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 420" font-family="-apple-system, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+  <rect width="900" height="420" fill="#ffffff"/>
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#334155"/></marker>
+  </defs>
+  <text x="30" y="34" font-size="18" font-weight="700" fill="#0f172a">长期记忆的写入流程（memory write pipeline）· Q28 / Q29 / Q31</text>
+
+  <g font-size="11" text-anchor="middle">
+    <rect x="30" y="70" width="130" height="64" rx="8" fill="#f1f5f9" stroke="#64748b"/><text x="95" y="96" fill="#0f172a">本轮对话</text><text x="95" y="114" fill="#475569">new turn</text>
+    <rect x="190" y="70" width="140" height="64" rx="8" fill="#ede9fe" stroke="#8b5cf6"/><text x="260" y="92" font-weight="700" fill="#0f172a">① 抽取</text><text x="260" y="108" fill="#475569">extraction</text><text x="260" y="124" fill="#0f172a">候选事实 + 来源</text>
+    <rect x="360" y="70" width="160" height="64" rx="8" fill="#fef9c3" stroke="#ca8a04"/><text x="440" y="92" font-weight="700" fill="#0f172a">② 写入门槛</text><text x="440" y="108" fill="#475569">write gate</text><text x="440" y="124" fill="#0f172a">拒绝 / 待确认 / 接受</text>
+    <rect x="550" y="70" width="150" height="64" rx="8" fill="#e0f2fe" stroke="#0284c7"/><text x="625" y="92" font-weight="700" fill="#0f172a">③ 冲突检查</text><text x="625" y="108" fill="#475569">conflict check</text><text x="625" y="124" fill="#0f172a">同一主体 + 同一属性</text>
+    <rect x="730" y="70" width="140" height="64" rx="8" fill="#dcfce7" stroke="#16a34a"/><text x="800" y="92" font-weight="700" fill="#0f172a">④ 操作</text><text x="800" y="110" fill="#0f172a">ADD / UPDATE</text><text x="800" y="126" fill="#0f172a">INVALIDATE / NOOP</text>
+  </g>
+  <line x1="160" y1="102" x2="188" y2="102" stroke="#334155" stroke-width="1.5" marker-end="url(#ar)"/>
+  <line x1="330" y1="102" x2="358" y2="102" stroke="#334155" stroke-width="1.5" marker-end="url(#ar)"/>
+  <line x1="520" y1="102" x2="548" y2="102" stroke="#334155" stroke-width="1.5" marker-end="url(#ar)"/>
+  <line x1="700" y1="102" x2="728" y2="102" stroke="#334155" stroke-width="1.5" marker-end="url(#ar)"/>
+
+  <text x="360" y="158" font-size="11" fill="#0f172a">玩笑、假设、引用别人的话 → 拒绝或待确认（防记忆污染 Q31）</text>
+  <text x="360" y="176" font-size="11" fill="#0f172a">敏感信息、低置信度 → 待确认，用户点头才写</text>
+
+  <!-- bi-temporal timeline -->
+  <rect x="30" y="200" width="840" height="150" rx="10" fill="#f8fafc" stroke="#64748b"/>
+  <text x="46" y="224" font-size="13" font-weight="700" fill="#0f172a">双时间轴（bi-temporal）：旧事实不删，标记失效时间</text>
+  <line x1="80" y1="290" x2="840" y2="290" stroke="#334155" stroke-width="1.5" marker-end="url(#ar)"/>
+  <text x="845" y="306" font-size="10" fill="#475569">时间</text>
+  <rect x="100" y="252" width="420" height="28" rx="5" fill="#fee2e2" stroke="#dc2626"/>
+  <text x="310" y="271" font-size="11" text-anchor="middle" fill="#0f172a">住在北京 lives_in = Beijing（valid_to = 2026-10）</text>
+  <rect x="520" y="252" width="300" height="28" rx="5" fill="#dcfce7" stroke="#16a34a"/>
+  <text x="670" y="271" font-size="11" text-anchor="middle" fill="#0f172a">住在上海 lives_in = Shanghai（当前有效）</text>
+  <line x1="520" y1="240" x2="520" y2="300" stroke="#0284c7" stroke-width="2"/>
+  <text x="520" y="318" font-size="11" text-anchor="middle" fill="#0284c7">用户说“我搬到上海了” → INVALIDATE 旧值 + ADD 新值</text>
+  <text x="46" y="340" font-size="11" fill="#475569">好处：能回答“我以前住哪”；检索默认只取当前有效的；写错了能回滚</text>
+
+  <rect x="30" y="365" width="840" height="40" rx="8" fill="#ffffff" stroke="#cbd5e1"/>
+  <text x="46" y="390" font-size="11" fill="#0f172a">读路径：按用户 + 属性取当前有效记忆 → 带上来源和时间一起放进上下文，让模型知道这条记忆多旧、从哪来</text>
+</svg>

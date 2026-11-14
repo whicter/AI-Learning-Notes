@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 560" font-family="-apple-system, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+<rect width="1100" height="560" fill="#ffffff"/>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#475569"/></marker><marker id="r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#dc2626"/></marker></defs>
+<text x="24" y="34" font-size="18" font-weight="700" fill="#0f172a">用 LangGraph 实现工单分诊：每个框是一个节点（node），箭头是边（edge）</text>
+<line x1="122" y1="148" x2="147" y2="148" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<line x1="332" y1="148" x2="367" y2="148" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<rect x="317" y="100" width="65" height="17" rx="4" fill="#ffffff" stroke="none" opacity="0.95"/>
+<text x="350" y="112" font-size="11" text-anchor="middle" fill="#475569">支持的现象</text>
+<line x1="240" y1="179" x2="240" y2="297" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<rect x="218" y="229" width="43" height="17" rx="4" fill="#ffffff" stroke="none" opacity="0.95"/>
+<text x="240" y="242" font-size="11" text-anchor="middle" fill="#475569">不支持</text>
+<line x1="572" y1="156" x2="607" y2="156" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<line x1="715" y1="194" x2="715" y2="297" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<rect x="638" y="236" width="153" height="17" rx="4" fill="#ffffff" stroke="none" opacity="0.95"/>
+<text x="715" y="250" font-size="11" text-anchor="middle" fill="#475569">本轮全部完成 → 合并 reduce</text>
+<polyline points="610,339 470,343 470,192" fill="none" stroke="#475569" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<rect x="386" y="334" width="168" height="17" rx="4" fill="#ffffff" stroke="none" opacity="0.95"/>
+<text x="470" y="347" font-size="11" text-anchor="middle" fill="#475569">还缺依赖信号 且 rounds &lt; 上限</text>
+<line x1="822" y1="336" x2="857" y2="336" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<rect x="795" y="269" width="89" height="17" rx="4" fill="#ffffff" stroke="none" opacity="0.95"/>
+<text x="840" y="282" font-size="11" text-anchor="middle" fill="#475569">有结论 / 到上限</text>
+<line x1="965" y1="298" x2="965" y2="180" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<polyline points="240,372 240,498 1086,498 1086,150 1070,150" fill="none" stroke="#475569" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<rect x="20" y="120" width="100" height="57" rx="10" fill="#f1f5f9" stroke="#64748b" stroke-width="2"/>
+<text x="70.0" y="146" font-size="13" font-weight="700" text-anchor="middle" fill="#0f172a">START</text>
+<text x="70.0" y="164" font-size="11" text-anchor="middle" fill="#475569">工单进来</text>
+<rect x="150" y="120" width="180" height="57" rx="10" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+<text x="240.0" y="146" font-size="13" font-weight="700" text-anchor="middle" fill="#047857">classify 节点</text>
+<text x="240.0" y="164" font-size="11" text-anchor="middle" fill="#475569">LLM：现象分类 + 抽 ID</text>
+<rect x="150" y="300" width="180" height="72" rx="10" fill="#eef2ff" stroke="#4f46e5" stroke-width="2"/>
+<text x="240.0" y="326" font-size="13" font-weight="700" text-anchor="middle" fill="#3730a3">unsupported 节点</text>
+<text x="240.0" y="344" font-size="11" text-anchor="middle" fill="#475569">不在知识表里</text>
+<text x="240.0" y="359" font-size="11" text-anchor="middle" fill="#475569">→ INCONCLUSIVE + 原因</text>
+<rect x="370" y="120" width="200" height="72" rx="10" fill="#eef2ff" stroke="#4f46e5" stroke-width="2"/>
+<text x="470.0" y="146" font-size="13" font-weight="700" text-anchor="middle" fill="#3730a3">planSignals 节点</text>
+<text x="470.0" y="164" font-size="11" text-anchor="middle" fill="#475569">查信号依赖图</text>
+<text x="470.0" y="179" font-size="11" text-anchor="middle" fill="#475569">→ 本轮可取的信号</text>
+<rect x="610" y="120" width="210" height="72" rx="10" fill="#eef2ff" stroke="#4f46e5" stroke-width="2"/>
+<text x="715.0" y="146" font-size="13" font-weight="700" text-anchor="middle" fill="#3730a3">fetchSignal × N</text>
+<text x="715.0" y="164" font-size="11" text-anchor="middle" fill="#475569">一轮内并行（Send fan-out）</text>
+<text x="715.0" y="179" font-size="11" text-anchor="middle" fill="#475569">错误写成 TOOL_FAILURE</text>
+<rect x="610" y="300" width="210" height="72" rx="10" fill="#eef2ff" stroke="#4f46e5" stroke-width="2"/>
+<text x="715.0" y="326" font-size="13" font-weight="700" text-anchor="middle" fill="#3730a3">evaluate 节点</text>
+<text x="715.0" y="344" font-size="11" text-anchor="middle" fill="#475569">代码比对声明式确认条件</text>
+<text x="715.0" y="359" font-size="11" text-anchor="middle" fill="#475569">LLM 只写解释</text>
+<rect x="860" y="300" width="210" height="72" rx="10" fill="#fdf2f8" stroke="#db2777" stroke-width="2"/>
+<text x="965.0" y="326" font-size="13" font-weight="700" text-anchor="middle" fill="#9d174d">humanReview 节点</text>
+<text x="965.0" y="344" font-size="11" text-anchor="middle" fill="#475569">interrupt() 暂停等人</text>
+<text x="965.0" y="359" font-size="11" text-anchor="middle" fill="#475569">同一 thread 恢复</text>
+<rect x="860" y="120" width="210" height="57" rx="10" fill="#f1f5f9" stroke="#64748b" stroke-width="2"/>
+<text x="965.0" y="146" font-size="13" font-weight="700" text-anchor="middle" fill="#0f172a">END</text>
+<text x="965.0" y="164" font-size="11" text-anchor="middle" fill="#475569">结论 + 证据</text>
+<rect x="370" y="410" width="200" height="60" rx="10" fill="#fff7ed" stroke="#f97316" stroke-width="2"/>
+<text x="470.0" y="438" font-size="13" font-weight="700" text-anchor="middle" fill="#c2410c">检查点 checkpointer</text>
+<text x="470.0" y="456" font-size="11" text-anchor="middle" fill="#475569">Postgres：一张工单一个 thread</text>
+<rect x="24" y="534" width="14" height="14" rx="3" fill="#eef2ff" stroke="#4f46e5" stroke-width="1.5"/>
+<text x="44" y="545" font-size="11" fill="#475569">确定性代码 code</text>
+<rect x="142.04" y="534" width="14" height="14" rx="3" fill="#ecfdf5" stroke="#10b981" stroke-width="1.5"/>
+<text x="162.04" y="545" font-size="11" fill="#475569">模型 LLM</text>
+<rect x="223.33999999999997" y="534" width="14" height="14" rx="3" fill="#fff7ed" stroke="#f97316" stroke-width="1.5"/>
+<text x="243.33999999999997" y="545" font-size="11" fill="#475569">数据 / 存储 data</text>
+<rect x="343.79999999999995" y="534" width="14" height="14" rx="3" fill="#fdf2f8" stroke="#db2777" stroke-width="1.5"/>
+<text x="363.79999999999995" y="545" font-size="11" fill="#475569">人工 human</text>
+</svg>

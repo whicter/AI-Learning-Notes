@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 510" font-family="-apple-system, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+<rect width="1100" height="510" fill="#ffffff"/>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#475569"/></marker><marker id="r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#dc2626"/></marker></defs>
+<text x="24" y="34" font-size="18" font-weight="700" fill="#0f172a">Q3 AI 编程助手 / coding agent</text>
+<line x1="142" y1="228" x2="157" y2="228" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<line x1="282" y1="228" x2="297" y2="228" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<line x1="390" y1="129" x2="390" y2="197" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<line x1="482" y1="228" x2="507" y2="228" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<line x1="682" y1="228" x2="707" y2="228" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<line x1="595" y1="129" x2="595" y2="197" stroke="#475569" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<polyline points="805,272 805,330 595,330 595,257" fill="none" stroke="#dc2626" stroke-width="2" marker-end="url(#r)"/>
+<rect x="539" y="321" width="111" height="17" rx="4" fill="#ffffff" stroke="none" opacity="0.95"/>
+<text x="595" y="334" font-size="11" text-anchor="middle" fill="#dc2626">失败信息回传 → 再修</text>
+<line x1="902" y1="228" x2="927" y2="228" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<rect x="888" y="180" width="54" height="17" rx="4" fill="#ffffff" stroke="none" opacity="0.95"/>
+<text x="914" y="192" font-size="11" text-anchor="middle" fill="#475569">全部通过</text>
+<line x1="1005" y1="259" x2="1005" y2="337" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<rect x="20" y="200" width="120" height="57" rx="10" fill="#f1f5f9" stroke="#64748b" stroke-width="2"/>
+<text x="80.0" y="226" font-size="13" font-weight="700" text-anchor="middle" fill="#0f172a">开发者 dev</text>
+<text x="80.0" y="244" font-size="11" text-anchor="middle" fill="#475569">提需求 / issue</text>
+<rect x="160" y="200" width="120" height="57" rx="10" fill="#eef2ff" stroke="#4f46e5" stroke-width="2"/>
+<text x="220.0" y="226" font-size="13" font-weight="700" text-anchor="middle" fill="#3730a3">IDE / CLI</text>
+<text x="220.0" y="244" font-size="11" text-anchor="middle" fill="#475569">取消旧请求</text>
+<rect x="300" y="200" width="180" height="72" rx="10" fill="#eef2ff" stroke="#4f46e5" stroke-width="2"/>
+<text x="390.0" y="226" font-size="13" font-weight="700" text-anchor="middle" fill="#3730a3">拼上下文 context</text>
+<text x="390.0" y="244" font-size="11" text-anchor="middle" fill="#475569">当前文件 · 相关文件</text>
+<text x="390.0" y="259" font-size="11" text-anchor="middle" fill="#475569">规范文件 AGENTS.md</text>
+<rect x="300" y="70" width="180" height="57" rx="10" fill="#fff7ed" stroke="#f97316" stroke-width="2"/>
+<text x="390.0" y="96" font-size="13" font-weight="700" text-anchor="middle" fill="#c2410c">代码索引 code index</text>
+<text x="390.0" y="114" font-size="11" text-anchor="middle" fill="#475569">LSP 符号图 · 向量检索</text>
+<rect x="510" y="200" width="170" height="57" rx="10" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+<text x="595.0" y="226" font-size="13" font-weight="700" text-anchor="middle" fill="#047857">模型：计划 + 改代码</text>
+<text x="595.0" y="244" font-size="11" text-anchor="middle" fill="#475569">plan → edit</text>
+<rect x="710" y="200" width="190" height="72" rx="10" fill="#fef2f2" stroke="#dc2626" stroke-width="2"/>
+<text x="805.0" y="226" font-size="13" font-weight="700" text-anchor="middle" fill="#991b1b">沙箱 sandbox</text>
+<text x="805.0" y="244" font-size="11" text-anchor="middle" fill="#475569">跑测试 · lint · 类型检查</text>
+<text x="805.0" y="259" font-size="11" text-anchor="middle" fill="#475569">无生产凭证 · 限网络</text>
+<rect x="510" y="70" width="170" height="57" rx="10" fill="#eef2ff" stroke="#4f46e5" stroke-width="2"/>
+<text x="595.0" y="96" font-size="13" font-weight="700" text-anchor="middle" fill="#3730a3">预算 budget</text>
+<text x="595.0" y="114" font-size="11" text-anchor="middle" fill="#475569">最多 N 步 · M 分钟</text>
+<rect x="930" y="200" width="150" height="57" rx="10" fill="#eef2ff" stroke="#4f46e5" stroke-width="2"/>
+<text x="1005.0" y="226" font-size="13" font-weight="700" text-anchor="middle" fill="#3730a3">生成 diff / PR</text>
+<text x="1005.0" y="244" font-size="11" text-anchor="middle" fill="#475569">只改允许的目录</text>
+<rect x="930" y="340" width="150" height="57" rx="10" fill="#fdf2f8" stroke="#db2777" stroke-width="2"/>
+<text x="1005.0" y="366" font-size="13" font-weight="700" text-anchor="middle" fill="#9d174d">人工 review</text>
+<text x="1005.0" y="384" font-size="11" text-anchor="middle" fill="#475569">通过才合并 merge</text>
+<rect x="24" y="484" width="14" height="14" rx="3" fill="#eef2ff" stroke="#4f46e5" stroke-width="1.5"/>
+<text x="44" y="495" font-size="11" fill="#475569">确定性代码 code</text>
+<rect x="142.04" y="484" width="14" height="14" rx="3" fill="#ecfdf5" stroke="#10b981" stroke-width="1.5"/>
+<text x="162.04" y="495" font-size="11" fill="#475569">模型 LLM</text>
+<rect x="223.33999999999997" y="484" width="14" height="14" rx="3" fill="#fff7ed" stroke="#f97316" stroke-width="1.5"/>
+<text x="243.33999999999997" y="495" font-size="11" fill="#475569">数据 / 存储 data</text>
+<rect x="343.79999999999995" y="484" width="14" height="14" rx="3" fill="#fef2f2" stroke="#dc2626" stroke-width="1.5"/>
+<text x="363.79999999999995" y="495" font-size="11" fill="#475569">安全检查 guard</text>
+<rect x="457.21999999999997" y="484" width="14" height="14" rx="3" fill="#fdf2f8" stroke="#db2777" stroke-width="1.5"/>
+<text x="477.21999999999997" y="495" font-size="11" fill="#475569">人工 human</text>
+</svg>

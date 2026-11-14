@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 600" font-family="-apple-system, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+  <rect width="960" height="600" fill="#ffffff"/>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#475569"/></marker>
+  </defs>
+  <text x="30" y="34" font-size="18" font-weight="700" fill="#0f172a">六种常见编排方式 orchestration patterns（从最受控到最自由）</text>
+
+  <!-- panel frames -->
+  <g fill="#f8fafc" stroke="#cbd5e1">
+    <rect x="20" y="50" width="300" height="260" rx="12"/><rect x="330" y="50" width="300" height="260" rx="12"/><rect x="640" y="50" width="300" height="260" rx="12"/>
+    <rect x="20" y="320" width="300" height="260" rx="12"/><rect x="330" y="320" width="300" height="260" rx="12"/><rect x="640" y="320" width="300" height="260" rx="12"/>
+  </g>
+
+  <!-- P1 workflow -->
+  <text x="36" y="76" font-size="15" font-weight="700" fill="#0f172a">① Workflow（代码定路线）</text>
+  <g font-size="12" text-anchor="middle" fill="#0f172a">
+    <rect x="36" y="110" width="60" height="40" rx="6" fill="#e2e8f0" stroke="#64748b"/><text x="66" y="135">取数据</text>
+    <rect x="126" y="110" width="70" height="40" rx="6" fill="#ffedd5" stroke="#f97316"/><text x="161" y="128">LLM</text><text x="161" y="143" font-size="10">分类</text>
+    <rect x="226" y="110" width="78" height="40" rx="6" fill="#e2e8f0" stroke="#64748b"/><text x="265" y="135">按类处理</text>
+  </g>
+  <g stroke="#475569" stroke-width="2"><line x1="98" y1="130" x2="122" y2="130" marker-end="url(#a)"/><line x1="198" y1="130" x2="222" y2="130" marker-end="url(#a)"/></g>
+  <text x="36" y="190" font-size="12" fill="#0f172a">路线写死在代码里，LLM 只在节点内做判断</text>
+  <text x="36" y="214" font-size="12" fill="#166534">✔ 可预测、好测、好审计</text>
+  <text x="36" y="236" font-size="12" fill="#b91c1c">✘ 路线变化多时代码爆炸</text>
+  <text x="36" y="280" font-size="12" fill="#475569">课程没单列，但这是生产默认起点（06 §2.3）</text>
+
+  <!-- P2 tool loop -->
+  <text x="346" y="76" font-size="15" font-weight="700" fill="#0f172a">② 工具调用循环 tool loop</text>
+  <g font-size="13" text-anchor="middle">
+    <rect x="370" y="110" width="80" height="44" rx="8" fill="#ffedd5" stroke="#f97316"/><text x="410" y="137">LLM</text>
+    <rect x="510" y="110" width="80" height="44" rx="8" fill="#dcfce7" stroke="#22c55e"/><text x="550" y="137">工具 tool</text>
+  </g>
+  <path d="M452,122 L506,122" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+  <path d="M508,144 L454,144" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+  <text x="480" y="116" font-size="11" text-anchor="middle" fill="#475569">调用</text><text x="480" y="160" font-size="11" text-anchor="middle" fill="#475569">结果</text>
+  <text x="346" y="190" font-size="12" fill="#0f172a">LLM 选工具 → 看结果 → 再选，直到完成</text>
+  <text x="346" y="214" font-size="12" fill="#166534">✔ 最简单，适合探索性任务</text>
+  <text x="346" y="236" font-size="12" fill="#b91c1c">✘ 长链容易跑偏、难调试</text>
+
+  <!-- P3 ReAct -->
+  <text x="656" y="76" font-size="15" font-weight="700" fill="#0f172a">③ ReAct（想→做→看）</text>
+  <g font-size="13" text-anchor="middle">
+    <rect x="745" y="92" width="80" height="34" rx="8" fill="#ede9fe" stroke="#8b5cf6"/><text x="785" y="114">Think</text>
+    <rect x="845" y="144" width="80" height="34" rx="8" fill="#dcfce7" stroke="#22c55e"/><text x="885" y="166">Act</text>
+    <rect x="655" y="144" width="80" height="34" rx="8" fill="#dbeafe" stroke="#3b82f6"/><text x="695" y="166">Observe</text>
+  </g>
+  <g fill="none" stroke="#475569" stroke-width="2">
+    <path d="M827,112 Q870,112 880,140" marker-end="url(#a)"/>
+    <path d="M843,166 L739,166" marker-end="url(#a)"/>
+    <path d="M700,142 Q705,112 741,110" marker-end="url(#a)"/>
+  </g>
+  <text x="656" y="208" font-size="12" fill="#0f172a">每次行动前先写出"为什么"，推理过程可见</text>
+  <text x="656" y="232" font-size="12" fill="#166534">✔ 可解释、好排查</text>
+  <text x="656" y="254" font-size="12" fill="#b91c1c">✘ 更啰嗦 → 更多 token、更慢</text>
+
+  <!-- P4 plan and execute -->
+  <text x="36" y="346" font-size="15" font-weight="700" fill="#0f172a">④ 先计划后执行 plan-and-execute</text>
+  <g font-size="12" text-anchor="middle">
+    <rect x="36" y="370" width="80" height="40" rx="8" fill="#ede9fe" stroke="#8b5cf6"/><text x="76" y="395">Planner</text>
+    <rect x="140" y="364" width="160" height="22" rx="4" fill="#fff" stroke="#94a3b8"/><text x="220" y="380">1. 取 Q2 收入数据</text>
+    <rect x="140" y="390" width="160" height="22" rx="4" fill="#fff" stroke="#94a3b8"/><text x="220" y="406">2. 画图</text>
+    <rect x="140" y="416" width="160" height="22" rx="4" fill="#fff" stroke="#94a3b8"/><text x="220" y="432">3. 写总结 → 4. 发邮件</text>
+  </g>
+  <line x1="118" y1="390" x2="136" y2="390" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+  <text x="36" y="468" font-size="12" fill="#0f172a">先出完整计划，再逐步执行</text>
+  <text x="36" y="492" font-size="12" fill="#166534">✔ 步骤清楚、可以先给人审计划</text>
+  <text x="36" y="514" font-size="12" fill="#b91c1c">✘ 环境一变计划就过时，要能重新规划</text>
+
+  <!-- P5 manager worker -->
+  <text x="346" y="346" font-size="15" font-weight="700" fill="#0f172a">⑤ Manager-Worker（多 agent）</text>
+  <g font-size="12" text-anchor="middle">
+    <rect x="430" y="362" width="100" height="36" rx="8" fill="#ffedd5" stroke="#f97316"/><text x="480" y="385">Manager</text>
+    <rect x="350" y="440" width="80" height="34" rx="8" fill="#dcfce7" stroke="#22c55e"/><text x="390" y="461">调研</text>
+    <rect x="440" y="440" width="80" height="34" rx="8" fill="#dcfce7" stroke="#22c55e"/><text x="480" y="461">写稿</text>
+    <rect x="530" y="440" width="80" height="34" rx="8" fill="#dcfce7" stroke="#22c55e"/><text x="570" y="461">配图</text>
+  </g>
+  <g stroke="#475569" stroke-width="1.8"><line x1="460" y1="400" x2="398" y2="436" marker-end="url(#a)"/><line x1="480" y1="400" x2="480" y2="436" marker-end="url(#a)"/><line x1="500" y1="400" x2="562" y2="436" marker-end="url(#a)"/></g>
+  <text x="346" y="500" font-size="12" fill="#0f172a">经理拆任务、分派、汇总</text>
+  <text x="346" y="522" font-size="12" fill="#166534">✔ 分工明确、子任务可并行</text>
+  <text x="346" y="544" font-size="12" fill="#b91c1c">✘ 经理是单点；token 成倍增长</text>
+
+  <!-- P6 handoff -->
+  <text x="656" y="346" font-size="15" font-weight="700" fill="#0f172a">⑥ Handoff（接力，无中心）</text>
+  <g font-size="12" text-anchor="middle">
+    <rect x="660" y="400" width="76" height="40" rx="8" fill="#dbeafe" stroke="#3b82f6"/><text x="698" y="418">A 接待</text><text x="698" y="432" font-size="10">识别需求</text>
+    <rect x="762" y="400" width="76" height="40" rx="8" fill="#dbeafe" stroke="#3b82f6"/><text x="800" y="418">B 机票</text><text x="800" y="432" font-size="10">订航班</text>
+    <rect x="864" y="400" width="66" height="40" rx="8" fill="#dbeafe" stroke="#3b82f6"/><text x="897" y="418">C 酒店</text><text x="897" y="432" font-size="10">订房</text>
+  </g>
+  <g stroke="#475569" stroke-width="2"><line x1="738" y1="420" x2="758" y2="420" marker-end="url(#a)"/><line x1="840" y1="420" x2="860" y2="420" marker-end="url(#a)"/></g>
+  <text x="656" y="476" font-size="12" fill="#0f172a">控制权连同上下文交给下一个专家</text>
+  <text x="656" y="500" font-size="12" fill="#166534">✔ 灵活，适合多领域客服</text>
+  <text x="656" y="522" font-size="12" fill="#b91c1c">✘ 踢皮球、死循环、没人总负责</text>
+</svg>

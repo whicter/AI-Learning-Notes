@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 520" font-family="-apple-system, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+<rect width="1100" height="520" fill="#ffffff"/>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#475569"/></marker><marker id="r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#dc2626"/></marker></defs>
+<text x="24" y="34" font-size="18" font-weight="700" fill="#0f172a">Q15 跨团队分配 GPU / token 配额（quota allocation）</text>
+<line x1="152" y1="208" x2="167" y2="208" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<line x1="372" y1="216" x2="387" y2="216" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<line x1="612" y1="208" x2="637" y2="208" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<line x1="740" y1="239" x2="740" y2="327" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<line x1="842" y1="358" x2="867" y2="358" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<line x1="270" y1="328" x2="270" y2="255" stroke="#475569" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<line x1="638" y1="358" x2="373" y2="358" stroke="#475569" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<rect x="478" y="350" width="54" height="17" rx="4" fill="#ffffff" stroke="none" opacity="0.95"/>
+<text x="506" y="362" font-size="11" text-anchor="middle" fill="#475569">历史用量</text>
+<rect x="20" y="180" width="130" height="57" rx="10" fill="#f1f5f9" stroke="#64748b" stroke-width="2"/>
+<text x="85.0" y="206" font-size="13" font-weight="700" text-anchor="middle" fill="#0f172a">各团队 teams</text>
+<text x="85.0" y="224" font-size="11" text-anchor="middle" fill="#475569">训练 · 推理 · 实验</text>
+<rect x="170" y="180" width="200" height="72" rx="10" fill="#eef2ff" stroke="#4f46e5" stroke-width="2"/>
+<text x="270.0" y="206" font-size="13" font-weight="700" text-anchor="middle" fill="#3730a3">配额服务 quota</text>
+<text x="270.0" y="224" font-size="11" text-anchor="middle" fill="#475569">每队保底额度 guaranteed</text>
+<text x="270.0" y="239" font-size="11" text-anchor="middle" fill="#475569">空闲时可借用 borrow</text>
+<rect x="390" y="180" width="220" height="72" rx="10" fill="#eef2ff" stroke="#4f46e5" stroke-width="2"/>
+<text x="500.0" y="206" font-size="13" font-weight="700" text-anchor="middle" fill="#3730a3">调度器 scheduler</text>
+<text x="500.0" y="224" font-size="11" text-anchor="middle" fill="#475569">优先级 · 公平分配 fair share</text>
+<text x="500.0" y="239" font-size="11" text-anchor="middle" fill="#475569">借来的可被抢占 preempt</text>
+<rect x="640" y="180" width="200" height="57" rx="10" fill="#f8fafc" stroke="#94a3b8" stroke-width="2"/>
+<text x="740.0" y="206" font-size="13" font-weight="700" text-anchor="middle" fill="#334155">GPU 资源池</text>
+<text x="740.0" y="224" font-size="11" text-anchor="middle" fill="#475569">按型号分池</text>
+<rect x="640" y="330" width="200" height="57" rx="10" fill="#fff7ed" stroke="#f97316" stroke-width="2"/>
+<text x="740.0" y="356" font-size="13" font-weight="700" text-anchor="middle" fill="#c2410c">计量 metering</text>
+<text x="740.0" y="374" font-size="11" text-anchor="middle" fill="#475569">每队用量 · 成本</text>
+<rect x="870" y="330" width="200" height="57" rx="10" fill="#fff7ed" stroke="#f97316" stroke-width="2"/>
+<text x="970.0" y="356" font-size="13" font-weight="700" text-anchor="middle" fill="#c2410c">成本分摊 chargeback</text>
+<text x="970.0" y="374" font-size="11" text-anchor="middle" fill="#475569">每月账单到团队</text>
+<rect x="170" y="330" width="200" height="72" rx="10" fill="#eef2ff" stroke="#4f46e5" stroke-width="2"/>
+<text x="270.0" y="356" font-size="13" font-weight="700" text-anchor="middle" fill="#3730a3">预测 + 预留</text>
+<text x="270.0" y="374" font-size="11" text-anchor="middle" fill="#475569">forecast / reservation</text>
+<text x="270.0" y="389" font-size="11" text-anchor="middle" fill="#475569">提前锁定大任务</text>
+<rect x="24" y="494" width="14" height="14" rx="3" fill="#eef2ff" stroke="#4f46e5" stroke-width="1.5"/>
+<text x="44" y="505" font-size="11" fill="#475569">确定性代码 code</text>
+<rect x="142.04" y="494" width="14" height="14" rx="3" fill="#fff7ed" stroke="#f97316" stroke-width="1.5"/>
+<text x="162.04" y="505" font-size="11" fill="#475569">数据 / 存储 data</text>
+<rect x="262.5" y="494" width="14" height="14" rx="3" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5"/>
+<text x="282.5" y="505" font-size="11" fill="#475569">外部系统 external</text>
+</svg>

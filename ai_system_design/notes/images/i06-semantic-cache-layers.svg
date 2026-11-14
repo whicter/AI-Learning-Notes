@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 440" font-family="-apple-system, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+  <rect width="880" height="440" fill="#ffffff"/>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#475569"/></marker>
+    <marker id="g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#16a34a"/></marker>
+  </defs>
+  <text x="30" y="34" font-size="18" font-weight="700" style="fill:#0f172a">分层缓存 tiered cache：精确 exact L1 → 语义 semantic L2 → RAG + LLM</text>
+
+  <rect x="30" y="70" width="120" height="70" rx="10" fill="#f1f5f9" stroke="#64748b" stroke-width="2"/>
+  <text x="90" y="100" font-size="14" font-weight="700" text-anchor="middle" style="fill:#0f172a">请求</text>
+  <text x="90" y="122" font-size="11" text-anchor="middle" style="fill:#475569">归一化（大小写/空格）</text>
+
+  <rect x="185" y="70" width="140" height="70" rx="10" fill="#eff6ff" stroke="#3b82f6" stroke-width="2"/>
+  <text x="255" y="98" font-size="14" font-weight="700" text-anchor="middle" style="fill:#1d4ed8">L1 精确 exact</text>
+  <text x="255" y="120" font-size="11" text-anchor="middle" style="fill:#475569">hash → Redis，~1ms</text>
+
+  <rect x="360" y="70" width="180" height="70" rx="10" fill="#f0fdf4" stroke="#22c55e" stroke-width="2"/>
+  <text x="450" y="96" font-size="14" font-weight="700" text-anchor="middle" style="fill:#15803d">L2 语义 semantic</text>
+  <text x="450" y="116" font-size="11" text-anchor="middle" style="fill:#475569">embed 5–20ms + ANN 1–10ms</text>
+  <text x="450" y="132" font-size="11" text-anchor="middle" style="fill:#475569">相似度 ≥ 阈值才命中</text>
+
+  <rect x="575" y="70" width="130" height="70" rx="10" fill="#fff7ed" stroke="#f97316" stroke-width="2"/>
+  <text x="640" y="98" font-size="14" font-weight="700" text-anchor="middle" style="fill:#c2410c">RAG 检索</text>
+  <text x="640" y="120" font-size="11" text-anchor="middle" style="fill:#475569">也可缓存检索结果</text>
+
+  <rect x="740" y="70" width="110" height="70" rx="10" fill="#faf5ff" stroke="#8b5cf6" stroke-width="2"/>
+  <text x="795" y="98" font-size="14" font-weight="700" text-anchor="middle" style="fill:#6d28d9">LLM</text>
+  <text x="795" y="120" font-size="11" text-anchor="middle" style="fill:#475569">0.5–3s</text>
+
+  <line x1="150" y1="105" x2="183" y2="105" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+  <line x1="325" y1="105" x2="358" y2="105" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+  <line x1="540" y1="105" x2="573" y2="105" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+  <line x1="705" y1="105" x2="738" y2="105" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+  <text x="342" y="98" font-size="10" text-anchor="middle" style="fill:#64748b">miss</text>
+  <text x="557" y="98" font-size="10" text-anchor="middle" style="fill:#64748b">miss</text>
+
+  <!-- hit returns -->
+  <path d="M255,140 L255,170 L90,170 L90,142" fill="none" stroke="#16a34a" stroke-width="2" marker-end="url(#g)"/>
+  <text x="172" y="164" font-size="11" text-anchor="middle" style="fill:#16a34a">hit</text>
+  <path d="M450,140 L450,185 L70,185 L70,142" fill="none" stroke="#16a34a" stroke-width="2" marker-end="url(#g)"/>
+  <text x="300" y="200" font-size="11" text-anchor="middle" style="fill:#16a34a">hit（相似度够高）</text>
+  <path d="M795,140 L795,200 L470,200 L470,142" fill="none" stroke="#8b5cf6" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+  <text x="640" y="216" font-size="11" text-anchor="middle" style="fill:#6d28d9">回写 write back：L1 + L2（namespace、版本、TTL）</text>
+
+  <!-- threshold tradeoff -->
+  <rect x="30" y="240" width="400" height="180" rx="10" fill="#f8fafc" stroke="#94a3b8"/>
+  <text x="45" y="264" font-size="14" font-weight="700" style="fill:#0f172a">阈值 threshold</text>
+  <line x1="70" y1="390" x2="400" y2="390" stroke="#94a3b8" stroke-width="1.5"/>
+  <line x1="70" y1="390" x2="70" y2="280" stroke="#94a3b8" stroke-width="1.5"/>
+  <text x="235" y="410" font-size="11" text-anchor="middle" style="fill:#64748b">阈值  0.85 → 0.98</text>
+  <path d="M80,290 C180,300 280,350 390,382" fill="none" stroke="#22c55e" stroke-width="2.5"/>
+  <text x="96" y="286" font-size="11" style="fill:#15803d">命中率 hit rate</text>
+  <path d="M80,370 C180,330 280,300 390,290" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
+  <text x="330" y="306" font-size="11" style="fill:#1d4ed8">正确率 precision</text>
+  <text x="250" y="262" font-size="11" style="fill:#b91c1c">太低：“重置密码”</text>
+  <text x="250" y="276" font-size="11" style="fill:#b91c1c">命中“重置路由器”</text>
+
+  <rect x="450" y="240" width="400" height="180" rx="10" fill="#fef2f2" stroke="#ef4444"/>
+  <text x="465" y="264" font-size="14" font-weight="700" style="fill:#b91c1c">上生产必须有</text>
+  <text x="465" y="290" font-size="12" style="fill:#0f172a">· namespace 按 租户 / 权限 / 领域 隔离（防串数据）</text>
+  <text x="465" y="314" font-size="12" style="fill:#0f172a">· 失效 invalidation：知识库更新 → 清相关条目；TTL 兜底</text>
+  <text x="465" y="338" font-size="12" style="fill:#0f172a">· 条目带 embedding 版本；换模型 = 整体重建</text>
+  <text x="465" y="362" font-size="12" style="fill:#0f172a">· 指标：命中率 + 错误命中率 false-hit rate</text>
+  <text x="465" y="386" font-size="12" style="fill:#0f172a">· 个性化 / 含 PII / 实时状态的答案不进缓存</text>
+  <text x="465" y="408" font-size="12" style="fill:#475569">起步：阈值 0.95 + 分领域，用数据逐步下调</text>
+</svg>

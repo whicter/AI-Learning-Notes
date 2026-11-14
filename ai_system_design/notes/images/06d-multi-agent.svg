@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 430" font-family="-apple-system, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+  <rect width="900" height="430" fill="#ffffff"/>
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#334155"/></marker>
+  </defs>
+  <text x="30" y="34" font-size="18" font-weight="700" fill="#0f172a">三种多智能体组织方式：谁拥有对话（who owns the conversation）· Q43 / Q48</text>
+
+  <!-- col 1 agents as tools -->
+  <rect x="25" y="55" width="270" height="250" rx="12" fill="#f5f3ff" stroke="#8b5cf6"/>
+  <text x="160" y="80" font-size="14" font-weight="700" text-anchor="middle" fill="#0f172a">子 agent 当工具</text>
+  <text x="160" y="97" font-size="11" text-anchor="middle" fill="#475569">agents-as-tools / orchestrator-workers</text>
+  <rect x="105" y="112" width="110" height="38" rx="6" fill="#ede9fe" stroke="#8b5cf6"/><text x="160" y="136" font-size="12" text-anchor="middle" fill="#0f172a">主管 manager</text>
+  <rect x="40" y="185" width="70" height="32" rx="6" fill="#ffffff" stroke="#8b5cf6"/><text x="75" y="206" font-size="11" text-anchor="middle" fill="#0f172a">子 1</text>
+  <rect x="125" y="185" width="70" height="32" rx="6" fill="#ffffff" stroke="#8b5cf6"/><text x="160" y="206" font-size="11" text-anchor="middle" fill="#0f172a">子 2</text>
+  <rect x="210" y="185" width="70" height="32" rx="6" fill="#ffffff" stroke="#8b5cf6"/><text x="245" y="206" font-size="11" text-anchor="middle" fill="#0f172a">子 3</text>
+  <line x1="140" y1="150" x2="80" y2="183" stroke="#334155" stroke-width="1.3" marker-end="url(#ar)"/>
+  <line x1="160" y1="150" x2="160" y2="183" stroke="#334155" stroke-width="1.3" marker-end="url(#ar)"/>
+  <line x1="180" y1="150" x2="240" y2="183" stroke="#334155" stroke-width="1.3" marker-end="url(#ar)"/>
+  <text x="40" y="242" font-size="11" fill="#0f172a">对话归属：始终是主管；子 agent 只交回摘要</text>
+  <text x="40" y="262" font-size="11" fill="#0f172a">适合：可并行的独立调研</text>
+  <text x="40" y="282" font-size="11" fill="#dc2626">代价：token 多（Anthropic：约为聊天的 15 倍）</text>
+
+  <!-- col 2 handoff -->
+  <rect x="315" y="55" width="270" height="250" rx="12" fill="#fff7ed" stroke="#f97316"/>
+  <text x="450" y="80" font-size="14" font-weight="700" text-anchor="middle" fill="#0f172a">移交</text>
+  <text x="450" y="97" font-size="11" text-anchor="middle" fill="#475569">handoff</text>
+  <rect x="330" y="125" width="70" height="38" rx="6" fill="#ffedd5" stroke="#f97316"/><text x="365" y="149" font-size="11" text-anchor="middle" fill="#0f172a">分诊</text>
+  <rect x="415" y="125" width="70" height="38" rx="6" fill="#ffedd5" stroke="#f97316"/><text x="450" y="149" font-size="11" text-anchor="middle" fill="#0f172a">退款</text>
+  <rect x="500" y="125" width="70" height="38" rx="6" fill="#ffedd5" stroke="#f97316"/><text x="535" y="149" font-size="11" text-anchor="middle" fill="#0f172a">物流</text>
+  <line x1="400" y1="144" x2="413" y2="144" stroke="#334155" stroke-width="1.5" marker-end="url(#ar)"/>
+  <line x1="485" y1="144" x2="498" y2="144" stroke="#334155" stroke-width="1.5" marker-end="url(#ar)"/>
+  <text x="450" y="192" font-size="11" text-anchor="middle" fill="#475569">对话整个交给下一个 agent，工具跟着 agent 走</text>
+  <text x="330" y="242" font-size="11" fill="#0f172a">对话归属：交出去就换人</text>
+  <text x="330" y="262" font-size="11" fill="#0f172a">适合：客服这类按专业分工的流程</text>
+  <text x="330" y="282" font-size="11" fill="#dc2626">风险：交接时上下文丢失或交错人</text>
+
+  <!-- col 3 teams -->
+  <rect x="605" y="55" width="270" height="250" rx="12" fill="#f0fdf4" stroke="#16a34a"/>
+  <text x="740" y="80" font-size="14" font-weight="700" text-anchor="middle" fill="#0f172a">团队</text>
+  <text x="740" y="97" font-size="11" text-anchor="middle" fill="#475569">agent teams（共享任务列表）</text>
+  <rect x="660" y="112" width="160" height="40" rx="6" fill="#dcfce7" stroke="#16a34a"/><text x="740" y="130" font-size="11" text-anchor="middle" fill="#0f172a">共享任务列表 + 文件锁</text><text x="740" y="145" font-size="10" text-anchor="middle" fill="#475569">task list · file lock · mailbox</text>
+  <rect x="625" y="185" width="70" height="32" rx="6" fill="#ffffff" stroke="#16a34a"/><text x="660" y="206" font-size="11" text-anchor="middle" fill="#0f172a">成员 A</text>
+  <rect x="705" y="185" width="70" height="32" rx="6" fill="#ffffff" stroke="#16a34a"/><text x="740" y="206" font-size="11" text-anchor="middle" fill="#0f172a">成员 B</text>
+  <rect x="785" y="185" width="70" height="32" rx="6" fill="#ffffff" stroke="#16a34a"/><text x="820" y="206" font-size="11" text-anchor="middle" fill="#0f172a">成员 C</text>
+  <line x1="660" y1="183" x2="700" y2="154" stroke="#334155" stroke-width="1.3" marker-end="url(#ar)"/>
+  <line x1="740" y1="183" x2="740" y2="154" stroke="#334155" stroke-width="1.3" marker-end="url(#ar)"/>
+  <line x1="820" y1="183" x2="780" y2="154" stroke="#334155" stroke-width="1.3" marker-end="url(#ar)"/>
+  <text x="620" y="242" font-size="11" fill="#0f172a">对话归属：各自一份，靠任务列表协调</text>
+  <text x="620" y="262" font-size="11" fill="#0f172a">适合：能按文件拆开的大改动</text>
+  <text x="620" y="282" font-size="11" fill="#dc2626">关卡：测试 + hooks 把关，防互相覆盖</text>
+
+  <rect x="25" y="322" width="850" height="90" rx="10" fill="#f8fafc" stroke="#64748b"/>
+  <text x="40" y="345" font-size="13" font-weight="700" fill="#0f172a">先问要不要多 agent</text>
+  <text x="40" y="366" font-size="11" fill="#0f172a">步骤固定 → 用 workflow；需要共享大量上下文、一步依赖上一步的决定 → 单 agent（Cognition 的观点：上下文碎片化会让决定互相矛盾）</text>
+  <text x="40" y="386" font-size="11" fill="#0f172a">任务能拆成互不依赖的子问题、单个上下文装不下 → 多 agent（Anthropic 研究系统的场景）</text>
+  <text x="40" y="404" font-size="11" fill="#475569">两边不矛盾：区别在任务能不能干净地切开</text>
+</svg>

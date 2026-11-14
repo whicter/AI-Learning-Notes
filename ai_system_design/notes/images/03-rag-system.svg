@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 470" font-family="-apple-system, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+  <rect width="960" height="470" fill="#ffffff"/>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#475569"/></marker>
+  </defs>
+  <text x="30" y="34" font-size="18" font-weight="700" fill="#0f172a">RAG = "开卷考试"（retrieve → generate）：先查资料，再照着资料回答</text>
+
+  <!-- offline lane -->
+  <rect x="20" y="52" width="920" height="140" rx="12" fill="#f0fdf4" stroke="#86efac"/>
+  <text x="36" y="78" font-size="15" font-weight="700" fill="#166534">离线 offline indexing：把资料整理成"可检索的卡片"（文档变了就重跑）</text>
+  <g font-size="13" fill="#0f172a" text-anchor="middle">
+    <rect x="36" y="96" width="130" height="60" rx="8" fill="#fff" stroke="#22c55e"/><text x="101" y="120">原始文档 docs</text><text x="101" y="140" font-size="11" fill="#475569">PDF/HTML/Wiki</text>
+    <rect x="196" y="96" width="130" height="60" rx="8" fill="#fff" stroke="#22c55e"/><text x="261" y="120">解析清洗 parse</text><text x="261" y="140" font-size="11" fill="#475569">去页眉、表格转文字</text>
+    <rect x="356" y="96" width="130" height="60" rx="8" fill="#fff" stroke="#22c55e"/><text x="421" y="120">切块 chunk</text><text x="421" y="140" font-size="11" fill="#475569">按段落/标题切</text>
+    <rect x="516" y="96" width="130" height="60" rx="8" fill="#fff" stroke="#22c55e"/><text x="581" y="120">Embedding</text><text x="581" y="140" font-size="11" fill="#475569">每块 → 向量</text>
+    <rect x="676" y="90" width="248" height="72" rx="8" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/><text x="800" y="114" font-weight="700">索引库 index</text><text x="800" y="134" font-size="11" fill="#166534">向量索引 + 关键词索引(BM25)</text><text x="800" y="151" font-size="11" fill="#166534">+ 元数据（来源、日期、权限 ACL）</text>
+  </g>
+  <g stroke="#475569" stroke-width="2"><line x1="168" y1="126" x2="192" y2="126" marker-end="url(#a)"/><line x1="328" y1="126" x2="352" y2="126" marker-end="url(#a)"/><line x1="488" y1="126" x2="512" y2="126" marker-end="url(#a)"/><line x1="648" y1="126" x2="672" y2="126" marker-end="url(#a)"/></g>
+
+  <!-- online lane -->
+  <rect x="20" y="210" width="920" height="170" rx="12" fill="#eff6ff" stroke="#93c5fd"/>
+  <text x="36" y="236" font-size="15" font-weight="700" fill="#1e3a8a">在线 online：每个问题都走一遍</text>
+  <g font-size="13" fill="#0f172a" text-anchor="middle">
+    <rect x="36" y="256" width="100" height="60" rx="8" fill="#fff" stroke="#3b82f6"/><text x="86" y="280">用户问题 query</text><text x="86" y="300" font-size="11" fill="#475569">"退款要几天？"</text>
+    <rect x="156" y="256" width="110" height="60" rx="8" fill="#fff" stroke="#3b82f6"/><text x="211" y="280">理解 rewrite</text><text x="211" y="300" font-size="11" fill="#475569">改写/纠错 → 向量</text>
+    <rect x="286" y="256" width="130" height="60" rx="8" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/><text x="351" y="280" font-weight="700">检索 retrieve</text><text x="351" y="300" font-size="11" fill="#475569">向量+关键词，按权限过滤</text>
+    <rect x="436" y="256" width="100" height="60" rx="8" fill="#fff" stroke="#3b82f6"/><text x="486" y="280">重排 rerank</text><text x="486" y="300" font-size="11" fill="#475569">取前几条 top-k</text>
+    <rect x="556" y="256" width="120" height="60" rx="8" fill="#fff" stroke="#3b82f6"/><text x="616" y="280">拼 prompt</text><text x="616" y="300" font-size="11" fill="#475569">指令+问题+资料片段</text>
+    <rect x="696" y="256" width="100" height="60" rx="8" fill="#ffedd5" stroke="#f97316" stroke-width="2"/><text x="746" y="280" font-weight="700">LLM 生成</text><text x="746" y="300" font-size="11" fill="#475569">grounded 作答</text>
+    <rect x="816" y="256" width="108" height="60" rx="8" fill="#fef2f2" stroke="#ef4444"/><text x="870" y="280">质检 QA</text><text x="870" y="300" font-size="11" fill="#475569">引用/幻觉/审核</text>
+  </g>
+  <g stroke="#475569" stroke-width="2"><line x1="138" y1="286" x2="152" y2="286" marker-end="url(#a)"/><line x1="268" y1="286" x2="282" y2="286" marker-end="url(#a)"/><line x1="418" y1="286" x2="432" y2="286" marker-end="url(#a)"/><line x1="538" y1="286" x2="552" y2="286" marker-end="url(#a)"/><line x1="678" y1="286" x2="692" y2="286" marker-end="url(#a)"/><line x1="798" y1="286" x2="812" y2="286" marker-end="url(#a)"/></g>
+  <path d="M760,164 L760,190 L351,190 L351,252" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-dasharray="6 4" marker-end="url(#a)"/>
+  <text x="560" y="204" text-anchor="middle" font-size="12" fill="#166534">查索引 lookup</text>
+  <text x="924" y="352" text-anchor="end" font-size="13" fill="#0f172a">→ 带引用的答案 cited answer</text>
+  <text x="36" y="352" font-size="12" fill="#475569">缓存：常见问题的向量 / 结果可缓存，省一次 embedding 和检索</text>
+
+  <text x="30" y="414" font-size="14" fill="#0f172a">为什么不直接问模型？模型的知识停在训练那天、不认识你公司的内部文档、还会编；RAG 让它"看着资料说话"并给出处。</text>
+  <text x="30" y="440" font-size="13" fill="#475569">答错时按层查：资料里有没有 → 切块切坏没 → 检索取到没 → 重排排对没 → 模型有没有照着说（详见 06 §2.2 的逐层排查表）。</text>
+</svg>

@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 540" font-family="-apple-system, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+<rect width="1100" height="540" fill="#ffffff"/>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#475569"/></marker><marker id="r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#dc2626"/></marker></defs>
+<text x="24" y="34" font-size="18" font-weight="700" fill="#0f172a">Q17 替用户在网页上完成任务的 agent（browser / web agent）</text>
+<line x1="142" y1="228" x2="157" y2="228" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<line x1="352" y1="228" x2="377" y2="228" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<rect x="342" y="180" width="44" height="17" rx="4" fill="#ffffff" stroke="none" opacity="0.95"/>
+<text x="364" y="192" font-size="11" text-anchor="middle" fill="#475569">点 [12]</text>
+<line x1="572" y1="228" x2="597" y2="228" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<line x1="752" y1="228" x2="777" y2="228" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<polyline points="930,200 930,150 255,150 255,200" fill="none" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<rect x="210" y="141" width="89" height="17" rx="4" fill="#ffffff" stroke="none" opacity="0.95"/>
+<text x="255" y="154" font-size="11" text-anchor="middle" fill="#475569">新的截图 + 编号</text>
+<line x1="475" y1="259" x2="475" y2="357" stroke="#475569" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<line x1="255" y1="274" x2="255" y2="357" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<rect x="228" y="306" width="54" height="17" rx="4" fill="#ffffff" stroke="none" opacity="0.95"/>
+<text x="255" y="320" font-size="11" text-anchor="middle" fill="#475569">我做完了</text>
+<line x1="518" y1="259" x2="656" y2="357" stroke="#dc2626" stroke-width="2" marker-end="url(#r)"/>
+<rect x="554" y="299" width="65" height="17" rx="4" fill="#ffffff" stroke="none" opacity="0.95"/>
+<text x="587" y="312" font-size="11" text-anchor="middle" fill="#dc2626">高风险动作</text>
+<rect x="20" y="200" width="120" height="57" rx="10" fill="#f1f5f9" stroke="#64748b" stroke-width="2"/>
+<text x="80.0" y="226" font-size="13" font-weight="700" text-anchor="middle" fill="#0f172a">用户任务</text>
+<text x="80.0" y="244" font-size="11" text-anchor="middle" fill="#475569">“订周五去纽约的票”</text>
+<rect x="160" y="200" width="190" height="72" rx="10" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+<text x="255.0" y="226" font-size="13" font-weight="700" text-anchor="middle" fill="#047857">视觉模型 VLM</text>
+<text x="255.0" y="244" font-size="11" text-anchor="middle" fill="#475569">看截图 → 决定下一步</text>
+<text x="255.0" y="259" font-size="11" text-anchor="middle" fill="#475569">ReAct：想 → 做 → 看</text>
+<rect x="380" y="200" width="190" height="57" rx="10" fill="#eef2ff" stroke="#4f46e5" stroke-width="2"/>
+<text x="475.0" y="226" font-size="13" font-weight="700" text-anchor="middle" fill="#3730a3">浏览器控制器</text>
+<text x="475.0" y="244" font-size="11" text-anchor="middle" fill="#475569">按元素编号点击 / 输入</text>
+<rect x="600" y="200" width="150" height="57" rx="10" fill="#f8fafc" stroke="#94a3b8" stroke-width="2"/>
+<text x="675.0" y="226" font-size="13" font-weight="700" text-anchor="middle" fill="#334155">真实网页</text>
+<text x="675.0" y="244" font-size="11" text-anchor="middle" fill="#475569">headless browser</text>
+<rect x="780" y="200" width="300" height="72" rx="10" fill="#eef2ff" stroke="#4f46e5" stroke-width="2"/>
+<text x="930.0" y="226" font-size="13" font-weight="700" text-anchor="middle" fill="#3730a3">页面 → 模型能看懂的输入</text>
+<text x="930.0" y="244" font-size="11" text-anchor="middle" fill="#475569">截图 + 给可点元素打编号 Set-of-Mark</text>
+<text x="930.0" y="259" font-size="11" text-anchor="middle" fill="#475569">+ 元素文字清单 · 只留最近 3 张</text>
+<rect x="380" y="360" width="190" height="57" rx="10" fill="#fef2f2" stroke="#dc2626" stroke-width="2"/>
+<text x="475.0" y="386" font-size="13" font-weight="700" text-anchor="middle" fill="#991b1b">循环检测 + 步数预算</text>
+<text x="475.0" y="404" font-size="11" text-anchor="middle" fill="#475569">同一动作重复 → 停</text>
+<rect x="160" y="360" width="190" height="57" rx="10" fill="#eef2ff" stroke="#4f46e5" stroke-width="2"/>
+<text x="255.0" y="386" font-size="13" font-weight="700" text-anchor="middle" fill="#3730a3">完成前校验</text>
+<text x="255.0" y="404" font-size="11" text-anchor="middle" fill="#475569">页面真的显示“已预订”？</text>
+<rect x="600" y="360" width="200" height="57" rx="10" fill="#fdf2f8" stroke="#db2777" stroke-width="2"/>
+<text x="700.0" y="386" font-size="13" font-weight="700" text-anchor="middle" fill="#9d174d">人工确认</text>
+<text x="700.0" y="404" font-size="11" text-anchor="middle" fill="#475569">付款 · 登录 · 提交表单</text>
+<rect x="24" y="514" width="14" height="14" rx="3" fill="#eef2ff" stroke="#4f46e5" stroke-width="1.5"/>
+<text x="44" y="525" font-size="11" fill="#475569">确定性代码 code</text>
+<rect x="142.04" y="514" width="14" height="14" rx="3" fill="#ecfdf5" stroke="#10b981" stroke-width="1.5"/>
+<text x="162.04" y="525" font-size="11" fill="#475569">模型 LLM</text>
+<rect x="223.33999999999997" y="514" width="14" height="14" rx="3" fill="#fef2f2" stroke="#dc2626" stroke-width="1.5"/>
+<text x="243.33999999999997" y="525" font-size="11" fill="#475569">安全检查 guard</text>
+<rect x="336.76" y="514" width="14" height="14" rx="3" fill="#fdf2f8" stroke="#db2777" stroke-width="1.5"/>
+<text x="356.76" y="525" font-size="11" fill="#475569">人工 human</text>
+<rect x="430.82" y="514" width="14" height="14" rx="3" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5"/>
+<text x="450.82" y="525" font-size="11" fill="#475569">外部系统 external</text>
+</svg>

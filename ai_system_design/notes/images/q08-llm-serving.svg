@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 540" font-family="-apple-system, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+<rect width="1100" height="540" fill="#ffffff"/>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#475569"/></marker><marker id="r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#dc2626"/></marker></defs>
+<text x="24" y="34" font-size="18" font-weight="700" fill="#0f172a">Q8 大模型推理服务（LLM inference serving）</text>
+<line x1="142" y1="150" x2="157" y2="150" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<line x1="312" y1="150" x2="327" y2="150" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<line x1="522" y1="150" x2="547" y2="150" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<line x1="852" y1="145" x2="877" y2="145" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<line x1="700" y1="258" x2="700" y2="203" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<rect x="673" y="222" width="54" height="17" rx="4" fill="#ffffff" stroke="none" opacity="0.95"/>
+<text x="700" y="234" font-size="11" text-anchor="middle" fill="#475569">加载权重</text>
+<line x1="312" y1="328" x2="327" y2="328" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<line x1="471" y1="298" x2="613" y2="203" stroke="#475569" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<rect x="508" y="242" width="67" height="17" rx="4" fill="#ffffff" stroke="none" opacity="0.95"/>
+<text x="542" y="254" font-size="11" text-anchor="middle" fill="#475569">加 / 减副本</text>
+<rect x="20" y="120" width="120" height="57" rx="10" fill="#f1f5f9" stroke="#64748b" stroke-width="2"/>
+<text x="80.0" y="146" font-size="13" font-weight="700" text-anchor="middle" fill="#0f172a">客户端 clients</text>
+<text x="80.0" y="164" font-size="11" text-anchor="middle" fill="#475569">流式接收 streaming</text>
+<rect x="160" y="120" width="150" height="57" rx="10" fill="#eef2ff" stroke="#4f46e5" stroke-width="2"/>
+<text x="235.0" y="146" font-size="13" font-weight="700" text-anchor="middle" fill="#3730a3">API 网关</text>
+<text x="235.0" y="164" font-size="11" text-anchor="middle" fill="#475569">认证 · 限流</text>
+<rect x="330" y="120" width="190" height="72" rx="10" fill="#eef2ff" stroke="#4f46e5" stroke-width="2"/>
+<text x="425.0" y="146" font-size="13" font-weight="700" text-anchor="middle" fill="#3730a3">调度器 scheduler</text>
+<text x="425.0" y="164" font-size="11" text-anchor="middle" fill="#475569">按长度分桶 · 优先级</text>
+<text x="425.0" y="179" font-size="11" text-anchor="middle" fill="#475569">选副本 replica</text>
+<rect x="550" y="90" width="300" height="110" rx="10" fill="#eef2ff" stroke="#4f46e5" stroke-width="2"/>
+<text x="700.0" y="128" font-size="13" font-weight="700" text-anchor="middle" fill="#3730a3">推理副本 replicas（多台）</text>
+<text x="700.0" y="146" font-size="11" text-anchor="middle" fill="#475569">连续批处理 continuous batching</text>
+<text x="700.0" y="160" font-size="11" text-anchor="middle" fill="#475569">KV cache 分页管理 PagedAttention</text>
+<text x="700.0" y="176" font-size="11" text-anchor="middle" fill="#475569">投机解码 speculative decoding</text>
+<rect x="880" y="100" width="200" height="72" rx="10" fill="#f8fafc" stroke="#94a3b8" stroke-width="2"/>
+<text x="980.0" y="126" font-size="13" font-weight="700" text-anchor="middle" fill="#334155">GPU</text>
+<text x="980.0" y="144" font-size="11" text-anchor="middle" fill="#475569">张量并行 TP（单机内）</text>
+<text x="980.0" y="159" font-size="11" text-anchor="middle" fill="#475569">流水线并行 PP（跨机）</text>
+<rect x="550" y="260" width="300" height="57" rx="10" fill="#fff7ed" stroke="#f97316" stroke-width="2"/>
+<text x="700.0" y="286" font-size="13" font-weight="700" text-anchor="middle" fill="#c2410c">模型仓库 model registry</text>
+<text x="700.0" y="304" font-size="11" text-anchor="middle" fill="#475569">权重 · 版本 · 量化格式</text>
+<rect x="330" y="300" width="190" height="57" rx="10" fill="#eef2ff" stroke="#4f46e5" stroke-width="2"/>
+<text x="425.0" y="326" font-size="13" font-weight="700" text-anchor="middle" fill="#3730a3">自动扩缩容 autoscaler</text>
+<text x="425.0" y="344" font-size="11" text-anchor="middle" fill="#475569">看队列长度 · TTFT</text>
+<rect x="20" y="300" width="290" height="72" rx="10" fill="#fff7ed" stroke="#f97316" stroke-width="2"/>
+<text x="165.0" y="326" font-size="13" font-weight="700" text-anchor="middle" fill="#c2410c">指标 metrics</text>
+<text x="165.0" y="344" font-size="11" text-anchor="middle" fill="#475569">TTFT（首字延迟）· TPOT（每字耗时）</text>
+<text x="165.0" y="359" font-size="11" text-anchor="middle" fill="#475569">GPU 利用率 · KV cache 占用</text>
+<text x="20" y="440" font-size="12" fill="#3730a3">prefill（读完整段输入）吃算力；decode（一个个吐字）吃显存带宽 → 两者瓶颈不同，可以分开部署。</text>
+<rect x="24" y="514" width="14" height="14" rx="3" fill="#eef2ff" stroke="#4f46e5" stroke-width="1.5"/>
+<text x="44" y="525" font-size="11" fill="#475569">确定性代码 code</text>
+<rect x="142.04" y="514" width="14" height="14" rx="3" fill="#fff7ed" stroke="#f97316" stroke-width="1.5"/>
+<text x="162.04" y="525" font-size="11" fill="#475569">数据 / 存储 data</text>
+<rect x="262.5" y="514" width="14" height="14" rx="3" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5"/>
+<text x="282.5" y="525" font-size="11" fill="#475569">外部系统 external</text>
+</svg>

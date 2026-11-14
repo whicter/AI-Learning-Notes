@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 600" font-family="-apple-system, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+<rect width="1100" height="600" fill="#ffffff"/>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#475569"/></marker><marker id="r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#dc2626"/></marker></defs>
+<text x="24" y="34" font-size="18" font-weight="700" fill="#0f172a">Q2 能执行操作的客服 agent（customer-support agent with actions）</text>
+<line x1="132" y1="268" x2="147" y2="268" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<line x1="312" y1="268" x2="327" y2="268" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<line x1="449" y1="238" x2="589" y2="130" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<line x1="492" y1="239" x2="543" y2="220" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<line x1="492" y1="278" x2="537" y2="278" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<line x1="439" y1="299" x2="600" y2="467" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<rect x="445" y="374" width="89" height="17" rx="4" fill="#ffffff" stroke="none" opacity="0.95"/>
+<text x="490" y="387" font-size="11" text-anchor="middle" fill="#475569">不清楚 / 高风险</text>
+<line x1="702" y1="288" x2="727" y2="288" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<line x1="882" y1="288" x2="907" y2="288" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<line x1="995" y1="319" x2="995" y2="377" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<line x1="908" y1="408" x2="893" y2="408" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<line x1="780" y1="319" x2="656" y2="467" stroke="#dc2626" stroke-width="2" marker-end="url(#r)"/>
+<rect x="609" y="384" width="67" height="17" rx="4" fill="#ffffff" stroke="none" opacity="0.95"/>
+<text x="643" y="397" font-size="11" text-anchor="middle" fill="#dc2626">超限 → 人工</text>
+<rect x="20" y="240" width="110" height="57" rx="10" fill="#f1f5f9" stroke="#64748b" stroke-width="2"/>
+<text x="75.0" y="266" font-size="13" font-weight="700" text-anchor="middle" fill="#0f172a">用户 user</text>
+<text x="75.0" y="284" font-size="11" text-anchor="middle" fill="#475569">发消息</text>
+<rect x="150" y="240" width="160" height="72" rx="10" fill="#fef2f2" stroke="#dc2626" stroke-width="2"/>
+<text x="230.0" y="266" font-size="13" font-weight="700" text-anchor="middle" fill="#991b1b">登录会话 session</text>
+<text x="230.0" y="284" font-size="11" text-anchor="middle" fill="#475569">身份来自登录</text>
+<text x="230.0" y="299" font-size="11" text-anchor="middle" fill="#475569">不信对话里自称</text>
+<rect x="330" y="240" width="160" height="57" rx="10" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+<text x="410.0" y="266" font-size="13" font-weight="700" text-anchor="middle" fill="#047857">意图分流 router</text>
+<text x="410.0" y="284" font-size="11" text-anchor="middle" fill="#475569">小模型 small model</text>
+<rect x="540" y="70" width="180" height="57" rx="10" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+<text x="630.0" y="96" font-size="13" font-weight="700" text-anchor="middle" fill="#047857">FAQ → RAG 回答</text>
+<text x="630.0" y="114" font-size="11" text-anchor="middle" fill="#475569">知识库检索</text>
+<rect x="540" y="160" width="180" height="57" rx="10" fill="#eef2ff" stroke="#4f46e5" stroke-width="2"/>
+<text x="630.0" y="186" font-size="13" font-weight="700" text-anchor="middle" fill="#3730a3">账户问题 → 读工具</text>
+<text x="630.0" y="204" font-size="11" text-anchor="middle" fill="#475569">read-only server</text>
+<rect x="540" y="260" width="160" height="57" rx="10" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+<text x="620.0" y="286" font-size="13" font-weight="700" text-anchor="middle" fill="#047857">要做操作 → 出计划</text>
+<text x="620.0" y="304" font-size="11" text-anchor="middle" fill="#475569">LLM 只提议</text>
+<rect x="730" y="260" width="150" height="57" rx="10" fill="#fef2f2" stroke="#dc2626" stroke-width="2"/>
+<text x="805.0" y="286" font-size="13" font-weight="700" text-anchor="middle" fill="#991b1b">策略检查 policy</text>
+<text x="805.0" y="304" font-size="11" text-anchor="middle" fill="#475569">金额 · 频率 · 风险</text>
+<rect x="910" y="260" width="170" height="57" rx="10" fill="#fdf2f8" stroke="#db2777" stroke-width="2"/>
+<text x="995.0" y="286" font-size="13" font-weight="700" text-anchor="middle" fill="#9d174d">用户确认 confirm</text>
+<text x="995.0" y="304" font-size="11" text-anchor="middle" fill="#475569">展示影响摘要</text>
+<rect x="910" y="380" width="170" height="57" rx="10" fill="#eef2ff" stroke="#4f46e5" stroke-width="2"/>
+<text x="995.0" y="406" font-size="13" font-weight="700" text-anchor="middle" fill="#3730a3">执行写工具 command</text>
+<text x="995.0" y="424" font-size="11" text-anchor="middle" fill="#475569">幂等键 idempotency key</text>
+<rect x="720" y="380" width="170" height="57" rx="10" fill="#eef2ff" stroke="#4f46e5" stroke-width="2"/>
+<text x="805.0" y="406" font-size="13" font-weight="700" text-anchor="middle" fill="#3730a3">结果校验 verify</text>
+<text x="805.0" y="424" font-size="11" text-anchor="middle" fill="#475569">钱真的退了吗？</text>
+<rect x="540" y="470" width="180" height="57" rx="10" fill="#fdf2f8" stroke="#db2777" stroke-width="2"/>
+<text x="630.0" y="496" font-size="13" font-weight="700" text-anchor="middle" fill="#9d174d">转人工 handoff</text>
+<text x="630.0" y="514" font-size="11" text-anchor="middle" fill="#475569">附证据摘要</text>
+<rect x="24" y="574" width="14" height="14" rx="3" fill="#eef2ff" stroke="#4f46e5" stroke-width="1.5"/>
+<text x="44" y="585" font-size="11" fill="#475569">确定性代码 code</text>
+<rect x="142.04" y="574" width="14" height="14" rx="3" fill="#ecfdf5" stroke="#10b981" stroke-width="1.5"/>
+<text x="162.04" y="585" font-size="11" fill="#475569">模型 LLM</text>
+<rect x="223.33999999999997" y="574" width="14" height="14" rx="3" fill="#fef2f2" stroke="#dc2626" stroke-width="1.5"/>
+<text x="243.33999999999997" y="585" font-size="11" fill="#475569">安全检查 guard</text>
+<rect x="336.76" y="574" width="14" height="14" rx="3" fill="#fdf2f8" stroke="#db2777" stroke-width="1.5"/>
+<text x="356.76" y="585" font-size="11" fill="#475569">人工 human</text>
+</svg>

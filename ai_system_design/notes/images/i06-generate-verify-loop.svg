@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 440" font-family="-apple-system, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+  <rect width="880" height="440" fill="#ffffff"/>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#475569"/></marker>
+  </defs>
+  <text x="30" y="34" font-size="18" font-weight="700" style="fill:#0f172a">生成 generate → 验证 verify → 反思 reflect → 选择 select</text>
+
+  <rect x="40" y="70" width="170" height="90" rx="10" fill="#f0fdf4" stroke="#22c55e" stroke-width="2"/>
+  <text x="125" y="98" font-size="15" font-weight="700" text-anchor="middle" style="fill:#15803d">① 生成候选 generate</text>
+  <text x="125" y="122" font-size="12" text-anchor="middle" style="fill:#475569">LLM 产出 N 个</text>
+  <text x="125" y="140" font-size="12" text-anchor="middle" style="fill:#475569">回答 / 代码 / 计划</text>
+
+  <rect x="260" y="70" width="170" height="90" rx="10" fill="#fff7ed" stroke="#f97316" stroke-width="2"/>
+  <text x="345" y="98" font-size="15" font-weight="700" text-anchor="middle" style="fill:#c2410c">② 外部验证 verify</text>
+  <text x="345" y="122" font-size="12" text-anchor="middle" style="fill:#475569">跑测试 / 模拟器 /</text>
+  <text x="345" y="140" font-size="12" text-anchor="middle" style="fill:#475569">VLM 检查 / 规则</text>
+
+  <rect x="480" y="70" width="170" height="90" rx="10" fill="#fefce8" stroke="#ca8a04" stroke-width="2"/>
+  <text x="565" y="98" font-size="15" font-weight="700" text-anchor="middle" style="fill:#a16207">③ 反思 reflect</text>
+  <text x="565" y="122" font-size="12" text-anchor="middle" style="fill:#475569">把“为什么失败”</text>
+  <text x="565" y="140" font-size="12" text-anchor="middle" style="fill:#475569">写成结构化反馈</text>
+
+  <rect x="700" y="70" width="150" height="90" rx="10" fill="#eef2ff" stroke="#4f46e5" stroke-width="2"/>
+  <text x="775" y="98" font-size="15" font-weight="700" text-anchor="middle" style="fill:#3730a3">④ 选择/停止 select</text>
+  <text x="775" y="122" font-size="12" text-anchor="middle" style="fill:#475569">留最好的；够好</text>
+  <text x="775" y="140" font-size="12" text-anchor="middle" style="fill:#475569">或到上限就停</text>
+
+  <line x1="210" y1="115" x2="258" y2="115" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+  <line x1="430" y1="115" x2="478" y2="115" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+  <line x1="650" y1="115" x2="698" y2="115" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+  <path d="M775,160 L775,190 L125,190 L125,162" fill="none" stroke="#475569" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#a)"/>
+  <text x="450" y="208" font-size="12" text-anchor="middle" style="fill:#475569">反馈 feedback 进入下一轮生成（最多 N 轮 max rounds）</text>
+
+  <!-- table of cases -->
+  <g font-size="12">
+    <rect x="40" y="230" width="810" height="30" fill="#f1f5f9" stroke="#cbd5e1"/>
+    <text x="55" y="250" font-weight="700" style="fill:#0f172a">案例</text>
+    <text x="215" y="250" font-weight="700" style="fill:#0f172a">生成什么</text>
+    <text x="420" y="250" font-weight="700" style="fill:#0f172a">谁来验证 verifier</text>
+    <text x="640" y="250" font-weight="700" style="fill:#0f172a">去掉验证/反思后</text>
+
+    <rect x="40" y="260" width="810" height="34" fill="#ffffff" stroke="#e2e8f0"/>
+    <text x="55" y="282" style="fill:#0f172a">Eureka（奖励函数）</text>
+    <text x="215" y="282" style="fill:#475569">奖励函数代码（一批）</text>
+    <text x="420" y="282" style="fill:#475569">GPU 上训练策略，看指标</text>
+    <text x="640" y="282" style="fill:#b91c1c">效果明显下降</text>
+
+    <rect x="40" y="294" width="810" height="34" fill="#ffffff" stroke="#e2e8f0"/>
+    <text x="55" y="316" style="fill:#0f172a">MACRS（推荐对话）</text>
+    <text x="215" y="316" style="fill:#475569">提问/推荐/闲聊各一个候选</text>
+    <text x="420" y="316" style="fill:#475569">planner 选一个 + 用户反馈</text>
+    <text x="640" y="316" style="fill:#b91c1c">去掉任一组件都下降</text>
+
+    <rect x="40" y="328" width="810" height="34" fill="#ffffff" stroke="#e2e8f0"/>
+    <text x="55" y="350" style="fill:#0f172a">Mulan（多物体生图）</text>
+    <text x="215" y="350" style="fill:#475569">一次画一个物体</text>
+    <text x="420" y="350" style="fill:#475569">VLM 检查每一步</text>
+    <text x="640" y="350" style="fill:#b91c1c">77.55% → 60.00%（论文）</text>
+
+    <rect x="40" y="362" width="810" height="34" fill="#eff6ff" stroke="#bfdbfe"/>
+    <text x="55" y="384" font-weight="700" style="fill:#1d4ed8">Coding agent（§3.3）</text>
+    <text x="215" y="384" style="fill:#475569">patch</text>
+    <text x="420" y="384" style="fill:#475569">沙箱里跑测试 / lint / 类型检查</text>
+    <text x="640" y="384" style="fill:#475569">验证器越可靠，越敢放开自主</text>
+  </g>
+  <text x="40" y="422" font-size="12" style="fill:#0f172a">一句话：可靠性来自“生成和评估分开 + 便宜可信的验证器”，不是来自更大的模型。</text>
+</svg>

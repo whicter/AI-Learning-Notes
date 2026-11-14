@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 430" font-family="-apple-system, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+  <rect width="880" height="430" fill="#ffffff"/>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#475569"/></marker>
+  </defs>
+  <text x="30" y="34" font-size="18" font-weight="700" style="fill:#0f172a">LLM 回归门禁 regression gate：非确定输出怎么做 CI</text>
+
+  <!-- change -->
+  <rect x="30" y="70" width="150" height="110" rx="10" fill="#f1f5f9" stroke="#64748b" stroke-width="2"/>
+  <text x="105" y="96" font-size="14" font-weight="700" text-anchor="middle" style="fill:#0f172a">一次变更</text>
+  <text x="105" y="120" font-size="12" text-anchor="middle" style="fill:#475569">prompt 模板</text>
+  <text x="105" y="138" font-size="12" text-anchor="middle" style="fill:#475569">模型 / 供应商版本</text>
+  <text x="105" y="156" font-size="12" text-anchor="middle" style="fill:#475569">embedding 模型</text>
+  <text x="105" y="174" font-size="12" text-anchor="middle" style="fill:#475569">知识 / 工具</text>
+
+  <!-- classify -->
+  <rect x="215" y="70" width="150" height="110" rx="10" fill="#eff6ff" stroke="#3b82f6" stroke-width="2"/>
+  <text x="290" y="100" font-size="14" font-weight="700" text-anchor="middle" style="fill:#1d4ed8">分类 change type</text>
+  <text x="290" y="126" font-size="12" text-anchor="middle" style="fill:#475569">决定跑哪些套件</text>
+  <text x="290" y="150" font-size="12" text-anchor="middle" style="fill:#b45309">换 embedding →</text>
+  <text x="290" y="168" font-size="12" text-anchor="middle" style="fill:#b45309">先重建索引/缓存</text>
+
+  <!-- suites -->
+  <rect x="400" y="62" width="200" height="56" rx="10" fill="#f0fdf4" stroke="#22c55e" stroke-width="2"/>
+  <text x="500" y="86" font-size="13" font-weight="700" text-anchor="middle" style="fill:#15803d">Smoke：50–100 条关键样本</text>
+  <text x="500" y="106" font-size="12" text-anchor="middle" style="fill:#475569">每次提交，分钟级</text>
+  <rect x="400" y="132" width="200" height="56" rx="10" fill="#f0fdf4" stroke="#22c55e" stroke-width="2"/>
+  <text x="500" y="156" font-size="13" font-weight="700" text-anchor="middle" style="fill:#15803d">Full：1,000+ 条</text>
+  <text x="500" y="176" font-size="12" text-anchor="middle" style="fill:#475569">nightly / 发布前，小时级</text>
+
+  <!-- scoring -->
+  <rect x="635" y="70" width="215" height="110" rx="10" fill="#fff7ed" stroke="#f97316" stroke-width="2"/>
+  <text x="742" y="96" font-size="14" font-weight="700" text-anchor="middle" style="fill:#c2410c">打分 scoring（每条跑 3–5 次）</text>
+  <text x="742" y="120" font-size="12" text-anchor="middle" style="fill:#475569">综合分 = 字面 + 语义 + 任务 + judge</text>
+  <text x="742" y="144" font-size="12" text-anchor="middle" style="fill:#475569">算置信区间 confidence interval</text>
+  <text x="742" y="168" font-size="12" text-anchor="middle" style="fill:#475569">和基线逐项比较</text>
+
+  <line x1="180" y1="125" x2="213" y2="125" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+  <line x1="365" y1="110" x2="398" y2="92" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+  <line x1="365" y1="140" x2="398" y2="158" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+  <line x1="600" y1="92" x2="633" y2="110" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+  <line x1="600" y1="158" x2="633" y2="140" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+
+  <!-- gate -->
+  <polygon points="742,215 832,265 742,315 652,265" fill="#fef2f2" stroke="#ef4444" stroke-width="2"/>
+  <text x="742" y="260" font-size="14" font-weight="700" text-anchor="middle" style="fill:#b91c1c">门禁 gate</text>
+  <text x="742" y="280" font-size="11" text-anchor="middle" style="fill:#475569">任一项越过阈值？</text>
+  <line x1="742" y1="180" x2="742" y2="213" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+
+  <rect x="430" y="240" width="170" height="50" rx="10" fill="#f0fdf4" stroke="#22c55e" stroke-width="2"/>
+  <text x="515" y="270" font-size="13" font-weight="700" text-anchor="middle" style="fill:#15803d">通过 → 灰度 canary</text>
+  <line x1="652" y1="265" x2="602" y2="265" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+  <text x="627" y="257" font-size="11" text-anchor="middle" style="fill:#475569">否</text>
+
+  <rect x="652" y="345" width="200" height="56" rx="10" fill="#fef2f2" stroke="#ef4444" stroke-width="2"/>
+  <text x="752" y="368" font-size="13" font-weight="700" text-anchor="middle" style="fill:#b91c1c">阻断 + 回滚 rollback</text>
+  <text x="752" y="388" font-size="11" text-anchor="middle" style="fill:#475569">模型 + prompt + embedding 一起回</text>
+  <line x1="742" y1="315" x2="742" y2="343" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+  <text x="752" y="334" font-size="11" style="fill:#475569">是</text>
+
+  <!-- artifacts -->
+  <rect x="30" y="230" width="370" height="170" rx="10" fill="#f8fafc" stroke="#94a3b8" stroke-dasharray="5 4"/>
+  <text x="45" y="256" font-size="14" font-weight="700" style="fill:#0f172a">每次运行存下来（可追溯）</text>
+  <text x="45" y="282" font-size="12" style="fill:#475569">run_id · commit · 数据集版本 · 模型/prompt/embedding 版本</text>
+  <text x="45" y="304" font-size="12" style="fill:#475569">每项指标分数 + 样例输出 + 与基线的 diff</text>
+  <text x="45" y="334" font-size="12" style="fill:#0f172a">阈值示例：语义分降幅 ≤ 2%，幻觉率升幅 ≤ 0.5 个百分点</text>
+  <text x="45" y="358" font-size="12" style="fill:#0f172a">看长期趋势：抓“每次都没越线、但一直在变差”</text>
+  <text x="45" y="382" font-size="12" style="fill:#0f172a">golden 定期由领域专家刷新，防基准过时</text>
+</svg>

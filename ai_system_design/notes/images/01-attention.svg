@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360" font-family="-apple-system, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+  <rect width="900" height="360" fill="#ffffff"/>
+  <text x="30" y="32" font-size="18" font-weight="700" fill="#0f172a">Attention 注意力：读到 "it" 时模型看哪些词？（线越粗 = 越关注）</text>
+
+  <!-- sentence 1 -->
+  <g fill="none" stroke-linecap="round">
+    <path d="M640,122 Q580,52 520,122" stroke="#f97316" stroke-width="7"/>
+    <path d="M640,122 Q495,40 350,122" stroke="#f97316" stroke-width="1.5" opacity="0.7"/>
+    <path d="M640,122 Q412,30 185,122" stroke="#f97316" stroke-width="2" opacity="0.7"/>
+    <path d="M640,122 Q697,70 755,122" stroke="#f97316" stroke-width="4"/>
+  </g>
+  <g font-size="17" fill="#0f172a" text-anchor="middle">
+    <text x="50" y="142">She</text><text x="115" y="142">poured</text><text x="185" y="142">milk</text><text x="245" y="142">from</text><text x="300" y="142">the</text><text x="350" y="142">jug</text><text x="405" y="142">into</text><text x="460" y="142">the</text>
+    <text x="520" y="142" font-weight="700" fill="#c2410c">glass</text><text x="585" y="142">until</text>
+    <text x="640" y="142" font-weight="700" fill="#2563eb">it</text><text x="690" y="142">was</text>
+    <text x="755" y="142" font-weight="700">full.</text>
+  </g>
+  <text x="788" y="142" font-size="13" fill="#475569">→ it = glass</text>
+
+  <!-- sentence 2 -->
+  <g fill="none" stroke-linecap="round">
+    <path d="M640,272 Q495,190 350,272" stroke="#8b5cf6" stroke-width="7"/>
+    <path d="M640,272 Q580,212 520,272" stroke="#8b5cf6" stroke-width="1.5" opacity="0.7"/>
+    <path d="M640,272 Q412,180 185,272" stroke="#8b5cf6" stroke-width="2" opacity="0.7"/>
+    <path d="M640,272 Q697,220 755,272" stroke="#8b5cf6" stroke-width="4"/>
+  </g>
+  <g font-size="17" fill="#0f172a" text-anchor="middle">
+    <text x="50" y="292">She</text><text x="115" y="292">poured</text><text x="185" y="292">milk</text><text x="245" y="292">from</text><text x="300" y="292">the</text>
+    <text x="350" y="292" font-weight="700" fill="#6d28d9">jug</text><text x="405" y="292">into</text><text x="460" y="292">the</text><text x="520" y="292">glass</text><text x="585" y="292">until</text>
+    <text x="640" y="292" font-weight="700" fill="#2563eb">it</text><text x="690" y="292">was</text>
+    <text x="760" y="292" font-weight="700">empty.</text>
+  </g>
+  <text x="800" y="292" font-size="13" fill="#475569">→ it = jug</text>
+
+  <text x="30" y="336" font-size="14" fill="#475569">只差最后一个词，"it" 指的东西就变了。Self-attention 让每个词根据整句上下文（context）更新自己的意思（权重为示意）。</text>
+</svg>

@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 500" font-family="-apple-system, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+  <rect width="880" height="500" fill="#ffffff"/>
+  <text x="30" y="34" font-size="18" font-weight="700" style="fill:#0f172a">生成质量指标地图 eval metrics：越往右越接近“业务正确”，也越贵</text>
+
+  <!-- axis -->
+  <line x1="40" y1="432" x2="840" y2="432" stroke="#94a3b8" stroke-width="2"/>
+  <polygon points="840,427 852,432 840,437" fill="#94a3b8"/>
+  <text x="40" y="452" font-size="12" style="fill:#64748b">便宜、快、可每次提交跑</text>
+  <text x="840" y="452" font-size="12" text-anchor="end" style="fill:#64748b">贵、慢、需要抽样/校准</text>
+
+  <!-- column 1 lexical -->
+  <rect x="30" y="60" width="190" height="350" rx="10" fill="#eff6ff" stroke="#3b82f6" stroke-width="2"/>
+  <text x="125" y="86" font-size="15" font-weight="700" text-anchor="middle" style="fill:#1d4ed8">① 字面重合 lexical</text>
+  <text x="45" y="116" font-size="13" style="fill:#0f172a">BLEU：n-gram 精确率</text>
+  <text x="45" y="134" font-size="12" style="fill:#475569">+ 过短惩罚（翻译）</text>
+  <text x="45" y="162" font-size="13" style="fill:#0f172a">ROUGE-N / L：召回率</text>
+  <text x="45" y="180" font-size="12" style="fill:#475569">L = 最长公共子序列（摘要）</text>
+  <text x="45" y="208" font-size="13" style="fill:#0f172a">Exact match</text>
+  <text x="45" y="226" font-size="12" style="fill:#475569">分类、抽取字段</text>
+  <rect x="42" y="330" width="166" height="66" rx="6" fill="#ffffff" stroke="#93c5fd"/>
+  <text x="52" y="352" font-size="12" style="fill:#b91c1c">换个说法就判错</text>
+  <text x="52" y="372" font-size="12" style="fill:#475569">只能当粗筛，</text>
+  <text x="52" y="388" font-size="12" style="fill:#475569">不能单独当门禁</text>
+
+  <!-- column 2 semantic -->
+  <rect x="236" y="60" width="190" height="350" rx="10" fill="#f0fdf4" stroke="#22c55e" stroke-width="2"/>
+  <text x="331" y="86" font-size="15" font-weight="700" text-anchor="middle" style="fill:#15803d">② 语义相似 semantic</text>
+  <text x="251" y="116" font-size="13" style="fill:#0f172a">BERTScore</text>
+  <text x="251" y="134" font-size="12" style="fill:#475569">token 级 embedding 对齐</text>
+  <text x="251" y="162" font-size="13" style="fill:#0f172a">Embedding cosine</text>
+  <text x="251" y="180" font-size="12" style="fill:#475569">整句向量和 golden 比</text>
+  <text x="251" y="208" font-size="13" style="fill:#0f172a">Perplexity（模型侧）</text>
+  <text x="251" y="226" font-size="12" style="fill:#475569">越低越“流畅”，不代表对</text>
+  <rect x="248" y="330" width="166" height="66" rx="6" fill="#ffffff" stroke="#86efac"/>
+  <text x="258" y="352" font-size="12" style="fill:#b91c1c">意思近 ≠ 事实对</text>
+  <text x="258" y="372" font-size="12" style="fill:#475569">数字改错一位，</text>
+  <text x="258" y="388" font-size="12" style="fill:#475569">相似度仍然很高</text>
+
+  <!-- column 3 task -->
+  <rect x="442" y="60" width="190" height="350" rx="10" fill="#fff7ed" stroke="#f97316" stroke-width="2"/>
+  <text x="537" y="86" font-size="15" font-weight="700" text-anchor="middle" style="fill:#c2410c">③ 任务 task-specific</text>
+  <text x="457" y="116" font-size="13" style="fill:#0f172a">NLI 蕴含 entailment 检查</text>
+  <text x="457" y="134" font-size="12" style="fill:#475569">输出是否被证据支持</text>
+  <text x="457" y="162" font-size="13" style="fill:#0f172a">幻觉率 / 引用命中率</text>
+  <text x="457" y="190" font-size="13" style="fill:#0f172a">格式合规率</text>
+  <text x="457" y="208" font-size="12" style="fill:#475569">JSON schema 通过率</text>
+  <text x="457" y="236" font-size="13" style="fill:#0f172a">图像：FID / CLIP score</text>
+  <rect x="454" y="330" width="166" height="66" rx="6" fill="#ffffff" stroke="#fdba74"/>
+  <text x="464" y="352" font-size="12" style="fill:#15803d">高风险领域权重最高</text>
+  <text x="464" y="372" font-size="12" style="fill:#475569">医疗/合规：事实性 ></text>
+  <text x="464" y="388" font-size="12" style="fill:#475569">流畅度</text>
+
+  <!-- column 4 judges -->
+  <rect x="648" y="60" width="200" height="350" rx="10" fill="#faf5ff" stroke="#8b5cf6" stroke-width="2"/>
+  <text x="748" y="86" font-size="15" font-weight="700" text-anchor="middle" style="fill:#6d28d9">④ 评审 judges（模型/人）</text>
+  <text x="663" y="116" font-size="13" style="fill:#0f172a">LLM-as-judge + 细则</text>
+  <text x="663" y="134" font-size="12" style="fill:#475569">相关性/完整性/连贯性</text>
+  <text x="663" y="162" font-size="13" style="fill:#0f172a">Pairwise（A/B 二选一）</text>
+  <text x="663" y="180" font-size="12" style="fill:#475569">比绝对打分稳定</text>
+  <text x="663" y="208" font-size="13" style="fill:#0f172a">MOS（1–5 平均分）</text>
+  <text x="663" y="226" font-size="12" style="fill:#475569">语音/图像主观质量</text>
+  <rect x="660" y="330" width="176" height="66" rx="6" fill="#ffffff" stroke="#c4b5fd"/>
+  <text x="670" y="352" font-size="12" style="fill:#b91c1c">judge 有偏差</text>
+  <text x="670" y="372" font-size="12" style="fill:#475569">先用人工标注集校准，</text>
+  <text x="670" y="388" font-size="12" style="fill:#475569">再进 CI</text>
+
+  <text x="440" y="484" font-size="13" text-anchor="middle" style="fill:#0f172a">实际做法：按领域风险给 ①–④ 加权，组成一个综合分；每项单独设退化阈值</text>
+</svg>

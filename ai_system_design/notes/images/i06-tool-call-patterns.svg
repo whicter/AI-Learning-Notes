@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 420" font-family="-apple-system, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+  <rect width="880" height="420" fill="#ffffff"/>
+  <text x="30" y="34" font-size="18" font-weight="700" style="fill:#0f172a">三种工具调用形态 tool-calling patterns（横轴 = 墙钟时间 wall-clock）</text>
+
+  <!-- row 1 single -->
+  <text x="30" y="80" font-size="14" font-weight="700" style="fill:#0f172a">单次 single</text>
+  <text x="30" y="98" font-size="11" style="fill:#475569">1 次选工具</text>
+  <g font-size="11" text-anchor="middle">
+    <rect x="170" y="64" width="80" height="34" rx="6" fill="#ede9fe" stroke="#8b5cf6"/><text x="210" y="86" style="fill:#0f172a">LLM 选</text>
+    <rect x="250" y="64" width="90" height="34" rx="6" fill="#ffedd5" stroke="#f97316"/><text x="295" y="86" style="fill:#0f172a">工具 A</text>
+    <rect x="340" y="64" width="80" height="34" rx="6" fill="#ede9fe" stroke="#8b5cf6"/><text x="380" y="86" style="fill:#0f172a">LLM 答</text>
+  </g>
+  <text x="440" y="86" font-size="12" style="fill:#15803d">最快、失败面最小；不能组合多个来源</text>
+
+  <!-- row 2 sequential -->
+  <text x="30" y="160" font-size="14" font-weight="700" style="fill:#0f172a">顺序（ReAct）</text>
+  <text x="30" y="178" font-size="11" style="fill:#475569">sequential 顺序依赖</text>
+  <g font-size="11" text-anchor="middle">
+    <rect x="170" y="144" width="70" height="34" rx="6" fill="#ede9fe" stroke="#8b5cf6"/><text x="205" y="166" style="fill:#0f172a">LLM</text>
+    <rect x="240" y="144" width="80" height="34" rx="6" fill="#ffedd5" stroke="#f97316"/><text x="280" y="166" style="fill:#0f172a">搜航班</text>
+    <rect x="320" y="144" width="70" height="34" rx="6" fill="#ede9fe" stroke="#8b5cf6"/><text x="355" y="166" style="fill:#0f172a">LLM</text>
+    <rect x="390" y="144" width="80" height="34" rx="6" fill="#ffedd5" stroke="#f97316"/><text x="430" y="166" style="fill:#0f172a">按价筛</text>
+    <rect x="470" y="144" width="70" height="34" rx="6" fill="#ede9fe" stroke="#8b5cf6"/><text x="505" y="166" style="fill:#0f172a">LLM</text>
+    <rect x="540" y="144" width="80" height="34" rx="6" fill="#ffedd5" stroke="#f97316"/><text x="580" y="166" style="fill:#0f172a">下单</text>
+    <rect x="620" y="144" width="70" height="34" rx="6" fill="#ede9fe" stroke="#8b5cf6"/><text x="655" y="166" style="fill:#0f172a">LLM 答</text>
+  </g>
+  <text x="700" y="160" font-size="12" style="fill:#b45309">延迟随步数</text>
+  <text x="700" y="176" font-size="12" style="fill:#b45309">线性增长</text>
+
+  <!-- row 3 parallel -->
+  <text x="30" y="250" font-size="14" font-weight="700" style="fill:#0f172a">并行 parallel</text>
+  <text x="30" y="268" font-size="11" style="fill:#475569">一次发出多个独立调用</text>
+  <g font-size="11" text-anchor="middle">
+    <rect x="170" y="240" width="80" height="34" rx="6" fill="#ede9fe" stroke="#8b5cf6"/><text x="210" y="262" style="fill:#0f172a">LLM 规划</text>
+    <rect x="260" y="212" width="110" height="28" rx="6" fill="#ffedd5" stroke="#f97316"/><text x="315" y="231" style="fill:#0f172a">天气</text>
+    <rect x="260" y="244" width="150" height="28" rx="6" fill="#ffedd5" stroke="#f97316"/><text x="335" y="263" style="fill:#0f172a">酒店</text>
+    <rect x="260" y="276" width="90" height="28" rx="6" fill="#fee2e2" stroke="#ef4444"/><text x="305" y="295" style="fill:#b91c1c">汇率 ✕</text>
+    <rect x="420" y="240" width="80" height="34" rx="6" fill="#e0f2fe" stroke="#0284c7"/><text x="460" y="262" style="fill:#0f172a">汇总</text>
+    <rect x="500" y="240" width="80" height="34" rx="6" fill="#ede9fe" stroke="#8b5cf6"/><text x="540" y="262" style="fill:#0f172a">LLM 答</text>
+  </g>
+  <text x="600" y="252" font-size="12" style="fill:#15803d">墙钟 = 最慢的那个</text>
+  <text x="600" y="270" font-size="12" style="fill:#b91c1c">要处理部分失败 partial failure：</text>
+  <text x="600" y="288" font-size="12" style="fill:#b91c1c">标 PARTIAL，不能当空结果</text>
+
+  <rect x="30" y="322" width="820" height="84" rx="10" fill="#f8fafc" stroke="#94a3b8"/>
+  <text x="45" y="346" font-size="13" font-weight="700" style="fill:#0f172a">编排层的错误恢复 error recovery（按错误类型选，不是一律重试）</text>
+  <text x="45" y="370" font-size="12" style="fill:#475569">瞬时/限流 → 指数退避 + 抖动（backoff + jitter）（写操作必须幂等）　参数错 → 把错误回给 LLM 改参数（限次数）</text>
+  <text x="45" y="392" font-size="12" style="fill:#475569">下游挂了 → 熔断 circuit breaker + 备用工具 / 降级回答　　整条链 → 一个总墙钟预算，超了返回已有的部分结果</text>
+</svg>

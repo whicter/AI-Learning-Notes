@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 480" font-family="-apple-system, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+  <rect width="960" height="480" fill="#ffffff"/>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#475569"/></marker>
+  </defs>
+  <text x="30" y="34" font-size="18" font-weight="700" fill="#0f172a">练习 3：AI 医院 —— 用模拟环境评估并改进"医生 agent"（研究模拟，非医疗建议）</text>
+
+  <!-- core loop -->
+  <rect x="30" y="66" width="160" height="70" rx="10" fill="#f1f5f9" stroke="#94a3b8" stroke-width="2"/>
+  <text x="110" y="92" text-anchor="middle" font-size="14" font-weight="700" fill="#334155">病人 Patient</text>
+  <text x="110" y="112" text-anchor="middle" font-size="11" fill="#0f172a">按真实病历扮演</text>
+  <text x="110" y="126" text-anchor="middle" font-size="11" fill="#0f172a">回答症状、病史</text>
+
+  <rect x="270" y="66" width="190" height="70" rx="10" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+  <text x="365" y="92" text-anchor="middle" font-size="14" font-weight="700" fill="#1e3a8a">实习医生 Doctor</text>
+  <text x="365" y="112" text-anchor="middle" font-size="11" fill="#0f172a">被评估的 agent：问诊、开检查、</text>
+  <text x="365" y="126" text-anchor="middle" font-size="11" fill="#0f172a">读结果、给诊断和方案</text>
+
+  <rect x="540" y="66" width="170" height="70" rx="10" fill="#ede9fe" stroke="#8b5cf6" stroke-width="2"/>
+  <text x="625" y="92" text-anchor="middle" font-size="14" font-weight="700" fill="#5b21b6">检查科 Examiner</text>
+  <text x="625" y="112" text-anchor="middle" font-size="11" fill="#0f172a">按申请给化验 / 影像结果</text>
+  <text x="625" y="126" text-anchor="middle" font-size="11" fill="#0f172a">（只给医生，不给病人）</text>
+
+  <rect x="770" y="66" width="160" height="70" rx="10" fill="#ffedd5" stroke="#f97316" stroke-width="2"/>
+  <text x="850" y="92" text-anchor="middle" font-size="14" font-weight="700" fill="#9a3412">主任 Director</text>
+  <text x="850" y="112" text-anchor="middle" font-size="11" fill="#0f172a">对照标准答案打分</text>
+  <text x="850" y="126" text-anchor="middle" font-size="11" fill="#0f172a">ground truth + 结构化反馈</text>
+
+  <g stroke="#475569" stroke-width="2"><line x1="192" y1="101" x2="266" y2="101" marker-end="url(#a)" marker-start="url(#a)"/><line x1="462" y1="101" x2="536" y2="101" marker-end="url(#a)" marker-start="url(#a)"/><line x1="712" y1="101" x2="766" y2="101" marker-end="url(#a)"/></g>
+  <text x="229" y="92" text-anchor="middle" font-size="11" fill="#475569">问诊</text>
+  <text x="499" y="92" text-anchor="middle" font-size="11" fill="#475569">检查</text>
+
+  <!-- collaboration -->
+  <rect x="30" y="160" width="440" height="120" rx="12" fill="#eff6ff" stroke="#93c5fd"/>
+  <text x="46" y="186" font-size="14" font-weight="700" fill="#1e3a8a">多医生会诊 collaboration（主任当主持人）</text>
+  <g font-size="12" fill="#0f172a">
+    <text x="46" y="210">1. 每个医生先<tspan font-weight="700">独立</tspan>写诊断（避免一开始就被带偏）</text>
+    <text x="46" y="232">2. 主任找出<tspan font-weight="700">分歧点</tspan>，只把分歧拿出来讨论</text>
+    <text x="46" y="254">3. 围绕分歧辩论 → 收敛成<tspan font-weight="700">共识诊断</tspan> consensus</text>
+    <text x="46" y="272" fill="#475569">没有主持的自由讨论容易发散 → 结构化流程</text>
+  </g>
+
+  <!-- evolution -->
+  <rect x="490" y="160" width="440" height="120" rx="12" fill="#f0fdf4" stroke="#86efac"/>
+  <text x="506" y="186" font-size="14" font-weight="700" fill="#166534">不重训模型也能"长经验"（记忆，不是微调）</text>
+  <g font-size="12" fill="#0f172a">
+    <text x="506" y="210">• 病例库 case base：成功病例整份存，</text>
+    <text x="506" y="228">  新病人来时用 RAG 检索相似病例</text>
+    <text x="506" y="250">• 经验库 experience base：误诊后对照答案</text>
+    <text x="506" y="268">  反思出一条规则，验证后入库</text>
+  </g>
+
+  <rect x="30" y="300" width="900" height="166" rx="12" fill="#fff7ed" stroke="#f59e0b"/>
+  <text x="46" y="326" font-size="15" font-weight="700" fill="#92400e">我补的批判点（面试里主动说）</text>
+  <g font-size="13" fill="#0f172a">
+    <text x="46" y="352">• <tspan font-weight="700">标准答案只在模拟里有</tspan>：真实上线时没有 ground truth，"从错误中学习"要靠延迟到来的结果或专家复核。</text>
+    <text x="46" y="378">• <tspan font-weight="700">经验规则会污染</tspan>：一条错规则会影响之后所有病例 → 规则要版本化、回放验证、人工批准才生效（对应 06 §2.4"自我优化失控"）。</text>
+    <text x="46" y="404">• <tspan font-weight="700">模拟到现实的差距</tspan> sim-to-real：LLM 扮的病人比真病人"配合"，模拟成绩会偏高。</text>
+    <text x="46" y="430">• 高风险领域：模型只给建议，最终由医生决定（HITL）；全程审计日志。</text>
+    <text x="46" y="454" fill="#475569">可迁移的模式：独立作答 → 找分歧 → 主持讨论；成功存案例、失败存规则 —— 换成"代码评审""合规复核"同样适用。</text>
+  </g>
+</svg>

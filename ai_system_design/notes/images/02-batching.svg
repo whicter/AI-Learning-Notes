@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 400" font-family="-apple-system, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+  <rect width="920" height="400" fill="#ffffff"/>
+  <defs>
+    <pattern id="h" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="8" height="8" fill="#f1f5f9"/><line x1="0" y1="0" x2="0" y2="8" stroke="#cbd5e1" stroke-width="3"/></pattern>
+  </defs>
+  <text x="30" y="34" font-size="18" font-weight="700" fill="#0f172a">静态 static vs 连续 continuous batching（4 个座位 slots，横轴 = decode 步数）</text>
+
+  <!-- static: x0=150, cell=60 -->
+  <text x="30" y="72" font-size="15" font-weight="700" fill="#0f172a">静态 static</text>
+  <text x="30" y="92" font-size="12" fill="#475569">一批全部做完</text><text x="30" y="108" font-size="12" fill="#475569">才换下一批</text>
+  <g font-size="13" fill="#fff" text-anchor="middle">
+    <rect x="150" y="60" width="240" height="26" fill="#3b82f6"/><text x="270" y="78">A</text><rect x="390" y="60" width="300" height="26" fill="url(#h)"/>
+    <rect x="150" y="90" width="540" height="26" fill="#8b5cf6"/><text x="420" y="108">B（最长）</text>
+    <rect x="150" y="120" width="360" height="26" fill="#22c55e"/><text x="330" y="138">C</text><rect x="510" y="120" width="180" height="26" fill="url(#h)"/>
+    <rect x="150" y="150" width="180" height="26" fill="#f97316"/><text x="240" y="168">D</text><rect x="330" y="150" width="360" height="26" fill="url(#h)"/>
+    <rect x="690" y="60" width="180" height="26" fill="#0ea5e9"/><text x="780" y="78">E</text>
+    <rect x="690" y="90" width="180" height="26" fill="#ec4899"/><text x="780" y="108">F</text>
+    <rect x="690" y="120" width="180" height="26" fill="#eab308"/><text x="780" y="138">G</text>
+    <rect x="690" y="150" width="180" height="26" fill="#14b8a6"/><text x="780" y="168">H</text>
+  </g>
+  <line x1="690" y1="52" x2="690" y2="184" stroke="#0f172a" stroke-dasharray="4 3"/>
+  <text x="696" y="196" font-size="12" fill="#475569">等 B 做完，下一批才进来</text>
+
+  <!-- continuous -->
+  <text x="30" y="240" font-size="15" font-weight="700" fill="#0f172a">连续 continuous</text>
+  <text x="30" y="260" font-size="12" fill="#475569">谁做完谁走，</text><text x="30" y="276" font-size="12" fill="#475569">空位马上补人</text>
+  <g font-size="13" fill="#fff" text-anchor="middle">
+    <rect x="150" y="228" width="240" height="26" fill="#3b82f6"/><text x="270" y="246">A</text>
+    <rect x="390" y="228" width="180" height="26" fill="#0ea5e9"/><text x="480" y="246">E</text>
+    <rect x="570" y="228" width="300" height="26" fill="#a855f7"/><text x="720" y="246">I</text>
+    <rect x="150" y="258" width="540" height="26" fill="#8b5cf6"/><text x="420" y="276">B</text>
+    <rect x="690" y="258" width="180" height="26" fill="#64748b"/><text x="780" y="276">J</text>
+    <rect x="150" y="288" width="360" height="26" fill="#22c55e"/><text x="330" y="306">C</text>
+    <rect x="510" y="288" width="180" height="26" fill="#ec4899"/><text x="600" y="306">F</text>
+    <rect x="690" y="288" width="180" height="26" fill="#84cc16"/><text x="780" y="306">K</text>
+    <rect x="150" y="318" width="180" height="26" fill="#f97316"/><text x="240" y="336">D</text>
+    <rect x="330" y="318" width="300" height="26" fill="#eab308"/><text x="480" y="336">G</text>
+    <rect x="630" y="318" width="240" height="26" fill="#14b8a6"/><text x="750" y="336">H</text>
+  </g>
+  <rect x="30" y="358" width="18" height="14" fill="url(#h)" stroke="#cbd5e1"/>
+  <text x="56" y="370" font-size="13" fill="#475569">= 座位空着 idle、GPU 在浪费。同样 12 步：静态只服务 8 个请求，连续服务 11 个（示意）。vLLM 等推理引擎默认就是连续 batching。</text>
+</svg>

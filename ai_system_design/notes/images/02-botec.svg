@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 420" font-family="-apple-system, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+  <rect width="940" height="420" fill="#ffffff"/>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#475569"/></marker>
+  </defs>
+  <text x="30" y="34" font-size="18" font-weight="700" fill="#0f172a">面试估算 BOTEC 三步走（数字沿用课程的假设：1 亿 DAU × 每人每天 10 次）</text>
+
+  <!-- row 1: traffic -->
+  <text x="30" y="72" font-size="15" font-weight="700" fill="#2563eb">① 流量 traffic</text>
+  <g font-size="14" fill="#0f172a" text-anchor="middle">
+    <rect x="30" y="84" width="170" height="56" rx="8" fill="#dbeafe" stroke="#3b82f6"/><text x="115" y="108">1 亿 × 10</text><text x="115" y="128">= 10 亿请求/天</text>
+    <rect x="240" y="84" width="170" height="56" rx="8" fill="#dbeafe" stroke="#3b82f6"/><text x="325" y="108">÷ 86,400 秒</text><text x="325" y="128">≈ 11.6K RPS（平均 avg）</text>
+    <rect x="450" y="84" width="200" height="56" rx="8" fill="#fef3c7" stroke="#f59e0b"/><text x="550" y="108">× 峰值系数 peak factor</text><text x="550" y="128">= 峰值 peak RPS</text>
+  </g>
+  <g stroke="#475569" stroke-width="2"><line x1="202" y1="112" x2="236" y2="112" marker-end="url(#a)"/><line x1="412" y1="112" x2="446" y2="112" marker-end="url(#a)"/></g>
+  <text x="670" y="106" font-size="13" fill="#b45309">课程用平均值算机器数；</text>
+  <text x="670" y="126" font-size="13" fill="#b45309">面试要按峰值 + 冗余说</text>
+
+  <!-- row 2: compute -->
+  <text x="30" y="182" font-size="15" font-weight="700" fill="#ea580c">② 算力 compute（GPU 数）</text>
+  <g font-size="14" fill="#0f172a" text-anchor="middle">
+    <rect x="30" y="194" width="250" height="56" rx="8" fill="#ffedd5" stroke="#f97316"/><text x="155" y="218">单卡吞吐 throughput？</text><text x="155" y="238">tokens/s ÷ 每请求 token 数</text>
+    <rect x="320" y="194" width="250" height="56" rx="8" fill="#ffedd5" stroke="#f97316"/><text x="445" y="218">GPU 数 = 峰值 RPS</text><text x="445" y="238">÷ 单卡 RPS × 冗余 headroom</text>
+  </g>
+  <line x1="282" y1="222" x2="316" y2="222" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+  <text x="600" y="212" font-size="13" fill="#b45309">单卡吞吐要靠压测，不能只用</text>
+  <text x="600" y="232" font-size="13" fill="#b45309">"参数 × 2 ÷ FLOPS"硬算（见正文 §5）</text>
+
+  <!-- row 3: storage & bandwidth -->
+  <text x="30" y="292" font-size="15" font-weight="700" fill="#16a34a">③ 存储 storage &amp; 带宽 bandwidth</text>
+  <g font-size="14" fill="#0f172a" text-anchor="middle">
+    <rect x="30" y="304" width="210" height="56" rx="8" fill="#dcfce7" stroke="#22c55e"/><text x="135" y="328">模型 3B × 2 字节</text><text x="135" y="348">= 6GB（几乎可忽略）</text>
+    <rect x="260" y="304" width="250" height="56" rx="8" fill="#dcfce7" stroke="#22c55e"/><text x="385" y="328">交互日志 10 亿 × 2KB = 2TB/天</text><text x="385" y="348">+25% 索引 ≈ 2.5TB/天</text>
+    <rect x="530" y="304" width="200" height="56" rx="8" fill="#dcfce7" stroke="#22c55e"/><text x="630" y="328">入口 ingress</text><text x="630" y="348">11.6K×2KB ≈ 186 Mbps</text>
+    <rect x="750" y="304" width="170" height="56" rx="8" fill="#dcfce7" stroke="#22c55e"/><text x="835" y="328">出口 egress</text><text x="835" y="348" font-size="12">11.6K×10KB ≈ 926 Mbps</text>
+  </g>
+  <text x="30" y="396" font-size="14" fill="#475569">结论模式：文本 LLM 的瓶颈几乎总是 GPU，不是存储和带宽 → 优化精力放在推理效率（batching、量化、缓存、路由小模型）。</text>
+</svg>

@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 420" font-family="-apple-system, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+  <rect width="940" height="420" fill="#ffffff"/>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#475569"/></marker>
+  </defs>
+  <text x="30" y="34" font-size="18" font-weight="700" fill="#0f172a">一次请求的两个阶段：Prefill（读题）和 Decode（逐字写）</text>
+
+  <!-- prefill -->
+  <rect x="30" y="56" width="420" height="300" rx="12" fill="#eff6ff" stroke="#93c5fd"/>
+  <text x="50" y="84" font-size="16" font-weight="700" fill="#1e3a8a">① Prefill：整段输入一次并行算完</text>
+  <g font-size="13" fill="#0f172a" text-anchor="middle">
+    <rect x="60" y="104" width="50" height="30" rx="5" fill="#dbeafe" stroke="#3b82f6"/><text x="85" y="124">总结</text>
+    <rect x="116" y="104" width="50" height="30" rx="5" fill="#dbeafe" stroke="#3b82f6"/><text x="141" y="124">这份</text>
+    <rect x="172" y="104" width="50" height="30" rx="5" fill="#dbeafe" stroke="#3b82f6"/><text x="197" y="124">合同</text>
+    <rect x="228" y="104" width="50" height="30" rx="5" fill="#dbeafe" stroke="#3b82f6"/><text x="253" y="124">…</text>
+    <rect x="284" y="104" width="50" height="30" rx="5" fill="#dbeafe" stroke="#3b82f6"/><text x="309" y="124">…</text>
+    <rect x="340" y="104" width="80" height="30" rx="5" fill="#dbeafe" stroke="#3b82f6"/><text x="380" y="124">(上万字)</text>
+  </g>
+  <g stroke="#475569" stroke-width="1.5">
+    <line x1="85" y1="136" x2="200" y2="168" marker-end="url(#a)"/><line x1="197" y1="136" x2="230" y2="166" marker-end="url(#a)"/>
+    <line x1="309" y1="136" x2="270" y2="166" marker-end="url(#a)"/><line x1="380" y1="136" x2="300" y2="168" marker-end="url(#a)"/>
+  </g>
+  <rect x="150" y="170" width="200" height="50" rx="10" fill="#3b82f6"/>
+  <text x="250" y="200" text-anchor="middle" font-size="16" font-weight="700" fill="#ffffff">模型（GPU 满负荷）</text>
+  <line x1="200" y1="222" x2="140" y2="252" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+  <line x1="300" y1="222" x2="350" y2="252" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+  <rect x="60" y="254" width="160" height="40" rx="8" fill="#ffedd5" stroke="#f97316"/>
+  <text x="140" y="279" text-anchor="middle" font-size="14" fill="#9a3412">KV cache（cached）</text>
+  <rect x="290" y="254" width="130" height="40" rx="8" fill="#dcfce7" stroke="#22c55e"/>
+  <text x="355" y="279" text-anchor="middle" font-size="14" fill="#166534">第 1 个 token</text>
+  <text x="50" y="320" font-size="13" fill="#1e3a8a">瓶颈：算力（compute-bound）</text>
+  <text x="50" y="342" font-size="13" fill="#1e3a8a">决定 TTFT（首字延迟）；输入越长越慢</text>
+
+  <!-- decode -->
+  <rect x="480" y="56" width="430" height="300" rx="12" fill="#fff7ed" stroke="#fdba74"/>
+  <text x="500" y="84" font-size="16" font-weight="700" fill="#9a3412">② Decode：一步只产 1 个 token</text>
+  <g font-size="13" fill="#0f172a">
+    <text x="500" y="122">第 2 步</text><rect x="560" y="106" width="200" height="24" rx="5" fill="#fed7aa"/><text x="570" y="123">读全部权重 + KV cache</text>
+    <text x="772" y="123">→ 1 个 token</text>
+    <text x="500" y="160">第 3 步</text><rect x="560" y="144" width="200" height="24" rx="5" fill="#fed7aa"/><text x="570" y="161">读全部权重 + KV cache</text>
+    <text x="772" y="161">→ 1 个 token</text>
+    <text x="500" y="198">第 4 步</text><rect x="560" y="182" width="200" height="24" rx="5" fill="#fed7aa"/><text x="570" y="199">读全部权重 + KV cache</text>
+    <text x="772" y="199">→ 1 个 token</text>
+    <text x="500" y="230" fill="#94a3b8">……几百步</text>
+  </g>
+  <text x="500" y="262" font-size="13" fill="#0f172a">KV cache 每步变长：</text>
+  <rect x="640" y="250" width="40" height="16" fill="#fdba74"/><rect x="684" y="250" width="60" height="16" fill="#fb923c"/><rect x="748" y="250" width="90" height="16" fill="#f97316"/>
+  <text x="500" y="320" font-size="13" fill="#9a3412">瓶颈：显存带宽（memory-bound）—— 每步搬一遍权重，</text>
+  <text x="500" y="342" font-size="13" fill="#9a3412">GPU 算力（compute）大多闲着。决定 TPOT</text>
+
+  <rect x="30" y="370" width="880" height="38" rx="8" fill="#f1f5f9"/>
+  <text x="470" y="395" text-anchor="middle" font-size="14" fill="#0f172a">所以：把很多请求凑成一批一起 decode（batching），搬一次权重服务多个人 → 吞吐大幅提升</text>
+</svg>

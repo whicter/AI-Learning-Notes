@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 500" font-family="-apple-system, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+  <rect width="880" height="500" fill="#ffffff"/>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#475569"/></marker>
+  </defs>
+  <text x="30" y="34" font-size="18" font-weight="700" style="fill:#0f172a">Agent 工程能力检查表：运行外壳与接入的服务</text>
+
+  <rect x="30" y="52" width="820" height="400" rx="14" fill="#f8fafc" stroke="#4f46e5" stroke-width="2.5" stroke-dasharray="8 5"/>
+  <text x="50" y="78" font-size="14" font-weight="700" style="fill:#3730a3">agent harness + 外部服务（不要求所有能力内置）</text>
+
+  <rect x="330" y="92" width="220" height="74" rx="12" fill="#f0fdf4" stroke="#22c55e" stroke-width="2.5"/>
+  <text x="440" y="122" font-size="16" font-weight="700" text-anchor="middle" style="fill:#15803d">大模型（LLM）</text>
+  <text x="440" y="146" font-size="12" text-anchor="middle" style="fill:#475569">输入上下文 → 文本 / 动作建议</text>
+
+  <line x1="440" y1="166" x2="440" y2="200" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+  <line x1="420" y1="200" x2="420" y2="168" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+  <text x="452" y="190" font-size="11" style="fill:#475569">动作建议 / 工具结果</text>
+
+  <!-- row 1 -->
+  <rect x="50" y="210" width="185" height="100" rx="10" fill="#eef2ff" stroke="#6366f1" stroke-width="2"/>
+  <text x="142" y="236" font-size="14" font-weight="700" text-anchor="middle" style="fill:#3730a3">① 执行器 runtime</text>
+  <text x="142" y="260" font-size="11" text-anchor="middle" style="fill:#475569">跑主循环：调模型 → 解析</text>
+  <text x="142" y="278" font-size="11" text-anchor="middle" style="fill:#475569">工具调用 → 执行 → 回填</text>
+  <text x="142" y="296" font-size="11" text-anchor="middle" style="fill:#475569">→ 再调模型</text>
+
+  <rect x="250" y="210" width="185" height="100" rx="10" fill="#fff7ed" stroke="#f97316" stroke-width="2"/>
+  <text x="342" y="236" font-size="14" font-weight="700" text-anchor="middle" style="fill:#c2410c">② 工具注册表</text>
+  <text x="342" y="254" font-size="11" text-anchor="middle" style="fill:#c2410c">tool registry</text>
+  <text x="342" y="276" font-size="11" text-anchor="middle" style="fill:#475569">有哪些工具、参数结构</text>
+  <text x="342" y="294" font-size="11" text-anchor="middle" style="fill:#475569">（schema）、权限边界</text>
+
+  <rect x="450" y="210" width="185" height="100" rx="10" fill="#faf5ff" stroke="#8b5cf6" stroke-width="2"/>
+  <text x="542" y="236" font-size="14" font-weight="700" text-anchor="middle" style="fill:#6d28d9">③ 状态 state / memory</text>
+  <text x="542" y="260" font-size="11" text-anchor="middle" style="fill:#475569">跨步骤、跨轮次的状态</text>
+  <text x="542" y="278" font-size="11" text-anchor="middle" style="fill:#475569">存哪、怎么持久化</text>
+
+  <rect x="650" y="210" width="185" height="100" rx="10" fill="#f1f5f9" stroke="#64748b" stroke-width="2"/>
+  <text x="742" y="236" font-size="14" font-weight="700" text-anchor="middle" style="fill:#0f172a">④ 执行追踪 tracing</text>
+  <text x="742" y="260" font-size="11" text-anchor="middle" style="fill:#475569">每步输入输出、耗时、</text>
+  <text x="742" y="278" font-size="11" text-anchor="middle" style="fill:#475569">用量与错误；回放需另存快照</text>
+
+  <!-- row 2 -->
+  <rect x="50" y="326" width="185" height="100" rx="10" fill="#fef2f2" stroke="#ef4444" stroke-width="2"/>
+  <text x="142" y="352" font-size="14" font-weight="700" text-anchor="middle" style="fill:#b91c1c">⑤ 护栏 guardrails</text>
+  <text x="142" y="376" font-size="11" text-anchor="middle" style="fill:#475569">能做什么、不能做什么：</text>
+  <text x="142" y="394" font-size="11" text-anchor="middle" style="fill:#475569">权限、敏感操作拦截、</text>
+  <text x="142" y="412" font-size="11" text-anchor="middle" style="fill:#475569">输出校验</text>
+
+  <rect x="250" y="326" width="185" height="100" rx="10" fill="#fefce8" stroke="#ca8a04" stroke-width="2"/>
+  <text x="342" y="352" font-size="14" font-weight="700" text-anchor="middle" style="fill:#a16207">⑥ 控制 control</text>
+  <text x="342" y="376" font-size="11" text-anchor="middle" style="fill:#475569">重试、退避、超时、</text>
+  <text x="342" y="394" font-size="11" text-anchor="middle" style="fill:#475569">预算上限、熔断、</text>
+  <text x="342" y="412" font-size="11" text-anchor="middle" style="fill:#475569">停止条件</text>
+
+  <rect x="450" y="326" width="185" height="100" rx="10" fill="#ecfeff" stroke="#0891b2" stroke-width="2"/>
+  <text x="542" y="352" font-size="14" font-weight="700" text-anchor="middle" style="fill:#0e7490">⑦ 评测 evaluation</text>
+  <text x="542" y="376" font-size="11" text-anchor="middle" style="fill:#475569">拿一批已知正确答案的</text>
+  <text x="542" y="394" font-size="11" text-anchor="middle" style="fill:#475569">样本跑一遍，量化打分</text>
+
+  <rect x="650" y="326" width="185" height="100" rx="10" fill="#f0fdf4" stroke="#16a34a" stroke-width="2"/>
+  <text x="742" y="352" font-size="14" font-weight="700" text-anchor="middle" style="fill:#15803d">⑧ 反馈 / CI gate</text>
+  <text x="742" y="376" font-size="11" text-anchor="middle" style="fill:#475569">按预设门禁检查</text>
+  <text x="742" y="394" font-size="11" text-anchor="middle" style="fill:#475569">不满足时阻止发布</text>
+
+  <text x="30" y="478" font-size="12" style="fill:#475569">边界：agent harness 组织任务运行；evaluation harness 组织测试评分。两者可以集成，也可以独立。</text>
+</svg>

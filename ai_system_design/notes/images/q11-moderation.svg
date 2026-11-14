@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 540" font-family="-apple-system, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+<rect width="1100" height="540" fill="#ffffff"/>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#475569"/></marker><marker id="r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#dc2626"/></marker></defs>
+<text x="24" y="34" font-size="18" font-weight="700" fill="#0f172a">Q11 用 LLM 做内容审核（content moderation）：便宜的先筛，贵的只看难的</text>
+<line x1="142" y1="228" x2="147" y2="228" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<line x1="312" y1="198" x2="421" y2="140" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<rect x="332" y="160" width="69" height="17" rx="4" fill="#ffffff" stroke="none" opacity="0.95"/>
+<text x="366" y="173" font-size="11" text-anchor="middle" fill="#475569">高置信 正常</text>
+<line x1="314" y1="274" x2="418" y2="327" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<rect x="332" y="292" width="69" height="17" rx="4" fill="#ffffff" stroke="none" opacity="0.95"/>
+<text x="366" y="304" font-size="11" text-anchor="middle" fill="#475569">高置信 违规</text>
+<line x1="332" y1="236" x2="397" y2="236" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<rect x="338" y="227" width="54" height="17" rx="4" fill="#ffffff" stroke="none" opacity="0.95"/>
+<text x="364" y="240" font-size="11" text-anchor="middle" fill="#475569">中间地带</text>
+<line x1="592" y1="228" x2="637" y2="228" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<line x1="822" y1="228" x2="867" y2="228" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<line x1="674" y1="139" x2="567" y2="197" stroke="#475569" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<line x1="730" y1="259" x2="730" y2="327" stroke="#475569" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<rect x="20" y="200" width="120" height="57" rx="10" fill="#f1f5f9" stroke="#64748b" stroke-width="2"/>
+<text x="80.0" y="226" font-size="13" font-weight="700" text-anchor="middle" fill="#0f172a">新内容 content</text>
+<text x="80.0" y="244" font-size="11" text-anchor="middle" fill="#475569">帖子 · 评论 · 图片</text>
+<rect x="150" y="200" width="180" height="72" rx="10" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+<text x="240.0" y="226" font-size="13" font-weight="700" text-anchor="middle" fill="#047857">便宜分类器</text>
+<text x="240.0" y="244" font-size="11" text-anchor="middle" fill="#475569">cheap classifier</text>
+<text x="240.0" y="259" font-size="11" text-anchor="middle" fill="#475569">处理绝大多数</text>
+<rect x="400" y="80" width="160" height="57" rx="10" fill="#eef2ff" stroke="#4f46e5" stroke-width="2"/>
+<text x="480.0" y="106" font-size="13" font-weight="700" text-anchor="middle" fill="#3730a3">明显没问题</text>
+<text x="480.0" y="124" font-size="11" text-anchor="middle" fill="#475569">→ 直接发布</text>
+<rect x="400" y="330" width="160" height="57" rx="10" fill="#eef2ff" stroke="#4f46e5" stroke-width="2"/>
+<text x="480.0" y="356" font-size="13" font-weight="700" text-anchor="middle" fill="#3730a3">明显违规</text>
+<text x="480.0" y="374" font-size="11" text-anchor="middle" fill="#475569">→ 直接拦截</text>
+<rect x="400" y="200" width="190" height="72" rx="10" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+<text x="495.0" y="226" font-size="13" font-weight="700" text-anchor="middle" fill="#047857">LLM + 政策条文</text>
+<text x="495.0" y="244" font-size="11" text-anchor="middle" fill="#475569">只处理“拿不准”的</text>
+<text x="495.0" y="259" font-size="11" text-anchor="middle" fill="#475569">输出：违反哪条 + 理由</text>
+<rect x="640" y="200" width="180" height="57" rx="10" fill="#fdf2f8" stroke="#db2777" stroke-width="2"/>
+<text x="730.0" y="226" font-size="13" font-weight="700" text-anchor="middle" fill="#9d174d">人工审核</text>
+<text x="730.0" y="244" font-size="11" text-anchor="middle" fill="#475569">仍拿不准 / 影响大</text>
+<rect x="870" y="200" width="200" height="57" rx="10" fill="#fdf2f8" stroke="#db2777" stroke-width="2"/>
+<text x="970.0" y="226" font-size="13" font-weight="700" text-anchor="middle" fill="#9d174d">申诉 appeal</text>
+<text x="970.0" y="244" font-size="11" text-anchor="middle" fill="#475569">用户不服 → 人工复审</text>
+<rect x="640" y="80" width="180" height="57" rx="10" fill="#fff7ed" stroke="#f97316" stroke-width="2"/>
+<text x="730.0" y="106" font-size="13" font-weight="700" text-anchor="middle" fill="#c2410c">政策版本 policy v12</text>
+<text x="730.0" y="124" font-size="11" text-anchor="middle" fill="#475569">改政策 = 发新版本</text>
+<rect x="640" y="330" width="430" height="57" rx="10" fill="#fff7ed" stroke="#f97316" stroke-width="2"/>
+<text x="855.0" y="356" font-size="13" font-weight="700" text-anchor="middle" fill="#c2410c">人工结论 → 训练数据 + 评测集</text>
+<text x="855.0" y="374" font-size="11" text-anchor="middle" fill="#475569">对抗样本（故意绕过的写法）单独收集</text>
+<rect x="24" y="514" width="14" height="14" rx="3" fill="#eef2ff" stroke="#4f46e5" stroke-width="1.5"/>
+<text x="44" y="525" font-size="11" fill="#475569">确定性代码 code</text>
+<rect x="142.04" y="514" width="14" height="14" rx="3" fill="#ecfdf5" stroke="#10b981" stroke-width="1.5"/>
+<text x="162.04" y="525" font-size="11" fill="#475569">模型 LLM</text>
+<rect x="223.33999999999997" y="514" width="14" height="14" rx="3" fill="#fff7ed" stroke="#f97316" stroke-width="1.5"/>
+<text x="243.33999999999997" y="525" font-size="11" fill="#475569">数据 / 存储 data</text>
+<rect x="343.79999999999995" y="514" width="14" height="14" rx="3" fill="#fdf2f8" stroke="#db2777" stroke-width="1.5"/>
+<text x="363.79999999999995" y="525" font-size="11" fill="#475569">人工 human</text>
+</svg>

@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 510" font-family="-apple-system, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+<rect width="1100" height="510" fill="#ffffff"/>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#475569"/></marker><marker id="r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#dc2626"/></marker></defs>
+<text x="24" y="34" font-size="18" font-weight="700" fill="#0f172a">Q10 语音助手（voice assistant）：全程流式，才能做到 1 秒左右开口</text>
+<line x1="132" y1="148" x2="147" y2="148" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<line x1="322" y1="148" x2="337" y2="148" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<line x1="512" y1="148" x2="527" y2="148" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<line x1="702" y1="148" x2="717" y2="148" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<line x1="892" y1="148" x2="907" y2="148" stroke="#475569" stroke-width="2" marker-end="url(#a)"/>
+<polyline points="75,177 75,320 340,318" fill="none" stroke="#dc2626" stroke-width="2" marker-end="url(#r)"/>
+<rect x="48" y="311" width="54" height="17" rx="4" fill="#ffffff" stroke="none" opacity="0.95"/>
+<text x="75" y="324" font-size="11" text-anchor="middle" fill="#dc2626">用户插话</text>
+<line x1="585" y1="278" x2="751" y2="180" stroke="#dc2626" stroke-width="2" marker-end="url(#r)"/>
+<rect x="662" y="220" width="32" height="17" rx="4" fill="#ffffff" stroke="none" opacity="0.95"/>
+<text x="678" y="233" font-size="11" text-anchor="middle" fill="#dc2626">停止</text>
+<rect x="20" y="120" width="110" height="57" rx="10" fill="#f1f5f9" stroke="#64748b" stroke-width="2"/>
+<text x="75.0" y="146" font-size="13" font-weight="700" text-anchor="middle" fill="#0f172a">麦克风 mic</text>
+<text x="75.0" y="164" font-size="11" text-anchor="middle" fill="#475569">音频流</text>
+<rect x="150" y="120" width="170" height="57" rx="10" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+<text x="235.0" y="146" font-size="13" font-weight="700" text-anchor="middle" fill="#047857">流式语音识别 ASR</text>
+<text x="235.0" y="164" font-size="11" text-anchor="middle" fill="#475569">边听边出文字</text>
+<rect x="340" y="120" width="170" height="57" rx="10" fill="#eef2ff" stroke="#4f46e5" stroke-width="2"/>
+<text x="425.0" y="146" font-size="13" font-weight="700" text-anchor="middle" fill="#3730a3">说完了吗？</text>
+<text x="425.0" y="164" font-size="11" text-anchor="middle" fill="#475569">轮次检测 turn detection</text>
+<rect x="530" y="120" width="170" height="72" rx="10" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+<text x="615.0" y="146" font-size="13" font-weight="700" text-anchor="middle" fill="#047857">大模型 LLM</text>
+<text x="615.0" y="164" font-size="11" text-anchor="middle" fill="#475569">流式输出 token</text>
+<text x="615.0" y="179" font-size="11" text-anchor="middle" fill="#475569">可调工具</text>
+<rect x="720" y="120" width="170" height="57" rx="10" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+<text x="805.0" y="146" font-size="13" font-weight="700" text-anchor="middle" fill="#047857">流式语音合成 TTS</text>
+<text x="805.0" y="164" font-size="11" text-anchor="middle" fill="#475569">第一句先合成</text>
+<rect x="910" y="120" width="170" height="57" rx="10" fill="#f1f5f9" stroke="#64748b" stroke-width="2"/>
+<text x="995.0" y="146" font-size="13" font-weight="700" text-anchor="middle" fill="#0f172a">扬声器 speaker</text>
+<text x="995.0" y="164" font-size="11" text-anchor="middle" fill="#475569">播放</text>
+<rect x="340" y="280" width="360" height="72" rx="10" fill="#eef2ff" stroke="#4f46e5" stroke-width="2"/>
+<text x="520.0" y="306" font-size="13" font-weight="700" text-anchor="middle" fill="#3730a3">打断处理 barge-in</text>
+<text x="520.0" y="324" font-size="11" text-anchor="middle" fill="#475569">用户一开口：立刻停播、丢弃没说完的部分</text>
+<text x="520.0" y="339" font-size="11" text-anchor="middle" fill="#475569">把“已经说出口的内容”记进对话历史</text>
+<rect x="720" y="280" width="360" height="72" rx="10" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+<text x="900.0" y="306" font-size="13" font-weight="700" text-anchor="middle" fill="#047857">另一种：端到端语音模型</text>
+<text x="900.0" y="324" font-size="11" text-anchor="middle" fill="#475569">speech-to-speech：延迟更低</text>
+<text x="900.0" y="339" font-size="11" text-anchor="middle" fill="#475569">但更难插入检查和工具调用</text>
+<text x="20" y="430" font-size="12" fill="#3730a3">延迟预算（latency budget）示意：识别结束判断 + 模型首 token + 合成第一句，加起来控制在约 1 秒量级；每一段都要单独测。</text>
+<rect x="24" y="484" width="14" height="14" rx="3" fill="#eef2ff" stroke="#4f46e5" stroke-width="1.5"/>
+<text x="44" y="495" font-size="11" fill="#475569">确定性代码 code</text>
+<rect x="142.04" y="484" width="14" height="14" rx="3" fill="#ecfdf5" stroke="#10b981" stroke-width="1.5"/>
+<text x="162.04" y="495" font-size="11" fill="#475569">模型 LLM</text>
+</svg>
