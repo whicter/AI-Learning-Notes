@@ -15,7 +15,15 @@ hide:
   <a class="kb-btn kb-btn--ghost" href="https://github.com/whicter/AI-Learning-Notes">GitHub</a>
 </div>
 
+<div class="ai-path" markdown="0">
+  <div class="ai-path__step"><span class="ai-path__n">1</span><div><b>打基础</b><p>LLM 怎么生成、Agent 由什么组成</p></div></div>
+  <div class="ai-path__line"></div>
+  <div class="ai-path__step"><span class="ai-path__n">2</span><div><b>练设计</b><p>RAG、Agent、Eval、Serving 与题库</p></div></div>
+  <div class="ai-path__line"></div>
+  <div class="ai-path__step"><span class="ai-path__n">3</span><div><b>冲面试</b><p>FDE 岗位与各公司面试准备</p></div></div>
+</div>
+
 <div class="kb-section-title">知识库</div>
-<div class="kb-section-sub">按模块系统学习：基础 → 系统设计 → FDE</div>
+<div class="kb-section-sub">按学习路线分成三个模块</div>
 
 <!-- KB_MODULE_CARDS -->

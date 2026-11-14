@@ -41,7 +41,7 @@ AI study notes: LLM and agent fundamentals from zero, AI system design interview
 
 ## 相关仓库 / Related
 
-- [LeetCode Java：按模式整理的算法题与 Java 题解](https://github.com/whicter/leetcode-java) · [网站](https://whicter.github.io/leetcode-java/)
+- [Algorithm Coding Interview：按模式整理的算法题与 Java 题解](https://github.com/whicter/leetcode-java) · [网站](https://whicter.github.io/leetcode-java/)
 - [System Design：系统设计面试准备与经典设计题](https://github.com/whicter/System_Design) · [网站](https://whicter.github.io/System_Design/)
 
 > 本仓库由作者的私有笔记库自动同步（one-way mirror）。This repo is generated automatically from a private notes vault; edits made here are overwritten on the next sync.
