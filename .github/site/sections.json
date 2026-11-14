@@ -1,0 +1,5 @@
+{
+  "AI 零基础": {"icon": "🌱", "desc": "从零理解大模型与智能体：生成原理、Prompt、工具调用、记忆、RAG 与评估", "count": "2 篇入门笔记"},
+  "AI 系统设计": {"icon": "🧩", "desc": "LLM / Agent 系统设计主文档、17 道设计题提纲、75 道 Agent 面试题与 8 篇基础笔记", "count": "12 篇文档"},
+  "FDE（Forward Deployed Engineer）": {"icon": "🚀", "desc": "FDE 岗位基础、案例与 take-home，以及 Anthropic / OpenAI / Google / Palantir 面试准备", "count": "11 篇文档"}
+}
