@@ -10,7 +10,7 @@
 
 ![](02_居丽叶的简历项目9：行政助手Agent/images/VkfVbKN1Do1fWjxPncscmvKxnHb.png)
 
-如果你不懂后端的东西，可以在面试中明确说明本项目是两个人协作完成的：**你负责算法与实验部分，另一位同学负责前后端开发和工程部署部分。** 
+如果你不懂后端的东西，可以在面试中明确说明本项目是两个人协作完成的：**你负责算法与实验部分，另一位同学负责前后端开发和工程部署部分。**
 
 **你负责的算法部分：**
 
@@ -159,7 +159,9 @@ Harness Engineering、Agent DAG、可信 RAG、Memory Engineering、Loop Enginee
 
 ### 面试问题
 
-> 🏖️ PI Agent面试拓展文档：[如何基于 Pi 开发自己的 Agent 项目](https://my.feishu.cn/wiki/REE6wlLe4iQoPKkzfGQcjY6znHb)
+> 🏖️
+>
+> PI Agent面试拓展文档：[如何基于 Pi 开发自己的 Agent 项目](https://my.feishu.cn/wiki/REE6wlLe4iQoPKkzfGQcjY6znHb)
 >
 > 自反思评测优化面试拓展文档：[把"跑一次实验"沉淀成Loop：评测驱动的自进化优化闭环](https://my.feishu.cn/wiki/C7YxwxdpNix2ankrXlycQMmonSg)
 

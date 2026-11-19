@@ -12,11 +12,11 @@ WandB (Weights & Biases) 就是为了解决这个问题而生的，它能把枯�
 
 登录官网：https://wandb.ai/注册账号
 
-![]([新手教程]如何使用 WandB 监控大模型的训练与调试/images/Kp4mbMEI7oy59jxOvxxcgkaRnrh.png)
+![]([新手教程]如何使用%20WandB%20监控大模型的训练与调试/images/Kp4mbMEI7oy59jxOvxxcgkaRnrh.png)
 
 取到自己的api key：
 
-![]([新手教程]如何使用 WandB 监控大模型的训练与调试/images/S89MbObZzoaIhFxlUkNcqFR5nVc.png)
+![]([新手教程]如何使用%20WandB%20监控大模型的训练与调试/images/S89MbObZzoaIhFxlUkNcqFR5nVc.png)
 
 #### **第二步：安装与登录**
 
@@ -74,13 +74,13 @@ wandb.log({
 
 #### 关注指标：`val/test_score` (评测集准确率)
 
-![]([新手教程]如何使用 WandB 监控大模型的训练与调试/images/QQ2Eb66I5ojWedxqUSrce7eInFg.png)
+![]([新手教程]如何使用%20WandB%20监控大模型的训练与调试/images/QQ2Eb66I5ojWedxqUSrce7eInFg.png)
 
 看下图的阶梯式上升：
 
-![]([新手教程]如何使用 WandB 监控大模型的训练与调试/images/Icn7b0vQNoRjdKxXvxIcMVptn8b.png)
+![]([新手教程]如何使用%20WandB%20监控大模型的训练与调试/images/Icn7b0vQNoRjdKxXvxIcMVptn8b.png)
 
-![表格]([新手教程]如何使用 WandB 监控大模型的训练与调试/images/sheet_WJfdsF0BKhpuautOhZ6ckak0nXb_yYmW97.png)
+![表格]([新手教程]如何使用%20WandB%20监控大模型的训练与调试/images/sheet_WJfdsF0BKhpuautOhZ6ckak0nXb_yYmW97.png)
 
 不同颜色的线代表不同阶段，我们可以清晰地看到，随着上下文窗口的拉长（从8K到16K再到24K），模型的准确率**基线和峰值是逐步提高的，**这说明模型解决难题（AIME2024）的能力在稳步提升。这也直接证明了论文提出的**迭代上下文长度延长**（Iterative Context Lengthening）策略的有效性。
 
@@ -99,7 +99,7 @@ wandb.log({
     - **8K 阶段 (蓝线)**：作为冷启动阶段，Loss 下降最快，表明模型在短窗口下迅速建立了基础推理模式
     - **16K (红线) -> 24K (粉线)**：可以观察到**迁移性**。当上下文窗口扩大时，Loss 并没有出现发散或剧烈反弹，而是保持了收敛的连续性。这证明了模型在短文本习得的优势策略，成功**泛化（Generalize）**到了长文本空间，通过 24K 阶段进一步巩固了长程推理能力。
 
-![]([新手教程]如何使用 WandB 监控大模型的训练与调试/images/W2nPbUKjCoivKXxjWfCcObaQnee.png)
+![]([新手教程]如何使用%20WandB%20监控大模型的训练与调试/images/W2nPbUKjCoivKXxjWfCcObaQnee.png)
 
 #### 2. `actor/kl_loss` (KL 散度)
 
@@ -110,7 +110,7 @@ wandb.log({
 - **8K 阶段 (蓝线)** ： 我们可以看到蓝线在训练过程中显著上升，KL 值一度达到 0.4。这说明在训练初期，为了学会如何推理（Reasoning），模型正在对基础策略进行大幅度的调整和修正 。此时的高 KL 值是符合预期的，代表模型正在走出舒适区，建立全新的解题范式。
 - **16K & 24K 阶段 (红/粉线)** ： 与之形成鲜明对比的是，红色和粉色曲线始终维持在极低的水平（接近 0）。这证明了**能力迁移**的发生： 当上下文扩展到 16K 和 24K 时，模型并没有从头学起，而是直接继承了 8K 阶段已经学好的推理逻辑，仅针对长文本进行微小的适应性调整。这种“低 KL、高 Reward”的状态，正是课程学习（Curriculum Learning）策略成功的最佳佐证。
 
-![]([新手教程]如何使用 WandB 监控大模型的训练与调试/images/F8Y4buKLLoKsJ1xtQVbcJzA6ngd.png)
+![]([新手教程]如何使用%20WandB%20监控大模型的训练与调试/images/F8Y4buKLLoKsJ1xtQVbcJzA6ngd.png)
 
 #### 3. `critic/rewards/mean` (平均奖励)
 
@@ -125,7 +125,7 @@ DeepScaleR 采用了简单但有效的奖励函数，不使用中间奖励：
 
 模型首先在成本较低的 8K 语境中快速获得大量奖励提升，当上下文窗口增加到 16K 和 24K 时，平均奖励并没有从头开始，而是保持了高位。这表明 DeepScaleR 的 RL 训练能够有效地将已获得的推理能力（高奖励策略）无缝地扩展到更长的上下文长度。
 
-![]([新手教程]如何使用 WandB 监控大模型的训练与调试/images/HE39bWQc8oHyF6xanUZcjcdqnse.png)
+![]([新手教程]如何使用%20WandB%20监控大模型的训练与调试/images/HE39bWQc8oHyF6xanUZcjcdqnse.png)
 
 ### 第三维度：它在想什么？（行为模式指标）
 
@@ -137,7 +137,7 @@ DeepScaleR 采用了简单但有效的奖励函数，不使用中间奖励：
 
 模型在 8K 和 16K 阶段 提高探索性（高熵）以学习有效的推理模式，从而实现性能的飞跃。在性能达到高水平后（24K 阶段），模型会降低探索性（低熵），迅速将策略收敛到最优、最确定的解题方法上。
 
-![]([新手教程]如何使用 WandB 监控大模型的训练与调试/images/MgUgbgHBcolMfPx4GDKcw4pgnQA.png)
+![]([新手教程]如何使用%20WandB%20监控大模型的训练与调试/images/MgUgbgHBcolMfPx4GDKcw4pgnQA.png)
 
 #### 2. `response_length` (回复长度) & `clip_ratio` (截断比例)
 
@@ -147,9 +147,9 @@ DeepScaleR 采用了简单但有效的奖励函数，不使用中间奖励：
 
 在8k训练初期，模型学会了**高效地推理，**惩罚了不必要的冗余输出，导致长度迅速下降。后来模型识图通过更长的思考来提升训练奖励，导致clip_ratio上升，此时8k的上下文窗口成为了限制模型训练的因素。将上下文窗口到16k后，模型输出长度逐渐增加，准确率也有一定的提升。最后将上下文长度提升到24k。
 
-![]([新手教程]如何使用 WandB 监控大模型的训练与调试/images/SaKhbpPneonC4IxmUzPc0qcLnKd.png)
+![]([新手教程]如何使用%20WandB%20监控大模型的训练与调试/images/SaKhbpPneonC4IxmUzPc0qcLnKd.png)
 
-![]([新手教程]如何使用 WandB 监控大模型的训练与调试/images/Fksnby1J5ozZoRxnJarclZ7Cneg.png)
+![]([新手教程]如何使用%20WandB%20监控大模型的训练与调试/images/Fksnby1J5ozZoRxnJarclZ7Cneg.png)
 
 ## 总结
 

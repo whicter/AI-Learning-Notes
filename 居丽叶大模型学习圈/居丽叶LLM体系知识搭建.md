@@ -2,7 +2,9 @@
 
 > 来源（Source）：https://my.feishu.cn/docx/AN61dRfiWoRUiRxhc6ucbmJwnGr
 
-> 🏖️ 大家好，这里是小红书@居丽叶 与 小红书@谷密欧 的大模型知识库。
+> 🏖️
+>
+> 大家好，这里是小红书@居丽叶 与 小红书@谷密欧 的大模型知识库。
 >
 > 文档内容较多，可以按照以下时间安排以每天学习4h为宜：
 >
@@ -12,7 +14,7 @@
 >
 > [针对大模型开发岗/Agent开发/AI应用开发岗的学习计划](https://my.feishu.cn/wiki/HNVmwNoDyiaJ6sk4EyMcxcCInmg?fromScene=spaceOverview)
 >
-> 八股及面试题在[居居的算法岗八股速记](https://y95yb64h04.feishu.cn/docx/KonZd1ykIoQRnGxDJxIccd18nCe)，密码在知识星球置顶[[新人必读]](https://t.zsxq.com/sp7iE)中
+> 八股及面试题在[居居的算法岗八股速记](https://y95yb64h04.feishu.cn/docx/KonZd1ykIoQRnGxDJxIccd18nCe)，密码在知识星球置顶[\[新人必读\]](https://t.zsxq.com/sp7iE)中
 
 ### 1 nlp基础知识篇
 
@@ -48,7 +50,9 @@ seq2seq通过encoder-decoder结构实现。seq2seq的问题是，长sequence中�
 
 self-attention是一种**将单个序列的不同位置关联起来以计算同一序列的表示的注意机制**。可以把self-attention理解为感受野可以自学习的CNN，CNN是self-attention的特例。self-attention在数据量大时表现优于CNN。
 
-> 🌰 **全局建模能力对比**
+> 🌰
+>
+> **全局建模能力对比**
 >
 > - **自注意力**: 在全局建模能力上，自注意力机制具有明显的优势，因为它可以显式地捕捉序列中任意两个元素之间的关系，无论它们之间的距离。这使得自注意力机制在处理长距离依赖和全局信息方面非常强大。
 > - **CNN**: CNN在局部特征提取方面非常有效，但在全局建模能力上可能不如自注意力机制。然而，通过设计特定的网络结构(如使用全局池化层或多尺度卷积)，CNN也可以在一定程度上捕捉全局信息
@@ -87,9 +91,11 @@ $\alpha_{1,1}=q^1 \dot  k^1$,经过softmax进行normalize，（q k对应query
 
 ![](居丽叶LLM体系知识搭建/images/NtcZb6opkoCzQZxo8qPcf3CHnOc.png)
 
-除以$\sqrt{d_k}$是为了平滑softmax的结果，防止进入了softmax的饱和区，导致梯度值太小而难以训练。 
+除以$\sqrt{d_k}$是为了平滑softmax的结果，防止进入了softmax的饱和区，导致梯度值太小而难以训练。
 
-> 🍞 总结下self-attention 与 RNN/LSTM的对比：
+> 🍞
+>
+> 总结下self-attention 与 RNN/LSTM的对比：
 >
 > 1. 引入Self Attention后会**更容易捕获句子中长距离的相互依赖的特征。**RNN或者LSTM虽然也能捕获长距离的特征，但是对于远距离的相互依赖的特征，要经过若干时间步步骤的信息累积才能将两者联系起来，而距离越远，有效捕获的可能性越小。
 > 2. self-attention和RNN都能处理时序数据，每个向量都考虑了整个sequence，但RNN需要按顺序计算，无法并行；**self-attention可以并行计算**。
@@ -263,7 +269,9 @@ print(attention.size(), output.size())
 
 由于之前使用了掩码矩阵，第i个单词的预测只包含了前i个单词的信息。softmax会输出一个长度为m的向量（m是词表长度），其中元素加和为1，每个元素表示预测这个单词的概率。然后根据decoding方法（后面的文章详细介绍）确定输出哪个单词。
 
-> 🚅 **transformer总结：**
+> 🚅
+>
+> **transformer总结：**
 >
 > - 优点：支持并行计算（RNN需要顺序计算），有一定捕获长距离语义的能力，已经衍生出了大量的模型。
 > - 缺点：计算复杂度$O(n^2)$，需要大量数据进行训练。
@@ -276,7 +284,9 @@ print(attention.size(), output.size())
 
 **先说结论：Pre-Norm结构往往更容易训练，但最终效果通常不如Post-Norm**。参考文献是《Understanding the Difficulty of Training Transformers》和《RealFormer: Transformer Likes Residual Attention》。
 
-> 📚 这里指的是post-norm在最优设置下的性能是优于pre-norm的，而不是在相同配置下，因为post-norm更难训练，需要一些额外的操作（比如需要添加学习率warmup）。
+> 📚
+>
+> 这里指的是post-norm在最优设置下的性能是优于pre-norm的，而不是在相同配置下，因为post-norm更难训练，需要一些额外的操作（比如需要添加学习率warmup）。
 
 ###### pre-norm效果为什么更差？
 
@@ -304,7 +314,9 @@ print(attention.size(), output.size())
 
 **残差的本意是为了给前面的层添加一个快速通道，保障梯度快速回传，而post-norm削弱了这个快速通道，残差名存实亡，容易导致梯度消失，难以训练。**
 
-> 🎹 **梯度消失指的是在深度网络的反向传播阶段，梯度在从输出层向输入层传播的过程中逐渐变小，最终趋于接近零**。前面的层梯度较小乃至不更新，会导致后面层的输入质量变低，从而导致模型准确率降低。为了缓解梯度消失，就可以采用残差连接，补上一个梯度为常数的项。
+> 🎹
+>
+> **梯度消失指的是在深度网络的反向传播阶段，梯度在从输出层向输入层传播的过程中逐渐变小，最终趋于接近零**。前面的层梯度较小乃至不更新，会导致后面层的输入质量变低，从而导致模型准确率降低。为了缓解梯度消失，就可以采用残差连接，补上一个梯度为常数的项。
 >
 > **梯度消失在微调模型时是优点**。因为微调希望优先调整后面的层，而前面的层少调整，避免破坏预训练学到的知识。梯度消失正好对前面的层调整较弱。所以，预训练好的Post-Norm模型，往往比Pre-Norm模型有更好的微调效果。
 
@@ -332,7 +344,9 @@ warmup学习率指学习率随着轮数逐渐增长到目标学习率。如果�
 
 ![](居丽叶LLM体系知识搭建/images/JQxCbiNOOo0QbPxOYJMciTzHn8c.png)
 
-> 🥛 总结：
+> 🥛
+>
+> 总结：
 >
 > - **Post-Norm**：适合较浅的 Transformer 网络，或者任务不太复杂时，它可以取得更好的准确性。
 > - **Pre-Norm**：对于深层 Transformer 模型，它的梯度更加稳定，收敛性有保障，因此通常在深度模型中表现得更好。
@@ -437,7 +451,9 @@ print(inputs)
 
 其中$d_{model}$是位置编码的长度，$i \in [0,1,...,(d_{model} - 1) / 2]$。采用这种设计，**pos+k位置的位置编码可以用pos位置的位置编码线性表示，体现了其相对位置关系。**
 
-> 🥇 这里的相对位置关系指的是两个token之间的，但是绝对位置编码每个位置的编码是固定的，而相对位置编码直接考虑两个token之间的相对位置。
+> 🥇
+>
+> 这里的相对位置关系指的是两个token之间的，但是绝对位置编码每个位置的编码是固定的，而相对位置编码直接考虑两个token之间的相对位置。
 
 > 证明：需要用到三角公式，定义$w_i = \frac{1}{10000^{2i / d_{model}}}$
 >
@@ -478,7 +494,9 @@ class PositionalEncoding(nn.Module):
         return self.dropout(x)
 ```
 
-> 🏖️ **总结：**绝对位置编码实现简单，存在以下缺点：
+> 🏖️
+>
+> **总结：**绝对位置编码实现简单，存在以下缺点：
 >
 > - 尽管能包含一定的相对位置信息，但是这种信息仅仅保存在位置编码内部，**在计算自注意力时，这种位置信息就被破坏了。**
 > - 一个token的位置编码是什么由其在句子中的绝对位置决定，但是**真正重要的往往不是绝对位置，而是它与其他token之间的关系。**
@@ -486,7 +504,7 @@ class PositionalEncoding(nn.Module):
 
 ##### 1.4.2 相对位置编码
 
-相对位置编码将两个token的相对位置信息添加到对应的attention值中。 
+相对位置编码将两个token的相对位置信息添加到对应的attention值中。
 
 ###### Attention with linear biases enables input length extrapolation（ALiBi）
 
@@ -519,7 +537,7 @@ XLNET将$p_j$替换成相对位置向量$R_{i-j}$，$p_i$替换成可训练的�
 
 （7）式中的每一项可以理解为“输入-输入”、“输入-位置”、“位置-输入”、“位置-位置”四项注意力的组合，由于**输入信息与位置信息应该是独立（解耦）**的，它们不应该有过多的交互，所以“输入-位置”、“位置-输入”两项Attention可以删掉，“位置-位置”实际上是一个依赖于（s,）的一个标量。
 
-此外，通过固定的桶函数 b(t-s) ，将 t-s 从 [−128,128] 压缩至 [0,31] ，再对每个 b(t-s) 训练对应的偏移量$r_{b(t-s)}$ 
+此外，通过固定的桶函数 b(t-s) ，将 t-s 从 [−128,128] 压缩至 [0,31] ，再对每个 b(t-s) 训练对应的偏移量$r_{b(t-s)}$
 
 ![](居丽叶LLM体系知识搭建/images/XCuybAyqxoOZZfx5PskcHCmtnMh.png)
 
@@ -682,7 +700,9 @@ IN和LN的融合，在神经网络的每一层中，**将特征分成若干组�
 
 **优点： 适用于样本较小、样本间相互影响较大，但又不需要对整个mini-batch进行归一化的情况。**
 
-> 🌲 总结：
+> 🌲
+>
+> 总结：
 >
 > - Batch Normalization 对batch的维度去做归一化，也就是针对不同样本的同一特征做操作， Layer Normalization 对hidden的维度去做归一化，也就是针对单个样本的不同特征做操作。
 > - Batch Normalization 是对这批样本的同一维度特征（每个神经元）做归一化， Layer Normalization 是对这单个样本的所有维度特征做归一化。
@@ -700,11 +720,15 @@ LayerNorm每次都需要计算均值和方差，而RMSNorm没有去中心化的�
 
 1. 计算均方根，同时加上一个小的常数$\sigma$以避免除以零：
 
-$RMS(x)= \sqrt {\frac{1}{d} \sum_{i=1} ^d x_i^2 +\sigma}$
+$$
+RMS(x)= \sqrt {\frac{1}{d} \sum_{i=1} ^d x_i^2 +\sigma}
+$$
 
 1. 最后，使用得到的 RMS 值对输入 $X$ 进行归一化，并乘以可学习的权重参数 $w$:
 
-$Y = X * \frac{1}{RMS(x)} * w$
+$$
+Y = X * \frac{1}{RMS(x)} * w
+$$
 
 ```python
 class RMsNorm(torch.nn.Module):
@@ -719,7 +743,9 @@ class RMsNorm(torch.nn.Module):
         return output* self.weight
 ```
 
-> 🚅 **RMSNorm对比LayerNorm的优点**
+> 🚅
+>
+> **RMSNorm对比LayerNorm的优点**
 >
 > - RMSNorm 不计算均值，**计算效率更高**，更适合大规模数据计算。
 > - RMSNorm **减轻了内部协变量偏移的影响**，仅对输入的均方根值进行归一化，受异常特征值导致的梯度不稳定影响更小，训练更加稳定。
@@ -773,14 +799,18 @@ word2vec将每个单词作为最小单位，为每个单词生成一个向量，
 
 介绍FastText之前，先介绍n-gram。基本思想是将文本内容按照字节顺序进行大小为N的滑动窗口操作，最终形成长度为N的字节片段序列。利用**n-gram**可以构建许多文本特征，例如当n=3时，即trigram，“apple”可以构建出：
 
-$<ap, app, ppl, ple, le>$
+$$
+<ap, app, ppl, ple, le>
+$$
 
 <表示前缀，>表示后缀。利用这些trigram来表示“apple”这个单词，进一步，我们可以用这5个trigram的embedding和apple本身的embedding叠加来表示“apple”的词向量。这样的好处是：
 
 1. **对于低频词生成的词向量效果会更好**。因为它们的n-gram可以和其它词共享。
 2. **对于训练词库之外的单词，仍然可以构建它们的词向量**。我们可以叠加它们的字符级n-gram向量。
 
-> 🌰 FastText和CBOW一样，也包含输入层、隐含层、输出层，输入都是多个经向量表示的单词，输出都是一个特定的target，隐含层都是对多个词向量的叠加平均。不同的是，**FastText的输入是上下文单词和n-gram的embedding，CBOW只有上下文单词。FastText使用了分层softmax。**
+> 🌰
+>
+> FastText和CBOW一样，也包含输入层、隐含层、输出层，输入都是多个经向量表示的单词，输出都是一个特定的target，隐含层都是对多个词向量的叠加平均。不同的是，**FastText的输入是上下文单词和n-gram的embedding，CBOW只有上下文单词。FastText使用了分层softmax。**
 >
 > FastText除了用来训练词向量，还可以用来做文本分类。
 
@@ -794,7 +824,9 @@ $<ap, app, ppl, ple, le>$
 
 $x_{max} = 100, \alpha = 0.75$。向量v是要学习的参数，本质上**与监督学习的训练方法一样**，采用了AdaGrad的梯度下降算法，对矩阵X中的所有非零元素进行随机采样，学习曲率（learning rate）设为0.05，在vector size小于300的情况下迭代了50次，其他大小的vectors上迭代了100次，直至收敛。最后我们对于一个词w的target embedding和context embedding，就是它对应的$v_i$和 $v_j$求和。
 
-> 🌟 Glove对比Word2vec
+> 🌟
+>
+> Glove对比Word2vec
 >
 > - **word2vec是局部语料库训练的，**其特征提取是基于滑窗的；而**glove的滑窗是为了构建共现 matrix**，是基于全局语料的，可见glove需要事先统计共现概率；因此，word2vec可以进行在线学习，glove则需要统计固定语料信息。并且**Glove训练时收敛更快**。
 > - word2vec是无监督学习，同样由于不需要人工标注；glove通常被认为是无监督学习，但实际上glove还是有label的，即共现次数log(Xij)。
@@ -843,7 +875,9 @@ Bert对不同的下游任务也有格式转换方法：
 
 ![](居丽叶LLM体系知识搭建/images/VBw4bESjgoDy6JxZg4QcqqOXnhg.png)
 
-> ✏️ 对比emlo、GPT和bert
+> ✏️
+>
+> 对比emlo、GPT和bert
 >
 > - 模型架构：**elmo采用LSTM，GPT和bert采用transformer**。GPT利用transformer的decoder部分，bert利用encoder部分。
 > - 单向双向：**elmo和bert都是双向语言模型，GPT是单向的，只能看到前边部分**。elmo实际上是两个单向语言模型（方向相反）的拼接，这种融合特征的能力比bert一体化融合特征方式弱。
@@ -922,7 +956,9 @@ BGE v1由6个模型组成，每种语言有'large', 'base'和'small'三款不同
 
 ![](居丽叶LLM体系知识搭建/images/Whvdb40AioysruxvuZOcN0ovnSe.png)
 
-> 🏕️ **Q：为什么编码器和解码器是非对称的？**
+> 🏕️
+>
+> **Q：为什么编码器和解码器是非对称的？**
 >
 > **A：** 从论文创新的角度来看，这种设计是经过深思熟虑的。传统上，BERT主要用于**MLM**（Masked Language Modeling）和**NSP**（Next Sentence Prediction）任务，通过获取`[CLS]`向量或最后一层隐层的输出，能捕捉一定的语义信息，作为语义嵌入用于文本检索等任务。自监督学习除了MLM，还包括对比学习和自编码器等方法，但对比学习的应用较多，并且对负采样有较高要求。现在，**RetroMAE的创新点在于将自编码器的思想引入BERT，利用自编码器作为特征表征学习的方式，进而提升模型的性能。**
 >
@@ -936,7 +972,9 @@ BGE v1由6个模型组成，每种语言有'large', 'base'和'small'三款不同
 
 在对比学习中，我们的目标是通过无标签数据集让模型学习区分正负样本的能力。具体来说，给定一个正文本对 p 和 q，以及一个负样本 q′，我们希望通过一个损失函数使得正文本对的相似度高于负样本对的相似度，从而提升模型的区分能力。这个目标的损失函数可以表示为：
 
-$\mathcal{L} = - \log \frac{\exp(\text{sim}(e_p, e_q) / \tau)}{\exp(\text{sim}(e_p, e_q) / \tau) + \exp(\text{sim}(e_p, e_{q'}) / \tau)}$
+$$
+\mathcal{L} = - \log \frac{\exp(\text{sim}(e_p, e_q) / \tau)}{\exp(\text{sim}(e_p, e_q) / \tau) + \exp(\text{sim}(e_p, e_{q'}) / \tau)}
+$$
 
 其中：
 
@@ -1068,7 +1106,9 @@ $\beta$：权重因子，控制两个任务在总Loss中的占比（经验值为
 
 ![](居丽叶LLM体系知识搭建/images/Tlq2baePoobLaJxAtu7cgl7Insc.png)
 
-> ✏️ ###### 如何选择合适的embedding模型
+> ✏️
+>
+> ###### 如何选择合适的embedding模型
 >
 > 1. **语言支持和性能**：大部分开源向量模型只支持单一或者有限的文本语言，所以需要确保 Embedding 模型支持的语言种类。多语言模型如 OpenAI Embedding 和 bge-m3 等模型能够处理多种语言。bge-m3 支持 100 多种语言，适合多语言需求的场景。另外，某些模型在主要语言（如中文）中的表现较好，但在处理较少使用的语言时可能会表现不佳。因此，需要评估模型在所有必需语言中的准确性，以确保一致的性能。
 > 2. **处理长文本的能力**：切分的文本片段后续需要通过 Embedding 模型进行向量化，所以必须考虑向量模型对输入文本块的 tokens 长度限制，超出这个限制则会导致模型对文本进行截断，从而丢失信息，影响下游任务的性能。不同的 Embedding 模型对文本块长度的支持能力不同。比如，BERT 及其变体通常支持最多 512 个tokens，处理长文本时则需要将文本分成更小的块，意味着需要更加精细化的分块策略。而 Jina AI 的 Embedding 模型和 bge-m3 模型则支持 8K 的 tokens 输入，适合处理长文本块。
@@ -1146,7 +1186,9 @@ LoRA固定原始参数$W_0$,只微调A B，A B的矩阵维度远低于$W_0$维�
 
 > LoRA可以看作是全量微调的一个泛化形式，随着模型可训练参数的增加（也就是增大r），LoRA就收敛到了原始模型，而基于Adapter的方法收敛到MLP，基于Prefix Tuning的方法收敛到不能接受长输入的模型。
 
-> 🎁 LoRA在实际应用中，可以选择需要应用到权重矩阵，一般应用到注意力模块和FFN网络，注意力模块也可以指定是否应用到q、k、v、o矩阵。
+> 🎁
+>
+> LoRA在实际应用中，可以选择需要应用到权重矩阵，一般应用到注意力模块和FFN网络，注意力模块也可以指定是否应用到q、k、v、o矩阵。
 
 在原论文中，还有一个超参数$\alpha$。$\alpha$控制低秩矩阵对预训练权重的影响。r决定低秩矩阵能捕捉的特征维度数量。$\alpha$一般固定为实验开始时的r值，后续不需要再调整。r一开始设置为比较大的值，后续$\alpha / r$逐渐变大。r越小表示低秩矩阵的信息更精炼，此时梯度下降的方向更确信，增快梯度下降的速度，相当于调整学习率。
 
@@ -1224,7 +1266,9 @@ Scaling Law指出可以通过在小计算量时得到损失值，预测大计算
 
 ![](居丽叶LLM体系知识搭建/images/NReZb9m8cooFuuxH8HKciqkonvq.png)
 
-> 💡 ###### 训练时计算资源消耗分布：
+> 💡
+>
+> ###### 训练时计算资源消耗分布：
 >
 > - 模型参数和梯度：完整的模型参数和需要更新的参数的梯度。
 > - 优化器：Adam需要维护一阶和二阶动量
@@ -1344,7 +1388,7 @@ X-LoRA：采取MOE的思路，对每个token经过多个expert，额外训练一
 
 ![](居丽叶LLM体系知识搭建/images/AUyMbizDJobXyTxCsTbcqgQwnZe.jpg)
 
-LoHa：对于秩$\leq$2R的LoRA，将X和Y分别拆分为两个矩阵，分别做矩阵相乘再做点积，秩变成了$\leq$$R^2$，表达能力更强。
+LoHa：对于秩$\leq$2R的LoRA，将X和Y分别拆分为两个矩阵，分别做矩阵相乘再做点积，秩变成了$\leq$ $R^2$，表达能力更强。
 
 ![](居丽叶LLM体系知识搭建/images/ZMJGb2Icoozx9hxmhv2cLSD8nkf.jpg)
 
@@ -1430,7 +1474,9 @@ P-Tuning v2在许多层都插入prompt，prompt之间相互独立，增加了可
 
 ![](居丽叶LLM体系知识搭建/images/L9ldbc3APoim2Bxh2AJcOGTOnSf.png)
 
-> 🍰 **总结一下，有监督学习与强化学习的区别**：
+> 🍰
+>
+> **总结一下，有监督学习与强化学习的区别**：
 >
 > - **优化目标**：有监督学习和强化学习的优化目标相似，即都是在优化某个数据分布下的一个分数值的期望。
 > - **优化方法**：二者优化的途径是不同的，有监督学习直接通过优化模型对于数据特征的输出来优化目标，即修改目标函数而数据分布不变；**强化学习则通过改变策略来调整智能体和环境交互数据的分布，进而优化目标，即修改数据分布而目标函数不变。**
@@ -1453,18 +1499,24 @@ P-Tuning v2在许多层都插入prompt，prompt之间相互独立，增加了可
 7. **折扣因子（Discount Factor, γ）**：用于控制未来奖励的重要性，取值范围为 [0,1]。折扣因子越接近1，表示对未来奖励的重视程度越高
 8. **策略（Policy，Π）**：在状态s采取动作a的概率，即：$\pi(a|s) = p(A_t = a| S_t = s)$。现实任务一般都是随机性策略，即在一个状态下按照概率采取不同动作，而非只能采取唯一动作的确定性策略。
 
-> ✍️ 如何理解累积奖励？
+> ✍️
+>
+> 如何理解累积奖励？
 >
 > 累计奖励是指从当前时间点开始，agent在后续所有时间步中获得的奖励之和。这个概念是评估智能体策略优劣的重要指标，因为它反映了智能体在长期内获得的总收益。
 >
-> - **Episodic Task**：有终止点的任务. 
+> - **Episodic Task**：有终止点的任务.
 > - **Continuing Task**: 没有终止点的任务。
 >
 > 对于Continuing Task, 目标函数是unbound的，所以添加一个discounting factor $\gamma$, $\gamma$越小表示越急功近利，取值范围为 [0,1]。以下讨论的也都是continuing task。
 >
-> $E(G_t) = \sum_{k=0}^n \gamma ^k E(R_{t+k}) \leq \sum_{k=0}^n \gamma^k E(R_{max}) \leq \frac{1}{1-\gamma} E(R_{max})$
+> $$
+> E(G_t) = \sum_{k=0}^n \gamma ^k E(R_{t+k}) \leq \sum_{k=0}^n \gamma^k E(R_{max}) \leq \frac{1}{1-\gamma} E(R_{max})
+> $$
 >
-> $E(G_t) = R_{t} + \gamma E(G_{t+1})$
+> $$
+> E(G_t) = R_{t} + \gamma E(G_{t+1})
+> $$
 
 ![](居丽叶LLM体系知识搭建/images/WlV8buVQBokDm9xzhXNcTiSynzh.png)
 
@@ -1490,10 +1542,12 @@ MDP可以由变量序列表示，也被称为轨迹（trajectory），或者称�
 
 在一个状态下的value值，也就是一个状态的期望回报，用v表示(由于本章参考文章较多，不同文章中denotation格式有细微区别，后面的v和V都表示状态价值函数)。v包含了即时奖励和未来奖励。
 
-$V_\pi(s) = E_\pi [G_t|S_t=s] = E_\pi( R_{t} + \gamma G_{t+1}|S_t = s) \\ =   
-\sum_{a \in A} \pi(a|s) \cdot \sum_{s'} \sum_r p(s', r| s, a) [r + \gamma E_\pi(G_{t+1}|S_{t+1}=s' )]  
-\\ =   
-\sum_{a \in A} \pi(a|s) \cdot \sum_{s'} \sum_r p(s', r| s, a) [r + \gamma V_\pi(s')]$
+$$
+V_\pi(s) = E_\pi [G_t|S_t=s] = E_\pi( R_{t} + \gamma G_{t+1}|S_t = s) \\ = 
+\sum_{a \in A} \pi(a|s) \cdot \sum_{s'} \sum_r p(s', r| s, a) [r + \gamma E_\pi(G_{t+1}|S_{t+1}=s' )]
+\\ = 
+\sum_{a \in A} \pi(a|s) \cdot \sum_{s'} \sum_r p(s', r| s, a) [r + \gamma V_\pi(s')]
+$$
 
 整个式子的核心是：**状态*s*的价值 = 所有可能动作的概率 × （该动作下所有可能转移的概率 × （即时奖励 + 折扣后的下一个状态价值））的总和**。
 
@@ -1505,21 +1559,29 @@ $V_\pi(s) = E_\pi [G_t|S_t=s] = E_\pi( R_{t} + \gamma G_{t+1}|S_t = s) \\ =
 
 前面的State-value式子展开后很复杂，这里先做了符号简化，我们令$r_\pi(s) = \sum_a \pi(a|s)\sum_r p(r|s,a)r,  p_\pi(s'|s) = \sum_a \pi(a|s) p(s'|s,a)$，就可以把核心关系提炼出来：
 
-$V_\pi(s) = r_\pi(s) + \gamma \sum_{s'}p_\pi(s'|s)V_\pi(s')$     
+$$
+V_\pi(s) = r_\pi(s) + \gamma \sum_{s'}p_\pi(s'|s)V_\pi(s')
+$$
 
 假设状态为$s_i ( i = 1 , … , n )$ :
 
-$V_\pi(s_i) = r_\pi(s_i) + \gamma \sum_{s_j}p_\pi(s_j|s_i)V_\pi(s_j)$
+$$
+V_\pi(s_i) = r_\pi(s_i) + \gamma \sum_{s_j}p_\pi(s_j|s_i)V_\pi(s_j)
+$$
 
 写成矩阵形式就是：
 
-$V_\pi = r_\pi + \gamma P_\pi V_\pi$
+$$
+V_\pi = r_\pi + \gamma P_\pi V_\pi
+$$
 
 ![](居丽叶LLM体系知识搭建/images/L9r3bQwINoeRt0xbpT3c4h3kn3c.png)
 
 由矩阵形式可知，每个状态s的state value都与其他状态有关，关系强弱由状态转移矩阵$P_\pi$矩阵。给定一个策略，算出相应的状态值被称为策略评估，这是强化学习的一个基本问题，可以通过求解此贝尔曼方程得到：
 
-$V_\pi = (I-\gamma P_\pi)^{-1} r_\pi$
+$$
+V_\pi = (I-\gamma P_\pi)^{-1} r_\pi
+$$
 
 但是这种矩阵求逆复杂度为$O(n^3)$，现实中求解贝尔曼方程一般采用policy iteration，即通过有限次的迭代得到一个近似解：先猜一个初始价值，然后不断用贝尔曼方程更新，直到价值不再变化（收敛）。
 
@@ -1527,33 +1589,42 @@ $V_\pi = (I-\gamma P_\pi)^{-1} r_\pi$
 
 后文中简称为动作价值函数，即Q函数。它比状态价值函数（V 函数）更 “具体”：V 函数衡量 “状态的好坏”，而 Q 函数直接衡量 “在某个状态下做某个动作的好坏”。(由于本章参考文章较多，不同文章中denotation格式有细微区别，后面的q和Q都表示动作价值函数)
 
-$Q_\pi(s, a) = E_\pi [G_t|S_t=s, A_t = a] \\= \sum_{s'} \sum_r p(s', r| s, a) [r + \gamma V_\pi(s')]  
-\\= \sum_{s'} \sum_r p(s', r| s, a) [r + \gamma \sum_{a' \in A} \pi(a'|s') Q_\pi(s', a')]$
+$$
+Q_\pi(s, a) = E_\pi [G_t|S_t=s, A_t = a] \\= \sum_{s'} \sum_r p(s', r| s, a) [r + \gamma V_\pi(s')]
+\\= \sum_{s'} \sum_r p(s', r| s, a) [r + \gamma \sum_{a' \in A} \pi(a'|s') Q_\pi(s', a')]
+$$
 
 Q值越大说明动作a越好。可以用到后面的贪心策略中。
 
 **状态价值函数**$V_\pi(s)$**和状态 - 动作价值函数**$Q_\pi(s, a)$**两者之间的关系**：状态s的价值 = 该状态下所有可能动作的 Q 值，按策略$\pi$选择动作的概率加权平均。
 
-$V_\pi(s) = \sum_{a \in A} \pi(a|s) Q_\pi(s, a)$
+$$
+V_\pi(s) = \sum_{a \in A} \pi(a|s) Q_\pi(s, a)
+$$
 
-**两种不同类型策略的对比：** 
+**两种不同类型策略的对比：**
 
 - **随机策略（stochastic policy）：**
 
-策略 $\pi(a\mid s)$ 表示在状态 $s$ 下选择动作 $a$ 的概率，通常在 $[0,1]$ 之间。此时 $V_\pi(s)$ 是对所有动作价值的加权平均。 
+策略 $\pi(a\mid s)$ 表示在状态 $s$ 下选择动作 $a$ 的概率，通常在 $[0,1]$ 之间。此时 $V_\pi(s)$ 是对所有动作价值的加权平均。
 
 - **确定性策略（deterministic policy）：**
 
-如果策略在状态 $s$ 下总是选择某个固定动作 $a^*$，那么： 
-    $\pi(a \mid s) =    
-    \begin{cases}   
-    1 & a = a^* \\   
-    0 & a \neq a^*   
-    \end{cases}$
+如果策略在状态 $s$ 下总是选择某个固定动作 $a^*$，那么：
 
-    这时状态价值函数退化为： 
+$$
+\pi(a \mid s) =  
+\begin{cases} 
+1 & a = a^* \\ 
+0 & a \neq a^* 
+\end{cases}
+$$
 
-    $V_\pi(s) = Q_\pi(s,a^*)$
+这时状态价值函数退化为：
+
+$$
+V_\pi(s) = Q_\pi(s,a^*)
+$$
 
 ![](居丽叶LLM体系知识搭建/images/K0K6bsBCZoS9BdxMPRHc1Nf7nOE.png)
 
@@ -1561,13 +1632,17 @@ $V_\pi(s) = \sum_{a \in A} \pi(a|s) Q_\pi(s, a)$
 
 经过以上的推导，已经得到了贝尔曼期望方程，它表示了状态价值函数和状态动作价值函数之间的关系：
 
-$V_\pi(s) = E_\pi [G_t|S_t=s] = E_\pi( R_{t} + \gamma G_{t+1}|S_t = s) \\ =   
-\sum_{a \in A} \pi(a|s) \cdot \sum_{s'} \sum_r p(s', r| s, a) [r + \gamma E_\pi(G_{t+1}|S_{t+1}=s' )]  
-\\ =   
-\sum_{a \in A} \pi(a|s) \cdot \sum_{s'} \sum_r p(s', r| s, a) [r + \gamma V_\pi(s')]$
+$$
+V_\pi(s) = E_\pi [G_t|S_t=s] = E_\pi( R_{t} + \gamma G_{t+1}|S_t = s) \\ = 
+\sum_{a \in A} \pi(a|s) \cdot \sum_{s'} \sum_r p(s', r| s, a) [r + \gamma E_\pi(G_{t+1}|S_{t+1}=s' )]
+\\ = 
+\sum_{a \in A} \pi(a|s) \cdot \sum_{s'} \sum_r p(s', r| s, a) [r + \gamma V_\pi(s')]
+$$
 
-$Q_\pi(s, a) = E_\pi [G_t|S_t=s, A_t = a] \\= \sum_{s'} \sum_r p(s', r| s, a) [r + \gamma V_\pi(s')]  
-\\= \sum_{s'} \sum_r p(s', r| s, a) [r + \gamma \sum_{a' \in A} \pi(a'|s') Q_\pi(s', a')]$
+$$
+Q_\pi(s, a) = E_\pi [G_t|S_t=s, A_t = a] \\= \sum_{s'} \sum_r p(s', r| s, a) [r + \gamma V_\pi(s')]
+\\= \sum_{s'} \sum_r p(s', r| s, a) [r + \gamma \sum_{a' \in A} \pi(a'|s') Q_\pi(s', a')]
+$$
 
 ###### Bellman Optimal Equation,BOE
 
@@ -1577,19 +1652,29 @@ $Q_\pi(s, a) = E_\pi [G_t|S_t=s, A_t = a] \\= \sum_{s'} \sum_r p(s', r| s, a) [r
 
 最优策略都有相同的状态价值函数，我们称之为**最优状态价值函数和最优动作价值函数，**表示为：
 
-$V^*(s) = \mathop{\max}\limits_\pi  V_\pi(s), Q^*(s, a) = \mathop{\max}\limits_\pi Q_\pi(s, a)$
+$$
+V^*(s) = \mathop{\max}\limits_\pi  V_\pi(s), Q^*(s, a) = \mathop{\max}\limits_\pi Q_\pi(s, a)
+$$
 
 为了使$Q_\pi(s, a)$最大，我们需要在当前的状态动作对$(s, a)$之后都执行最优策略。于是我们得到了最优状态价值函数和最优动作价值函数之间的关系：
 
-$Q^*(s, a) = \sum_{s'} \sum_r p(s', r| s, a) [r + \gamma V^*(s')]$
+$$
+Q^*(s, a) = \sum_{s'} \sum_r p(s', r| s, a) [r + \gamma V^*(s')]
+$$
 
-$v^*(s) = \mathop{\max}\limits_{a \in \mathcal{A}} q^*(s, a)$
+$$
+v^*(s) = \mathop{\max}\limits_{a \in \mathcal{A}} q^*(s, a)
+$$
 
 **贝尔曼最优方程**为：
 
-$V^*(s) =  \mathop{\max}\limits_{a \in \mathcal{A}} \sum_{s'} \sum_r p(s', r| s, a) [r + \gamma V^*(s')]$
+$$
+V^*(s) =  \mathop{\max}\limits_{a \in \mathcal{A}} \sum_{s'} \sum_r p(s', r| s, a) [r + \gamma V^*(s')]
+$$
 
-$Q^*(s, a) = \sum_{s'} \sum_r p(s', r| s, a) [r + \gamma  \mathop{\max}\limits_{a' \in \mathcal{A}} Q^*(s', a')]$
+$$
+Q^*(s, a) = \sum_{s'} \sum_r p(s', r| s, a) [r + \gamma  \mathop{\max}\limits_{a' \in \mathcal{A}} Q^*(s', a')]
+$$
 
 ##### 2.2.4 动态规划
 
@@ -1607,19 +1692,27 @@ $Q^*(s, a) = \sum_{s'} \sum_r p(s', r| s, a) [r + \gamma  \mathop{\max}\limits_{
 
 1. **策略评估（也叫价值评估）**：**通过迭代法不断更新当前策略下的状态价值函数**，直到state value的前后差值小于一个阈值（收敛到一个定值）：
 
-$V_\pi = r_\pi + \gamma P_\pi V_\pi$
+$$
+V_\pi = r_\pi + \gamma P_\pi V_\pi
+$$
 
 > 注意这里的策略是固定的，由于采用贪心策略，所以在每个状态下采取的动作也是固定的，即$\pi(a^*|s) = 1$, 而其他的动作都为0。因此在下面算法中省略了$\sum_{a \in A} \pi(a|s)$。
 
 1. **策略优化（也叫策略迭代）**：目的是基于更新后的$V_\pi$更新策略：
 
-$\pi = \mathop{\arg\max}\limits_{\pi}(r_\pi + \gamma P_\pi V_\pi)$
+$$
+\pi = \mathop{\arg\max}\limits_{\pi}(r_\pi + \gamma P_\pi V_\pi)
+$$
 
 具体到每一个状态：
 
-$\pi(s) = \mathop{\arg\max}\limits_\pi \sum_a \pi(a|s) \cdot \sum_{s'} \sum_r p(s', r| s, a) [r + \gamma V_\pi(s')] = \mathop{\arg\max}\limits_\pi \sum_a \pi(a|s) \cdot Q_\pi(s, a)$
+$$
+\pi(s) = \mathop{\arg\max}\limits_\pi \sum_a \pi(a|s) \cdot \sum_{s'} \sum_r p(s', r| s, a) [r + \gamma V_\pi(s')] = \mathop{\arg\max}\limits_\pi \sum_a \pi(a|s) \cdot Q_\pi(s, a)
+$$
 
-$a^* = \mathop{\arg\max}\limits_a Q_\pi(s, a)$
+$$
+a^* = \mathop{\arg\max}\limits_a Q_\pi(s, a)
+$$
 
 ![](居丽叶LLM体系知识搭建/images/ODBub7EJvocUq1xu9UhcWrwIn4c.png)
 
@@ -1631,7 +1724,9 @@ V和$\pi$的更新是交替进行的，其中V**的更新由于要进行多次�
 
 ![](居丽叶LLM体系知识搭建/images/VEbjb9dPKoXxi5xfthQcTCXLnme.png)
 
-> 🍞 举一个栗子，引用自https://blog.csdn.net/qq_64671439/article/details/135329688：
+> 🍞
+>
+> 举一个栗子，引用自https://blog.csdn.net/qq_64671439/article/details/135329688：
 >
 > - **初始设置：**走到s1的奖励为0，走到s2的奖励为1，走出去的奖励为-1，折扣因子γ为0.9，初始策略如第一张图。
 > - **策略评估：**可以根据bellman方程求解出状态s1和s2的value，也可以先随机初始化状态s1和s2的value，然后用迭代法计算出状态s1和s2的value
@@ -1647,15 +1742,21 @@ V和$\pi$的更新是交替进行的，其中V**的更新由于要进行多次�
 
 策略迭代算法需要迭代很多轮的策略评估和策略优化，其中策略评估比较慢，而策略优化需要等待策略评估完成才能执行。而在价值迭代算法中，只进行一轮的策略评估，然后直接根据更新后的价值进行策略评估。利用贝尔曼最优方程：
 
-$V^*(s) =  \mathop{\max}\limits_{a \in \mathcal{A}} \sum_{s'} \sum_r p(s', r| s, a) [r + \gamma V^*(s')]$
+$$
+V^*(s) =  \mathop{\max}\limits_{a \in \mathcal{A}} \sum_{s'} \sum_r p(s', r| s, a) [r + \gamma V^*(s')]
+$$
 
 可以将其写为迭代的形式：
 
-$V^{k+1}(s) =  \mathop{\max}\limits_{a \in \mathcal{A}} \sum_{s'} \sum_r p(s', r| s, a) [r + \gamma V^k(s')]$
+$$
+V^{k+1}(s) =  \mathop{\max}\limits_{a \in \mathcal{A}} \sum_{s'} \sum_r p(s', r| s, a) [r + \gamma V^k(s')]
+$$
 
 当$V^{k+1}$和$V^k$之间距离小于一个阈值时，直接取出最优策略：
 
-$\pi(s) = \mathop{\arg\max}\limits_a  \sum_{s'} \sum_r p(s', r| s, a) [r + \gamma V^{k+1}(s')]$
+$$
+\pi(s) = \mathop{\arg\max}\limits_a  \sum_{s'} \sum_r p(s', r| s, a) [r + \gamma V^{k+1}(s')]
+$$
 
 **价值迭代算法伪代码如下：**
 
@@ -1667,7 +1768,9 @@ $\pi(s) = \mathop{\arg\max}\limits_a  \sum_{s'} \sum_r p(s', r| s, a) [r + \gamm
 
 ##### 2.2.5 蒙特卡洛方法
 
-> 🐵 **蒙特卡洛方法 vs Policy Iteration方法：**
+> 🐵
+>
+> **蒙特卡洛方法 vs Policy Iteration方法：**
 >
 > 之前介绍的通过迭代法解决贝尔曼方程的过程中，都假设模型已知（model-based），也就是环境的动态属性已知（$p(s',r|s,a)$是随环境变化，之前都假设知道每个时刻的$p(s',r|s,a)$，并且状态数量少且是离散的）。然而在实际问题中，我们可能对环境的动态特性并不是那么清楚，但是我们可以得到足够多的数据，那么我们同样可以用强化学习来建模解决这个问题，这类不利用模型的算法被称为Model-free的方法。Monte Carlo方法便是一种Model-free的方法。
 >
@@ -1679,7 +1782,9 @@ $\pi(s) = \mathop{\arg\max}\limits_a  \sum_{s'} \sum_r p(s', r| s, a) [r + \gamm
 
 回顾V(s)的定义：每个状态下的累计回报的期望：
 
-$V_\pi(s) = E[G_t|S_t=s]$
+$$
+V_\pi(s) = E[G_t|S_t=s]
+$$
 
 Monte Carlo的核心思想是用样本均值来近似期望。依据大数定理，对于随机变量X，给定N个iid采样的样本$\{ x_j \}_{j=1}^N$, 则$\bar{x} = \frac{1}{N} \sum_{j=1}^{N} x_j$可以视为$E(X)$的无偏估计。由大数定理可知，可以用样本均值估计期望，假设$g_1,...,g_n$是多个episode得到的n个s状态的累计回报，则$V(s) = \frac{g_1 +...+ g_n}{n}$是$G_t$的无偏估计。
 
@@ -1717,19 +1822,27 @@ Monte Carlo的策略优化与迭代法一致。策略评估和策略优化依次
 
 时序差分是一种用来估计一个策略的价值函数的方法，它结合了蒙特卡洛和动态规划算法的思想。和蒙特卡洛方法一样，也是不基于环境模型的，通过Agent与环境交互来采集数据进行学习。可以在一边生成episode的过程中，一边用生成好的样本进行估算，不需要完整的episode。
 
-> 👍 时序差分方法和蒙特卡洛的相似之处在于可以从样本数据中学习，不需要事先知道环境；和动态规划的相似之处在于根据贝尔曼方程的思想，利用后续状态的价值估计来更新当前状态的价值估计。
+> 👍
+>
+> 时序差分方法和蒙特卡洛的相似之处在于可以从样本数据中学习，不需要事先知道环境；和动态规划的相似之处在于根据贝尔曼方程的思想，利用后续状态的价值估计来更新当前状态的价值估计。
 
 $V(S_t)$作为要更新迭代的值，$G_t$是采样到的样本值，$G_t = R_{t} + \gamma R_{t+1}+... = R_{t} + \gamma G_{t+1}$，在蒙特卡洛方法中，只有整个episode结束才能得到。而时序差分方法只需要当前步结束即可进行计算，用当前获得的奖励加上下一个状态的价值估计来作为在当前状态会获得的回报。按照**Robbins-Monro**算法（一种随机近似算法）就有
 
-$V(s_t) = V(s_t) + \alpha[G_t - V(s_t)]$
+$$
+V(s_t) = V(s_t) + \alpha[G_t - V(s_t)]
+$$
 
 又已知：
 
-$V_\pi(s) = E[G_t|S_t = s] = E[R_{t} + \gamma G_{t+1}|S_t=s] = R_{t} + \gamma V_\pi(s_{t+1})$
+$$
+V_\pi(s) = E[G_t|S_t = s] = E[R_{t} + \gamma G_{t+1}|S_t=s] = R_{t} + \gamma V_\pi(s_{t+1})
+$$
 
 用$E(G_t)$近似代替$G_t$, 虽然牺牲了无偏估计的特性，但获得了更快速且更直接的方法：
 
-$V(s_t) = V(s_t) + \alpha[R_{t} + \gamma V(s_{t+1}) - V(s_t)]$
+$$
+V(s_t) = V(s_t) + \alpha[R_{t} + \gamma V(s_{t+1}) - V(s_t)]
+$$
 
 其中$R_{t} + \gamma V(s_{t+1}) - V(s_t)$被称为时序差分误差。这样只需要知道下一个状态就可以对当前状态进行更新。
 
@@ -1739,7 +1852,9 @@ $V(s_t) = V(s_t) + \alpha[R_{t} + \gamma V(s_{t+1}) - V(s_t)]$
 
 与之类似的，在策略优化时需要用到的动作价值函数q(s, a)也可以使用TD进行更新。
 
-$Q(s_t, a_t) = Q(s_t, a_t) + \alpha[R_{t} + \gamma Q(s_{t+1}, a_{t+1}) - Q(s_t, a_t)]$
+$$
+Q(s_t, a_t) = Q(s_t, a_t) + \alpha[R_{t} + \gamma Q(s_{t+1}, a_{t+1}) - Q(s_t, a_t)]
+$$
 
 下面伪代码中S'是下一个状态，A'是根据策略在S'下采取的动作，区别是如果S'是终止状态，没有A'，额外定义Q(S', A') = 0。当更新了Q(s, a)后，可以再对策略进行更新（*ε*-greedy）：
 
@@ -1749,23 +1864,33 @@ $Q(s_t, a_t) = Q(s_t, a_t) + \alpha[R_{t} + \gamma Q(s_{t+1}, a_{t+1}) - Q(s_t, 
 
 ###### 多步Sarsa
 
-> 🥛 **对比蒙特卡洛和时序差分算法**
+> 🥛
+>
+> **对比蒙特卡洛和时序差分算法**
 >
 > 蒙特卡洛方法是**无偏**（unbiased）的，但是具有比较大的方差，因为每一步的状态转移都有不确定性，而每一步状态采取的动作所得到的不一样的奖励最终都会加起来，这会极大影响最终的价值估计；时序差分算法具有非常小的方差，因为只关注了一步状态转移，用到了一步的奖励，但是它是**有偏**的，因为用到了下一个状态的价值估计而不是其真实的价值（也就是v无法衡量$\pi$的真正价值）。
 
 多步Sarsa采用两者折中的算法，利用n步的奖励，然后使用之后的状态价值估计：
 
-$G_t = R_{t} + \gamma R_{t+1} + ...+ \gamma^n Q(s_{t+n}, a_{t+n})$
+$$
+G_t = R_{t} + \gamma R_{t+1} + ...+ \gamma^n Q(s_{t+n}, a_{t+n})
+$$
 
-$Q(s_t, a_t) = Q(s_t, a_t) + \alpha[G_t- Q(s_t, a_t)]$
+$$
+Q(s_t, a_t) = Q(s_t, a_t) + \alpha[G_t- Q(s_t, a_t)]
+$$
 
 ###### Q-learning
 
 Q-learning是基于贝尔曼最优方程直接估计$Q^*$ ,其时序差分更新方式为：
 
-$Q^*(s, a) = \sum_{s'} \sum_r p(s', r| s, a) [r + \gamma  \mathop{\max}\limits_{a' \in \mathcal{A}} Q^*(s', a')]$
+$$
+Q^*(s, a) = \sum_{s'} \sum_r p(s', r| s, a) [r + \gamma  \mathop{\max}\limits_{a' \in \mathcal{A}} Q^*(s', a')]
+$$
 
-$Q(s_t, a_t) = Q(s_t, a_t) + \alpha[R_{t} + \gamma \mathop{\max}\limits_{a } Q(s_{t+1}, a) - Q(s_t, a_t)]$
+$$
+Q(s_t, a_t) = Q(s_t, a_t) + \alpha[R_{t} + \gamma \mathop{\max}\limits_{a } Q(s_{t+1}, a) - Q(s_t, a_t)]
+$$
 
 也就是**每次都选下一个动作价值最高的行动和奖励作为当前状态最优动作价值的估计**
 
@@ -1781,11 +1906,15 @@ Dyna-Q 使用一种叫做 **Q-planning** 的方法来基于模型生成一些模
 
 每次与环境执行一轮Q-learning，就会执行N次Q-Planning，当N=0时就会退化成Q-learning。值得注意的是Dyna-Q  是基于模型的（伪代码中的$M(s, a)$就是环境模型），只不过$M(s, a)$会在训练过程中会进行更新，即$M(s, a) \leftarrow r, s'$。
 
-> 🥛 对比Q-learning和Sarsa
+> 🥛
+>
+> 对比Q-learning和Sarsa
 >
 > 需要强调的是，Q-learning 的更新并非必须使用当前贪心策略$arg \mathop{\max}\limits_{a } Q(s, a)$采样得到的数据，因为给定任意的$(s, a, r, s')$都可以直接根据更新公式来更新，为了探索，我们通常使用一个$\epsilon$-贪婪策略来与环境交互。Sarsa 必须使用当前$\epsilon$-贪婪策略采样得到的数据，因为它的更新中用到$a_{t+1}$是当前策略在$s_{t+1}$下的动作。我们称 Sarsa 是**在线策略**（on-policy）算法，称 Q-learning 是**离线策略**（off-policy）算法.
 
-> 🥛 基于**行为策略**进行数据采样，利用采样到的数据更新**目标策略。**
+> 🥛
+>
+> 基于**行为策略**进行数据采样，利用采样到的数据更新**目标策略。**
 >
 > **注意区分以下概念**：
 >
@@ -1794,7 +1923,9 @@ Dyna-Q 使用一种叫做 **Q-planning** 的方法来基于模型生成一些模
 
 ![表格](居丽叶LLM体系知识搭建/images/sheet_W9kcs6GqahaiPStZRm1cBNgAnAb_S6KXda.png)
 
-> ✏️ **强化学习方法还可以按照以下标准进行划分：**
+> ✏️
+>
+> **强化学习方法还可以按照以下标准进行划分：**
 >
 > **从数据的角度**
 >
@@ -1822,7 +1953,9 @@ Dyna-Q 使用一种叫做 **Q-planning** 的方法来基于模型生成一些模
 
 对于以上情况，更好的方法是用函数拟合的方法来估计预测给定状态下的V和Q，这种方法也被叫做是近似方法。构造$\hat{V}(s, w) \approx V_\pi(s)$，训练目标就是$min \space  l(w) =  \sum_s \mu(s)[V_\pi(s) - \hat{V}(s, w)]^2$， $\mu(s)$表示被访问的概率。如果采用梯度下降，则更新公式为：
 
-$w = w - \eta \nabla l(w) = w + \eta \nabla \sum_s \mu(s) \cdot 2[V_\pi(s) - \hat{V}(s, w)] \nabla \hat V(s, w)$
+$$
+w = w - \eta \nabla l(w) = w + \eta \nabla \sum_s \mu(s) \cdot 2[V_\pi(s) - \hat{V}(s, w)] \nabla \hat V(s, w)
+$$
 
 又已知$V_\pi(s) = E[G_t|S_t = s] = E[R_{t} + \gamma G_{t+1}|S_t=s] = R_{t} + \gamma V_\pi(S_{t+1})$，只需要知道下一个状态就可以对当前状态进行的w进行更新.
 
@@ -1832,11 +1965,15 @@ $w = w - \eta \nabla l(w) = w + \eta \nabla \sum_s \mu(s) \cdot 2[V_\pi(s) - \ha
 
 回忆Q-learning中迭代公式（这里用$r 代替了 R_{t+1}$）：
 
-$Q(s_t, a_t) = Q(s_t, a_t) + \alpha[r + \gamma \mathop{\max}\limits_{a \in \mathcal{A}} Q(s_{t+1}, a) - Q(s_t, a_t)]$
+$$
+Q(s_t, a_t) = Q(s_t, a_t) + \alpha[r + \gamma \mathop{\max}\limits_{a \in \mathcal{A}} Q(s_{t+1}, a) - Q(s_t, a_t)]
+$$
 
 Q-learning的学习目标是让$Q(s, a)$与$r + \gamma \mathop{\max}\limits_{a \in \mathcal{A}} Q(s_{t+1}, a)$接近，利用函数$w$来拟合这一目标任务，损失函数构造为**均方误差**的形式：
 
-$\frac{1}{2N}\sum_{i=1}^{N}[Q_w(s_i, a_i) - (r_i + \gamma \mathop{\max}\limits_{a' \in \mathcal{A}} Q_{w}(s_i', a')]^2$
+$$
+\frac{1}{2N}\sum_{i=1}^{N}[Q_w(s_i, a_i) - (r_i + \gamma \mathop{\max}\limits_{a' \in \mathcal{A}} Q_{w}(s_i', a')]^2
+$$
 
 这就将 Q-learning 扩展到神经网络形式——**深度 Q 网络**（deep Q network，DQN）算法。由于 DQN 是off-policy算法，因此我们在收集数据的时候可以使用一个$\epsilon$**-贪婪策略**来平衡探索与利用，将收集到的数据存储起来，在后续的训练中使用。除此以外，DQN 中还有两个非常重要的模块——**经验回放**和**目标网络。**
 
@@ -1851,7 +1988,9 @@ $\frac{1}{2N}\sum_{i=1}^{N}[Q_w(s_i, a_i) - (r_i + \gamma \mathop{\max}\limits_{
 
 DQN的训练目标是让$Q_w(s, a)$逼近TD的目标$r + \gamma \mathop{\max}\limits_{a' \in \mathcal{A}} Q_w(s', a')$。但是这两项都涉及神经网络$Q_w$，这样就像是在赛跑，训练模型和目标模型都在不断的改变，这非常容易造成神经网络训练的不稳定性。为了解决这一问题，DQN利用两套Q模型，将损失函数修改为：
 
-$\frac{1}{2N}\sum_{i=1}^{N}[Q_w(s_i, a_i) - (r_i + \gamma \mathop{\max}\limits_{a' \in \mathcal{A}} Q_{w^-}(s_i', a')]^2$
+$$
+\frac{1}{2N}\sum_{i=1}^{N}[Q_w(s_i, a_i) - (r_i + \gamma \mathop{\max}\limits_{a' \in \mathcal{A}} Q_{w^-}(s_i', a')]^2
+$$
 
 其中$Q_w(s, a)$表示用来训练的模型，使用梯度下降更新。$Q_{w^-}(s, a)$网络是目标模型，训练过程中每隔C步才会与训练网络同步一次。这样就使得目标网络相对于训练网络更加稳定。
 
@@ -1865,7 +2004,9 @@ $\frac{1}{2N}\sum_{i=1}^{N}[Q_w(s_i, a_i) - (r_i + \gamma \mathop{\max}\limits_{
 
 DQN中优化的TD目标为：$r + \gamma \mathop{\max}\limits_{a' \in \mathcal{A}} Q_{w^-}(s', a')$，将其改写为$r + \gamma      Q_{w^-}(s', \mathop{arg \max}\limits_{a' \in \mathcal{A}} Q_{w}(s', a') )$。简单来说，首先选取状态$s'$下的最优动作$a^* = \mathop{arg \max}\limits_{a' \in \mathcal{A}} Q_{w^-}(s', a')$，再计算该动作对应的$Q_{w^-}(s', a^*)$。
 
-> 🎹 **DQN面临的问题**：
+> 🎹
+>
+> **DQN面临的问题**：
 >
 > DQN通过神经网络进行估算，会产生正向或负向的误差，在 DQN 的更新方式下神经网络会将正向误差累积。例如，我们考虑一个特殊情形：在状态$s'$下所有动作的$Q_{w^-}$值均为 0，即$Q_{w^-}(s', a_i) = 0, \forall i$，但是由于神经网络拟合的误差通常会出现某些动作的估算有正误差的情况，即存在某个动作$a'$有$Q_{w^-}(s', a') > 0$，这样用DQN更新时，$Q_w(s, a)$也会被过高的估计。同理，我们拿这个$Q_w(s, a)$来作为更新目标来更新上一步$Q_w(s, a)$的值时，同样会过高估计，这样的误差将会逐步累积。对于动作空间较大的任务，DQN 中的过高估计问题会非常严重，造成 DQN 无法有效工作的后果。
 
@@ -1877,17 +2018,23 @@ DQN中优化的TD目标为：$r + \gamma \mathop{\max}\limits_{a' \in \mathcal{A
 
 在Dueling DQN中，**Q 网络**被建模为**：**
 
-$Q_{\eta, \alpha, \beta}(s, a) = V_{\eta, \alpha}(s) + A_{\eta, \beta}(s, a)$
+$$
+Q_{\eta, \alpha, \beta}(s, a) = V_{\eta, \alpha}(s) + A_{\eta, \beta}(s, a)
+$$
 
 其中$\eta$表示状态价值函数和优势函数共享的网络参数，$\alpha 和 \beta$分别是状态价值函数和优势函数的参数。在训练时不再让神经网络直接输出$Q$值，而是训练神经网络的最后几层的两个分支，分别输出状态价值函数和优势函数，再求和得到$Q$值。
 
-> ✍️ **状态价值函数和优势函数分别建模的好处**
+> ✍️
+>
+> **状态价值函数和优势函数分别建模的好处**
 >
 > 模型场景下Agent只关注状态的价值而不关注动作之间的差异，此时就要突出状态价值函数$V$的重要性，将二者分开建模能够使智能体更好地处理与动作关联较小的状态。
 
 此外，为了避免**不唯一性**（也就是两套不同的V和A得到了同样的Q，例如对V加上常数C，对所有的A再减去C，得到的Q值一致）导致训练的不稳定性，**Q网络**修改为：
 
-$Q_{\eta, \alpha, \beta}(s, a) = V_{\eta, \alpha}(s) + A_{\eta, \beta}(s, a) - \frac{1}{|\mathcal{A}|} \sum_{a' \in \mathcal{A}} A_{\eta, \beta}(s, a')$
+$$
+Q_{\eta, \alpha, \beta}(s, a) = V_{\eta, \alpha}(s) + A_{\eta, \beta}(s, a) - \frac{1}{|\mathcal{A}|} \sum_{a' \in \mathcal{A}} A_{\eta, \beta}(s, a')
+$$
 
 Dueling DQN能更高效学习状态价值函数。每一次更新时，函数$V$都会被更新，这也会影响到其他动作的$Q$值。而传统的 DQN 只会更新某个动作的$Q$值，其他动作的$Q$值就不会更新。因此，Dueling DQN 能够更加频繁、准确地学习状态价值函数。
 
@@ -1905,7 +2052,9 @@ Dueling DQN能更高效学习状态价值函数。每一次更新时，函数$V$
 
 其中$\nu^{\pi}$表示状态访问分布，$\nu^{\pi}(s)$表示状态$s$被访问的概率。上面公式证明依靠policy gradient theorem，参考《https://hrl.boyuai.com/chapter/2/%E7%AD%96%E7%95%A5%E6%A2%AF%E5%BA%A6%E7%AE%97%E6%B3%95#93-reinforce》，在此省略，只需要知道最终推导结果即可。
 
-> 🌅 因为上式中期望的下标是$\pi_\theta$，所以策略梯度算法为on-policy算法，即必须使用当前策略采样得到的数据来计算梯度.
+> 🌅
+>
+> 因为上式中期望的下标是$\pi_\theta$，所以策略梯度算法为on-policy算法，即必须使用当前策略采样得到的数据来计算梯度.
 
 策略梯度的公式中有参数$Q^{\pi_\theta}(s, a)$，在**REINFORCE 算法**中用**蒙特卡洛算法**来估计，策略梯度修改为下式，其中T是与环境交互的最大步数：
 
@@ -1925,7 +2074,9 @@ Dueling DQN能更高效学习状态价值函数。每一次更新时，函数$V$
 
 REINFORCE算法用蒙特卡洛方法去估计公式中的$Q^{\pi_\theta}(s, a)$函数，而Actor-Critic算法学习一个Q函数，结合了value-based和policy-based方法的优点，其中actor代表策略模型，critic表示价值函数。
 
-> 📍 **如何理解Actor和Critic的关系**
+> 📍
+>
+> **如何理解Actor和Critic的关系**
 >
 > - Actor 负责与环境交互采集数据，并在 Critic 价值函数的指导下用策略梯度学习一个更好的策略（类似于策略优化）。
 > - Critic 通过 Actor 与环境交互收集的数据学习一个价值函数（类似于策略评估），用于判断状态和动作的好坏。
@@ -1940,7 +2091,9 @@ Actor-Crtic包含了一系列的算法，首先将策略梯度写成一般的形
 2. **动作**$a_t$**之后的回报**$\sum_{t'=t}^T \gamma^{t' - t} r_{t'}$**：**这就是**REINFORCE算法**，但是因为每一步的状态转移都有不确定性，而每一步状态采取的动作所得到的不一样的奖励最终都会加起来，这会极大影响最终的价值估计方差较大。同样需要完整的episode，episode生成和策略更新不可同时进行，训练效率较低。
 3. **加入基准线的REINFORCE**$\sum_{t'=t}^T \gamma^{t' - t} r_{t'} - b(s_t)$**：**引入基线函数$b(s_t)$来减小方差，通常采用状态价值函数$V(s_t)$。
 
-> ✍️ **为什么能降低方差**
+> ✍️
+>
+> **为什么能降低方差**
 >
 > 回忆在Dueling DQN中出现的优势函数，$A(s, a) = Q(s, a) - V(s)$，这里的$V(s) = \sum_{a \in A} \pi(a|s) Q(s, a)$,因此优势函数的期望是0，相当于把所有数据做了平移，但这并不能直接降低方差。
 >
@@ -1948,31 +2101,41 @@ Actor-Crtic包含了一系列的算法，首先将策略梯度写成一般的形
 >
 > 回到加入基准线的REINFORCE，与之同理，$E[\sum_{t'=t}^T \gamma^{t' - t} r_{t'}]  = E(G_t) = V(s_t)$，也是将$\psi_t$的期望变成了0，$V(s_t)$只与状态相关，减去$V(s_t)$就消除了状态的影响，只关注动作之间的好坏关系，降低了波动和方差。
 >
-> 具体证明详见https://zhuanlan.zhihu.com/p/1900133920491668867，感谢星球中同学&发现这个问题，他也发表一个笔记，做了引申的条件说明，感兴趣可以了解http://xhslink.com/o/5ugXemSYm38 
+> 具体证明详见https://zhuanlan.zhihu.com/p/1900133920491668867，感谢星球中同学&发现这个问题，他也发表一个笔记，做了引申的条件说明，感兴趣可以了解http://xhslink.com/o/5ugXemSYm38
 
 1. **动作价值函数**$Q^{\pi_\theta}(s_t, a_t)$: 直接学习Q网络，也就是在状态$s_t$下采取动作$a_t$后能获得的期望回报。
 2. **优势函数**$A^{\pi_\theta}(s_t, a_t)$：在状态$s_t$下采取动作$a_t$相对于当前策略的平均表现的优劣程度, 能帮助 Actor 更高效地更新策略。
 3. **时序差分误差**$r_t + \gamma V^{\pi_\theta}(s_{t+1})- V^{\pi_\theta}(s_{t})$：优势函数需要同时维护Q和V两个网络，估计不稳定性会更强。时序差分误差只维护V网络（一般提到Actor-Crtic默认使用时序差分误差）。可以在每一步之后都进行更新，并且不对任务的步数做限制。时序差分误差是优势函数的有偏估计，$A^{\pi_\theta}(s_t, a_t) = E_{s_{t+1} \sim p(s_{t+1}| s_t, a_t)}[r_t + \gamma V^{\pi_\theta}(s_{t+1})- V^{\pi_\theta}(s_{t})]$
 
-> 🥖 **时序差分误差本质就是优势函数用**$r_t + \gamma V^{\pi_\theta}(s_{t+1})$**替换了**$Q(s_t, a_t)$
+> 🥖
+>
+> **时序差分误差本质就是优势函数用**$r_t + \gamma V^{\pi_\theta}(s_{t+1})$**替换了**$Q(s_t, a_t)$
 >
 > 根据马尔可夫决策过程的性质，我们有：
 >
-> $Q_\pi(s, a) = \sum_{s'} \sum_r p(s', r| s, a) [r + \gamma V_\pi(s')]$
+> $$
+> Q_\pi(s, a) = \sum_{s'} \sum_r p(s', r| s, a) [r + \gamma V_\pi(s')]
+> $$
 >
 > 假设$p(s',r|s,a)$不随环境变化，而是固定的值，那么就有
 >
-> $Q(s_t, a_t) =  r(s_t, a_t) + \gamma V(s_{t+1})$
+> $$
+> Q(s_t, a_t) =  r(s_t, a_t) + \gamma V(s_{t+1})
+> $$
 >
 > 在$p(s',r|s,a)$固定的情况下，上面就是对$Q(s_t, a_t)$的无偏估计。但整体来看还是有偏的。
 
 得到了策略梯度后，就可以用**梯度上升法（**因为是Actor的目标函数是最大化，所以是梯度上升**）**对Actor进行更新，Critic模型$V_w$的更新采用时序差分误差，损失函数为：
 
-$L(w) = \frac{1}{2}(r + \gamma V_w(s_{t+1}) - V_w(s_t))^2$
+$$
+L(w) = \frac{1}{2}(r + \gamma V_w(s_{t+1}) - V_w(s_t))^2
+$$
 
 采取类似于**DQN**的目标网络，上式中的$r + \gamma V_w(s_{t+1})$为目标网络，不会产生梯度来更新价值函数。因此损失函数的梯度为：
 
-$\nabla_wL(w) = -(r + \gamma V_w(s_{t+1}) - V_w(s_t))\nabla_wV_w(s_t)$
+$$
+\nabla_wL(w) = -(r + \gamma V_w(s_{t+1}) - V_w(s_t))\nabla_wV_w(s_t)
+$$
 
 然后使用**梯度下降方法**来更新 Critic 价值网络参数。当Actor模型接近最优策略时，$Q(s_t, a_t) = r + \gamma V_w(s_{t+1})$很接近$V_w(s_t)$, 对应的Critic模型的损失很小。
 
@@ -2002,23 +2165,33 @@ $\nabla_wL(w) = -(r + \gamma V_w(s_{t+1}) - V_w(s_t))\nabla_wV_w(s_t)$
 
 > 第二个公式是因为期望里边的值与s和a有关，所以对$\pi_{\theta'}$求期望实际就是在算对s和a的期望。最后一个公式用到状态访问分布的性质。
 
-> 🎁 **状态访问分布与占用度量：**
+> 🎁
+>
+> **状态访问分布与占用度量：**
 >
 > 定义MDP初始状态下的分布为$\nu_0(s)$，表示agent的初始状态在状态s的概率，用$P_t^\pi(s)$表示采用策略$\pi$时agent在t时候状态为s的概率，有$P_0^\pi(s) = \nu_0(s)$。策略的**状态访问分布**为，表示agent与环境交互时会访问到的状态的分布（这一交互还没有进行，要预测访问到每个状态的概率）：
 >
-> $\nu^\pi(s) = (1 - \gamma) \sum_{t=0}^\infty \gamma^t P_t^\pi(s)$
+> $$
+> \nu^\pi(s) = (1 - \gamma) \sum_{t=0}^\infty \gamma^t P_t^\pi(s)
+> $$
 >
 > 前边乘以$1 - \gamma$是为了保障所有$\nu^\pi(s)$之和为1的归一化因子。理论上在计算该分布时需要交互到无穷步之后，但实际上agent和环境的交互次数有限的，可以用下式来计算状态访问概率：
 >
-> $\nu^\pi(s') = (1-\gamma)\nu_0(s') + \gamma \int P(s'|s, a) \pi(a|s) \nu^\pi(s) ds \space da$
+> $$
+> \nu^\pi(s') = (1-\gamma)\nu_0(s') + \gamma \int P(s'|s, a) \pi(a|s) \nu^\pi(s) ds \space da
+> $$
 >
 > 类似的定义策略的**占用度量，**表示动作状态对$(s, a)$被访问的概率：
 >
-> $\rho^\pi(s,a) = (1 - \gamma) \sum_{t=0}^\infty \gamma^t P_t^\pi(s) \pi(a|s)$
+> $$
+> \rho^\pi(s,a) = (1 - \gamma) \sum_{t=0}^\infty \gamma^t P_t^\pi(s) \pi(a|s)
+> $$
 >
 > 两者之间的关系为：
 >
-> $\rho^\pi(s, a) = \nu^\pi(s) \pi(a|s)$
+> $$
+> \rho^\pi(s, a) = \nu^\pi(s) \pi(a|s)
+> $$
 
 以上公式表明只要新策略满足$E_{s \sim \nu^{\pi_{\theta'}}} E_{(a \sim \pi_{\theta'}(\cdot | s))}[A^{\pi_\theta}(s, a)] \ge 0$，就能保证策略性能单调递增，即$J(\theta') \ge J(\theta)$。但是这里即需要用$\pi_{\theta'}$进行数据采样，又要求解$\pi_{\theta'}$，不可能把所有的新策略都用来收集数据，再基于收集到的数据判断是否满足上述条件，采样到的数据利用率低下。TRPO采用了近似的方法，当新旧策略非常接近时，状态访问分布变化很小，因此采用旧策略$\pi_\theta$的状态访问分布，这样的$J(\theta')$就变成了：
 
@@ -2034,11 +2207,15 @@ $\nabla_wL(w) = -(r + \gamma V_w(s_{t+1}) - V_w(s_t))\nabla_wV_w(s_t)$
 
 这里的限制条件划定了一个**信任区域**，在这个区域中，可以认为新策略和环境交互的状态访问分布与旧策略最后采样的状态访问分布一致，进而可以基于一步行动的重要性采样方法使当前学习策略稳定提升。
 
-> 🥇 **重要性采样：**
+> 🥇
+>
+> **重要性采样：**
 >
 > 假设我们需要计算 **目标分布**$π(a∣s)$**下的期望值**，但只能从 **行为分布** $μ(a∣s)$**中采样**。重要性采样通过引入权重（重要性比率）来修正偏差：
 >
-> $E_{a \sim \mu}[\frac{\pi(a|s)}{\mu({a|s})} f(a)] = E_{a \sim \pi}[f(a)]$
+> $$
+> E_{a \sim \mu}[\frac{\pi(a|s)}{\mu({a|s})} f(a)] = E_{a \sim \pi}[f(a)]
+> $$
 >
 > 其中$\frac{\pi(a|s)}{\mu({a|s})}$为重要性权重，用于补偿两个分布之间的差异。$f(a)$是待估计的函数。
 >
@@ -2058,13 +2235,17 @@ $\nabla_wL(w) = -(r + \gamma V_w(s_{t+1}) - V_w(s_t))\nabla_wV_w(s_t)$
 
 优势函数$A^{\pi_\theta}(s_t, a_t) = Q^{\pi_\theta}(s_t,a_t)- V^{\pi_\theta}(s_t)= E_{s_{t+1} \sim p(s_{t+1}| s_t, a_t)}[r_t + \gamma V^{\pi_\theta}(s_{t+1})- V^{\pi_\theta}(s_{t})]$，$A^{\pi_\theta}(s_t, a_t)$就是红色的靶心，蓝色的点就是每次采样得到的$r_t + \gamma V^{\pi_\theta}(s_{t+1})- V^{\pi_\theta}(s_{t})$。由于$V^{\pi_\theta}(s_{t+1})$还是用下一个状态的价值来估计真实的价值，是有偏差的，对应上图左下。如果将$V^{\pi_\theta}(s_{t+1})$通过多次估计来计算：
 
-$- V^{\pi_\theta}(s_{t}) + \sum_{l=0}^\infty \gamma^lr_{t+l}$
+$$
+- V^{\pi_\theta}(s_{t}) + \sum_{l=0}^\infty \gamma^lr_{t+l}
+$$
 
 其中$r$都是通过采样得到的即时奖励（也就是**蒙特卡洛算法**），这些数据没有偏差。但是这些r都是随机变量，引入更大的随机性导致方差变大，对应上图右上。
 
 为了平衡偏差和方差，采用**广义优势估计**来估计优势函数，用$\delta = r_t + \gamma V(s_{t+1}) - V(s_t)$表示时序差分误差，V是一个已经学习的状态价值函数，采用**多步Sarsa**的思想：
 
-> ❤️ **回忆下多步Sarsa**:
+> ❤️
+>
+> **回忆下多步Sarsa**:
 >
 > 传统优势函数估计基于**时序差分**或者**蒙特卡洛算法**，但是蒙特卡洛方法具有比较大的方差，时序差分算法则是有偏的。**多步Sarsa**采用两者折中的算法，同时减少了方差和偏差，提高了估计的准确度。
 
@@ -2082,7 +2263,9 @@ $- V^{\pi_\theta}(s_{t}) + \sum_{l=0}^\infty \gamma^lr_{t+l}$
 
 ###### 传统的PPO
 
-> 🎁 **传统的PPO**
+> 🎁
+>
+> **传统的PPO**
 >
 > 这里的传统PPO指的是agent和环境进行交互（例如机器人），因此奖励也是环境即时给的，也就是每一个动作都会有一个奖励，不需要额外训练一个奖励模型。而之后的RLHF-PPO的奖励信号来源于人类反馈（例如对话生成任务），需要额外设计奖励模型（无论是基于规则的奖励还是用深度学习模拟），奖励往往是在序列结束时给出，并且在奖励中引入了额外的KL-散度限制。
 >
@@ -2110,7 +2293,9 @@ PPO直接对策略更新的幅度进行限制，为了消除限制条件有两�
 
 接下来讲解PPO中的一些具体细节，如果不采用这些技术，那么PPO的最基础版本会是如下格式：
 
-$\mathop{arg \max}\limits_{\theta} E_{s \sim \nu^{\pi_{\theta}}} E_{a \sim \pi_{\theta}(\cdot | s)} [\pi_\theta(a|s) A^{\pi_\theta}(s, a))]$
+$$
+\mathop{arg \max}\limits_{\theta} E_{s \sim \nu^{\pi_{\theta}}} E_{a \sim \pi_{\theta}(\cdot | s)} [\pi_\theta(a|s) A^{\pi_\theta}(s, a))]
+$$
 
 - **重要性采样**：最基础版本的PPO是**on-policy**的，既要$\pi_\theta$采样也要更新，为了提升数据利用率，同TRPO中同样的**近似方法**，优化目标修改为$\mathop{arg \max}\limits_{\theta} E_{s \sim \nu^{\pi_{\theta_k}}} E_{a \sim \pi_{\theta}(\cdot | s)} [\pi_\theta(a|s) A^{\pi_\theta}(s, a))]$。再采用TRPO中**重要性采样**，利用$\pi_{\theta_k}$产生的数据来更新$\pi_\theta$，优化目标修改为$\mathop{arg \max}\limits_{\theta} E_{s \sim \nu^{\pi_{\theta_k}}} E_{a \sim \pi_{\theta_k}(\cdot | s)} [  \frac{\pi_\theta(a|s)}{\pi_{\theta_k}(a|s)} A^{\pi_\theta}(s, a))]$，PPO也就可以重复利用之前策略生成的数据了。
 - **策略截断**：为了消除TRPO中的限制条件（实际上，TRPO的求解比较复杂，感兴趣的可以参考《https://hrl.boyuai.com/chapter/2/trpo%E7%AE%97%E6%B3%95#113-%E8%BF%91%E4%BC%BC%E6%B1%82%E8%A7%A3》中的11.3-11.5），PPO首先定义了$r(\theta) = \frac{\pi_\theta(a|s)}{\pi_{\theta_{k}} (a|s)}$，并对$r(\theta)$采取了**clip**操作，控制其更新幅度再$[1 - \epsilon, 1 + \epsilon]$之间，确保更新不会偏离参考模型过远。变成了最终的优化目标。
@@ -2123,15 +2308,21 @@ $\mathop{arg \max}\limits_{\theta} E_{s \sim \nu^{\pi_{\theta}}} E_{a \sim \pi_{
 
 PPO的训练过程与Actor-Crtic一样，也是先更新策略模型，再更新评估模型。以上更新完策略模型后(也就是用一个batch中的trajectory都更新完策略模型)，使用收集到的轨迹数据，也就是使用当前策略模型（Actor）和当前价值模型$V_\phi(s_t)$与环境交互得到的数据，逼近一个稳定的目标值 $V^{\text{target}}_t$。最常见做法是最小化**均方误差（MSE）**：对于轨迹中的每个时间步 `t`，使用当前的价值函数 $V_\phi(s_t)$ 计算广义优势估计 $A_t^{GAE}$，由GAE的定义，递归展开有：
 
-$A_t^{GAE} = \delta_t + \gamma \lambda A_{t+1}^{GAE} = (r_t + \gamma V_{\phi} (s_{t+1}) - V_{\phi}(s_t)) + \gamma \lambda A_{t+1}^{GAE}$
+$$
+A_t^{GAE} = \delta_t + \gamma \lambda A_{t+1}^{GAE} = (r_t + \gamma V_{\phi} (s_{t+1}) - V_{\phi}(s_t)) + \gamma \lambda A_{t+1}^{GAE}
+$$
 
 其中$r_t$表示 t 时刻获得的即时奖励，用当前价值模型的输出做baseline，将优势加回去得到目标价值：
 
-$V^{\text{target}}(s_t) = A_t^{GAE} + V_{\phi}(s_t) = (r_t + \gamma V_{\phi} (s_{t+1})) + \gamma \lambda A_{t+1}^{GAE}$
+$$
+V^{\text{target}}(s_t) = A_t^{GAE} + V_{\phi}(s_t) = (r_t + \gamma V_{\phi} (s_{t+1})) + \gamma \lambda A_{t+1}^{GAE}
+$$
 
 评估模型的损失函数为：
 
-$L_{loss} = (V_{\phi}(s_t) - V^{\text{target}}(s_t))^2 = [V_{\phi}(s_t) - (r_t + \gamma V_{\phi} (s_{t+1}) + \gamma \lambda A_{t+1}^{GAE} ]^2$
+$$
+L_{loss} = (V_{\phi}(s_t) - V^{\text{target}}(s_t))^2 = [V_{\phi}(s_t) - (r_t + \gamma V_{\phi} (s_{t+1}) + \gamma \lambda A_{t+1}^{GAE} ]^2
+$$
 
 与Actor-Critic模型的评估模型损失一致，只不过这里引入了GAE对优势做了指数平滑而已。在此基础上很多实现还会对**价值函数**做"**clipping**"（裁剪）来抑制价值估计的大幅漂移$V_t^{clip} = clip(V_{\phi}(s_t), V_{\phi}(s_t) + \epsilon,V_{\phi}(s_t) - \epsilon )$，类似于策略模型中的clip操作。
 
@@ -2174,15 +2365,21 @@ RLHF提出从人类给出的反馈中学习奖励函数，该奖励函数满足�
 
 将奖励函数视为解释人类判断的潜在因素，人类偏好片段 $\sigma^i$的概率与潜在奖励在该片段长度上的总和呈指数相关，将奖励函数估计值 $\hat{r}$ 解释为偏好预测器。基于Bradley-Terry 模型，人类偏好片段 $\sigma^1$ 超过 $\sigma^2$的概率:
 
-$\hat{P}[σ1≻σ2]=\frac{exp∑\hat{r}(o_t^1,a_t^1)}{exp∑\hat{r}(o_t^1,a_t^1) + exp∑\hat{r}(o_t^2,a_t^2)}$
+$$
+\hat{P}[σ1≻σ2]=\frac{exp∑\hat{r}(o_t^1,a_t^1)}{exp∑\hat{r}(o_t^1,a_t^1) + exp∑\hat{r}(o_t^2,a_t^2)}
+$$
 
 训练损失为这些预测和实际人类偏好之间的**交叉熵损失**, $(\sigma^1, \sigma^2, \mu)$表示人类的偏好，$\mu = \{0, 1, 0.5\} \space if \space  \{\sigma^1 \succ \sigma^2, \sigma^2 \succ \sigma^1, \sigma^1 = \sigma^2\}$。
 
-$loss(\hat{r}) = - \sum_{(\sigma^1, \sigma^2, \mu) \in \mathcal{D}} \mu(\sigma^1 \succ \sigma^2) log \hat{P}[\sigma^1 \succ \sigma^2] + \mu(\sigma^2 \succ \sigma^1) log \hat{P}[\sigma^2 \succ \sigma^1]$
+$$
+loss(\hat{r}) = - \sum_{(\sigma^1, \sigma^2, \mu) \in \mathcal{D}} \mu(\sigma^1 \succ \sigma^2) log \hat{P}[\sigma^1 \succ \sigma^2] + \mu(\sigma^2 \succ \sigma^1) log \hat{P}[\sigma^2 \succ \sigma^1]
+$$
 
 计正样本和负样本为$\sigma^+, \sigma^-$，上述的损失可以写为：
 
-$loss(\hat{r}) = -E_{(\sigma^+, \sigma^-, y, \in \mathcal{D})} [log \hat{P}[\sigma^+ \succ \sigma^-]] =-E_{(\sigma^+, \sigma^-, y, \in \mathcal{D})} [log \frac{exp∑\hat{r}(o_t^+,a_t^+)}{exp∑\hat{r}(o_t^+,a_t^+) + exp∑\hat{r}(o_t^-,a_t^-)}]$
+$$
+loss(\hat{r}) = -E_{(\sigma^+, \sigma^-, y, \in \mathcal{D})} [log \hat{P}[\sigma^+ \succ \sigma^-]] =-E_{(\sigma^+, \sigma^-, y, \in \mathcal{D})} [log \frac{exp∑\hat{r}(o_t^+,a_t^+)}{exp∑\hat{r}(o_t^+,a_t^+) + exp∑\hat{r}(o_t^-,a_t^-)}]
+$$
 
 还做了以下的改进：
 
@@ -2200,15 +2397,21 @@ $loss(\hat{r}) = -E_{(\sigma^+, \sigma^-, y, \in \mathcal{D})} [log \hat{P}[\sig
 - **奖励**$R_t$：在状态$s_t$下生成token $a_t$的即时奖励。
 - **价值**$V_t$：状态价值函数，包含着即时奖励和未来期望奖励，$V_t = E [G_t|s_t] = E( R_{t} + \gamma G_{t+1}|s_t)$
 
-> 🏝️ 注意NLP场景下状态转移是确定的，也就是在状态$s_t$下生成token $a_t$转移到的下一个状态$s_{t+1}$是固定的，即状态$s_t$拼接生成的token$a_t$。
+> 🏝️
+>
+> 注意NLP场景下状态转移是确定的，也就是在状态$s_t$下生成token $a_t$转移到的下一个状态$s_{t+1}$是固定的，即状态$s_t$拼接生成的token$a_t$。
 
 - **训练目标**：最大化期望回报，其中$x, y$分别表示用户查询和模型输出：
 
-$\mathop{\max}\limits_{\pi} E_{x \sim \mathcal{D}, y \sim \pi}[R(x, y)]$
+$$
+\mathop{\max}\limits_{\pi} E_{x \sim \mathcal{D}, y \sim \pi}[R(x, y)]
+$$
 
 更常见的训练目标则是带有行为约束的强化学习，对策略更新幅度进行了限制，$\pi_{ref}$一般采用上一轮的$\pi$策略。
 
-$\mathop{\max}\limits_{\pi} E_{x \sim \mathcal{D}, y \sim \pi}[R(x, y) - \beta D_{KL}(\pi(y|x) || \pi_{ref}(y|x))]$
+$$
+\mathop{\max}\limits_{\pi} E_{x \sim \mathcal{D}, y \sim \pi}[R(x, y) - \beta D_{KL}(\pi(y|x) || \pi_{ref}(y|x))]
+$$
 
 ###### RLHF-PPO
 
@@ -2229,7 +2432,9 @@ Actor模型直接用SFT训练出的模型进行初始化，训练目的是让Act
 
 1. 强化学习的核心目标是最大化累积奖励：$\max_\pi \mathbb{E}_{\tau \sim \pi} \left[ \sum_{t=0}^T \gamma^t r(s_t, a_t) \right]$。用$V_t$表示t时刻预期收益，$\pi (a_t | s_t)$表示采取$a_t$动作的概率，策略模型的损失可以定义为：
 
-$Actor\_loss = -\sum_{t}^{T} V_t \log \pi (a_t | s_t)$
+$$
+Actor\_loss = -\sum_{t}^{T} V_t \log \pi (a_t | s_t)
+$$
 
 当Critic评估的状态价值$V_t$为正时，应该增加该动作的概率；当$V_t$为负时，应该减少该动作概率。接下来只考虑t时刻的损失函数，省略求和符号。
 
@@ -2237,27 +2442,33 @@ $Actor\_loss = -\sum_{t}^{T} V_t \log \pi (a_t | s_t)$
 2. 引入**重要性采样**，让一个batch的数据能复用多次。$Actor\_loss = -A_t \frac{\pi(a_t| s_t)}{\pi_{old}(a_t| s_t)}$，这里去掉了log以消除对数计算，简化梯度传播，原因参考[详解近端策略优化(ppo，干货满满)](https://www.cnblogs.com/xingzheai/p/15931681.html)
 3. 引入**clip**控制更新幅度，避免$\pi_{old}$与$\pi$距离过大:
 
-$Actor\_loss = - min(A_t \frac{\pi(a_t| s_t)}{\pi_{old}(a_t| s_t)}, A_t \space clip( \frac{\pi(a_t| s_t)}{\pi_{old}(a_t| s_t)}, 1 - \epsilon, 1 + \epsilon ))$
+$$
+Actor\_loss = - min(A_t \frac{\pi(a_t| s_t)}{\pi_{old}(a_t| s_t)}, A_t \space clip( \frac{\pi(a_t| s_t)}{\pi_{old}(a_t| s_t)}, 1 - \epsilon, 1 + \epsilon ))
+$$
 
 总结：
 
-$\begin{aligned}  
-&\text{基础形式} & -\sum V_t \log\pi(a_t|s_t) \\  
-&\text{优势替代} & -A_t \log\pi(a_t|s_t) \\  
-&\text{重要性采样改进} & -A_t \frac{\pi(a_t|s_t)}{\pi_{old}(a_t|s_t)} \\  
-&\text{最终形式} & - min(A_t \frac{\pi(a_t| s_t)}{\pi_{old}(a_t| s_t)}, A_t \space clip( \frac{\pi(a_t| s_t)}{\pi_{old}(a_t| s_t)}, 1 - \epsilon, 1 + \epsilon ))  
-\end{aligned}$
+$$
+\begin{aligned}
+&\text{基础形式} & -\sum V_t \log\pi(a_t|s_t) \\
+&\text{优势替代} & -A_t \log\pi(a_t|s_t) \\
+&\text{重要性采样改进} & -A_t \frac{\pi(a_t|s_t)}{\pi_{old}(a_t|s_t)} \\
+&\text{最终形式} & - min(A_t \frac{\pi(a_t| s_t)}{\pi_{old}(a_t| s_t)}, A_t \space clip( \frac{\pi(a_t| s_t)}{\pi_{old}(a_t| s_t)}, 1 - \epsilon, 1 + \epsilon ))
+\end{aligned}
+$$
 
 另外，在NLP场景下中，奖励或者人类偏好往往是句子级别的，也就是可以用最后一个时刻的奖励$r_t$表示整个句子的奖励,用T表示最后一个时刻：
 
-- 当 t<T 时，考虑策略模型是否有在参考模型的约束下生成token $a_t$,保持生成内容与参考模型一致
+- 当 t\<T 时，考虑策略模型是否有在参考模型的约束下生成token $a_t$,保持生成内容与参考模型一致
 - 当 t=T 时，考虑策略模型是否遵从了参考模型的约束，和真正的即时收益$r_t$
 
-$r_t =   
-\begin{cases}  
--\gamma * (log\frac{ \pi(a_t|s_t)}{ \pi_{ref}(a_t|s_t)}), t \neq T \\  
--\gamma * (log\frac{ \pi(a_t|s_t)}{ \pi_{ref}(a_t|s_t)}) + r_t, t = T   
-\end{cases}$
+$$
+r_t = 
+\begin{cases}
+-\gamma * (log\frac{ \pi(a_t|s_t)}{ \pi_{ref}(a_t|s_t)}), t \neq T \\
+-\gamma * (log\frac{ \pi(a_t|s_t)}{ \pi_{ref}(a_t|s_t)}) + r_t, t = T 
+\end{cases}
+$$
 
 其中$\gamma$是缩放因子。在Reward模型的训练阶段（这个训练不是指PPO训练，而是在SFT模型的基础上要训练才能得到一个奖励模型），也只有最后时刻的$r_t$计算对整个用户查询+回复的奖励值，其余时刻的即时奖励就用策略模型与参考模型之间的距离。
 
@@ -2267,7 +2478,9 @@ Reference模型在训练过程中保持冻结，目的是防止Actor模型训练
 
 如，Actor模型对用户输入生成回复，过程中会为每个token生成对应的log_probs，Reference模型类似生成ref_log_probs，优化目标为：
 
-$\mathop{\max}\limits_{\pi} E_{x \sim \mathcal{D}, y \sim \pi}[r(x, y) - \beta D_{KL}(\pi(y|x) || \pi_{ref}(y|x))] \\ = \mathop{\max}\limits_{\pi} E_{x \sim \mathcal{D}, y \sim \pi}[r(x, y) - \beta log\frac{\pi(y|x)}{\pi_{ref}(y|x)}] \\ = \mathop{\max}\limits_{\pi} E_{x \sim \mathcal{D}, y \sim \pi}[r(x, y) - \beta (log\_probs - ref\_log\_probs)]$
+$$
+\mathop{\max}\limits_{\pi} E_{x \sim \mathcal{D}, y \sim \pi}[r(x, y) - \beta D_{KL}(\pi(y|x) || \pi_{ref}(y|x))] \\ = \mathop{\max}\limits_{\pi} E_{x \sim \mathcal{D}, y \sim \pi}[r(x, y) - \beta log\frac{\pi(y|x)}{\pi_{ref}(y|x)}] \\ = \mathop{\max}\limits_{\pi} E_{x \sim \mathcal{D}, y \sim \pi}[r(x, y) - \beta (log\_probs - ref\_log\_probs)]
+$$
 
 $log\_probs - ref\_log\_probs$的值越小说明策略模型和参考模型越接近，说明策略模型没有训练歪。
 
@@ -2277,15 +2490,21 @@ Critic Model用于预测期望收益$V$，需要参与训练，提升模型对�
 
 更新完策略模型后(也就是用一个batch中的trajectory都更新完策略模型)，使用收集到的轨迹数据，也就是使用当前策略模型（Actor）和当前价值模型$V_\phi(s_t)$与环境交互得到的数据，逼近一个稳定的目标值 $V^{\text{target}}_t$。最常见做法是最小化**均方误差（MSE）**：对于轨迹中的每个时间步 `t`，使用当前的价值函数 $V_\phi(s_t)$ 计算广义优势估计 $A_t^{GAE}$，由GAE的定义，递归展开有：
 
-$A_t^{GAE} = \delta_t + \gamma \lambda A_{t+1}^{GAE} = (r_t + \gamma V_{\phi} (s_{t+1}) - V_{\phi}(s_t)) + \gamma \lambda A_{t+1}^{GAE}$
+$$
+A_t^{GAE} = \delta_t + \gamma \lambda A_{t+1}^{GAE} = (r_t + \gamma V_{\phi} (s_{t+1}) - V_{\phi}(s_t)) + \gamma \lambda A_{t+1}^{GAE}
+$$
 
 其中$r_t$表示 t 时刻获得的即时奖励，用当前价值模型的输出做baseline，将优势加回去得到目标价值：
 
-$V^{\text{target}}(s_t) = A_t^{GAE} + V_{\phi}(s_t) = (r_t + \gamma V_{\phi} (s_{t+1})) + \gamma \lambda A_{t+1}^{GAE}$
+$$
+V^{\text{target}}(s_t) = A_t^{GAE} + V_{\phi}(s_t) = (r_t + \gamma V_{\phi} (s_{t+1})) + \gamma \lambda A_{t+1}^{GAE}
+$$
 
 评估模型的损失函数为：
 
-$L_{loss} = (V_{\phi}(s_t) - V^{\text{target}}(s_t))^2 = [V_{\phi}(s_t) - (r_t + \gamma V_{\phi} (s_{t+1})+ \gamma \lambda A_{t+1}^{GAE}) ]^2$
+$$
+L_{loss} = (V_{\phi}(s_t) - V^{\text{target}}(s_t))^2 = [V_{\phi}(s_t) - (r_t + \gamma V_{\phi} (s_{t+1})+ \gamma \lambda A_{t+1}^{GAE}) ]^2
+$$
 
 与Actor-Critic模型的评估模型损失一致，只不过这里引入了GAE对优势做了指数平滑而已。在此基础上很多实现还会对**价值函数**做"**clipping**"（裁剪）来抑制价值估计的大幅漂移$V_t^{clip} = clip(V_{\phi}(s_t), V_{\phi}(s_t) + \epsilon,V_{\phi}(s_t) - \epsilon )$，类似于策略模型中的clip操作。
 
@@ -2295,15 +2514,23 @@ $L_{loss} = (V_{\phi}(s_t) - V^{\text{target}}(s_t))^2 = [V_{\phi}(s_t) - (r_t +
 
 采用**对比学习**的方式进行训练，针对同一个用户问题，生成了prefer的回复$y_w$和disprefer的回复$y_l$，将查询和回复拼接起来交给奖励模型进行评分，训练目标是最大化模型对prefer回复的奖励与对disprefer回复之间奖励的差值，奖励模型训练的损失为：
 
-$Reward\_loss = -E_{(x, y_w, y_l) \in \mathcal{D}} [log \sigma(r(x, y_w) - r(x, y_l))]$
+$$
+Reward\_loss = -E_{(x, y_w, y_l) \in \mathcal{D}} [log \sigma(r(x, y_w) - r(x, y_l))]
+$$
 
 其中$x, y_w, y_l$表示用户输入，偏好输出(正样本)和不偏好输出(负样本)，$\sigma(x) = \frac{1}{1 + e^{-x}}$，带入$\sigma(r(x, y_w) - r(x, y_l))$，奖励为：
 
-$Reward\_loss = -E_{(x, y_w, y_l) \in \mathcal{D}} [log \frac{exp({r(x, y_w)})}{exp({r(x, y_w)}) + exp({r(x, y_l)})} ]$
+$$
+Reward\_loss = -E_{(x, y_w, y_l) \in \mathcal{D}} [log \frac{exp({r(x, y_w)})}{exp({r(x, y_w)}) + exp({r(x, y_l)})} ]
+$$
 
-> 🏝️ 这里的奖励与传统RLHF中的损失不同,传统RLHF考虑了一个trajectory中所有(s, a)对，并且初始状态可以不同：
+> 🏝️
 >
-> $loss(\hat{r}) =-E_{(\sigma^+, \sigma^-, y, \in \mathcal{D})} [log \frac{exp∑\hat{r}(s_t^+,a_t^+)}{exp∑\hat{r}(s_t^+,a_t^+) + exp∑\hat{r}(s_t^-,a_t^-)}]$
+> 这里的奖励与传统RLHF中的损失不同,传统RLHF考虑了一个trajectory中所有(s, a)对，并且初始状态可以不同：
+>
+> $$
+> loss(\hat{r}) =-E_{(\sigma^+, \sigma^-, y, \in \mathcal{D})} [log \frac{exp∑\hat{r}(s_t^+,a_t^+)}{exp∑\hat{r}(s_t^+,a_t^+) + exp∑\hat{r}(s_t^-,a_t^-)}]
+> $$
 >
 > 而在nlp领域只针对整个回复计算奖励，初始的用户输入为$x$相同，因为奖励或者人类偏好往往是句子级别的。
 >
@@ -2326,7 +2553,9 @@ $Reward\_loss = -E_{(x, y_w, y_l) \in \mathcal{D}} [log \frac{exp({r(x, y_w)})}{
 1. 按照损失函数更新Actor模型
 2. 按照损失函数更新Critic模型
 
-> 🏝️ **RLHF-PPO总结**
+> 🏝️
+>
+> **RLHF-PPO总结**
 >
 > RLHF-PPO的核心思想是通过限制策略更新的幅度，确保新策略与旧策略的差异不会过大，从而稳定训练，包含以下4个模型：
 >
@@ -2339,7 +2568,9 @@ $Reward\_loss = -E_{(x, y_w, y_l) \in \mathcal{D}} [log \frac{exp({r(x, y_w)})}{
 
 ![](居丽叶LLM体系知识搭建/images/NJmlbYJRgo7WpkxopgRc1lcbnvc.png)
 
-> 🥖 ###### RLHF-**PPO训练流程：**
+> 🥖
+>
+> ###### RLHF-**PPO训练流程：**
 >
 > 1. 以**sft模型**初始化Reference和Actor模型，sft模型使用有监督数据集训练得到。格式为**instruction+input+output**，input是用户输入，output是标签，instruction是任务描述。
 > 2. 基于用户偏好数据训练**奖励模型**，格式为**instruction+input+chosen+rejected**，instruction是任务描述，input是输入，chosen是正确答案，rejected是错误回复。Critic Model的初始化方式有很多种，例如和Actor共享部分参数、以**奖励模型**初始化Critic模型（deepchat中是这么初始化的）。
@@ -2349,12 +2580,16 @@ $Reward\_loss = -E_{(x, y_w, y_l) \in \mathcal{D}} [log \frac{exp({r(x, y_w)})}{
 
 ![](居丽叶LLM体系知识搭建/images/ZJNqb4Gkdo1RIrxjdkacXGM2nOe.png)
 
-> 🏕️ **RLHF-PPO的优缺点**
+> 🏕️
+>
+> **RLHF-PPO的优缺点**
 >
 > - **优点**：clip操作能有效防止策略突变，稳定性高；支持数据复用，on-policy；训练相较于TRPO更简单，训练效率更高。
 > - **缺点**：对超参数敏感（如$\epsilon、\lambda$）;需要维护4个模型，对显存需要较高；clip机制是经验性设计，缺乏理论保证。
 
-> ⚽ **RLHF-PPO的一些额外的知识点：**
+> ⚽
+>
+> **RLHF-PPO的一些额外的知识点：**
 >
 > 1. 在InstructGPT中，在Actor模型的损失函数上又加了一项在预训练数据集上的损失，避免遗忘预训练学到的知识，也被称为**减轻对齐税（这个问题在小模型上更明显）**。
 > 2. **对奖励进行归一化**能稳定训练
@@ -2377,7 +2612,9 @@ GRPO算法采用群体分数取代了评估模型。对于用户问题q，从旧
 
 GRPO原论文设置G=64，通过从旧策略中采样大量的输出，增大了能探索到正确答案的概率。
 
-> 🌅 对目标函数的详解：
+> 🌅
+>
+> 对目标函数的详解：
 >
 > - $\frac{\pi_\theta(o_i|q)}{\pi_{\theta_{old}}(o_i|q)}$表示新模型和旧模型在同一输入下得到同一输出的概率比.
 > - clip函数也是为了将更新限制在一定范围内，即将$\frac{\pi_\theta(o_i|q)}{\pi_{\theta_{old}}(o_i|q)}$限制在$[1-\epsilon, 1+\epsilon]$之间。
@@ -2387,13 +2624,17 @@ GRPO原论文设置G=64，通过从旧策略中采样大量的输出，增大了
 
 ![](居丽叶LLM体系知识搭建/images/TS6nbI7gQo2aEuxRRHYc6aw3nxe.png)
 
-> 🐵 **对比PPO、GRPO、DPO：**
+> 🐵
+>
+> **对比PPO、GRPO、DPO：**
 >
 > - **GRPO：一组prompt经过LLM生成N个结果，每个结果打分，超过平均的被接受，反之被拒绝**
 > - **PPO：一组prompt经过LLM生成结果，对结果打分，和上一个的自己比较，有优势被接受，反之被拒绝**
 > - **DPO：提前构造好了拒绝和接受的数据，模型参数往接受的方向调整**
 
-> ✍️ **去掉评估模型，GRPO可能面临的问题：**
+> ✍️
+>
+> **去掉评估模型，GRPO可能面临的问题：**
 >
 > - **奖励估计不准确**：Critic Model的核心作用是**评估状态或动作的长期价值。在某些任务中，奖励可能只有在完成特定的长期目标后才能获得，这种场景中失去Critic Model会导致奖励估计不准确，从而导致训练不稳定。**
 >
@@ -2407,7 +2648,9 @@ GRPO原论文设置G=64，通过从旧策略中采样大量的输出，增大了
 
 KL-散度的计算公式为：
 
-$KL(q || p) = \sum_xq(x) log \frac{q(x)}{p(x)} = E_{x \sim q} [log \frac{q(x)}{p(x)}]$
+$$
+KL(q || p) = \sum_xq(x) log \frac{q(x)}{p(x)} = E_{x \sim q} [log \frac{q(x)}{p(x)}]
+$$
 
 KL 散度非负，当且仅当$q(x) = p(x)$时，KL散度为0。实际计算中，直接计算KL散度很难，因为需要对所有的x求和或求积分，计算成本和内存效果过大。因此在实际计算中，往往使用近似方法计算KL-散度。
 
@@ -2415,13 +2658,19 @@ KL 散度非负，当且仅当$q(x) = p(x)$时，KL散度为0。实际计算中�
 
 定义$r = \frac{p(x)}{q(x)}$，K1估计为：
 
-$K1 = log \frac{q(x)}{p(x)} = -log(r)$
+$$
+K1 = log \frac{q(x)}{p(x)} = -log(r)
+$$
 
 K1是对KL-散度的无偏估计：
 
-$E[k1] = E_{x \sim q} [log \frac{q(x)}{p(x)}] = KL(q || p)$
+$$
+E[k1] = E_{x \sim q} [log \frac{q(x)}{p(x)}] = KL(q || p)
+$$
 
-> 🎼 **KL-散度和K1估计的区别**
+> 🎼
+>
+> **KL-散度和K1估计的区别**
 >
 > 第一次看到这里的你是否会感觉KL-散度和K1估计没啥区别，nonono，KL-散度的计算量比K1估计大很多。
 >
@@ -2429,29 +2678,35 @@ $E[k1] = E_{x \sim q} [log \frac{q(x)}{p(x)}] = KL(q || p)$
 >
 > 而K1估计中， q是通过策略生成事件的概率，p是目标策略生成事件概率。K1估计只需要计算单个事件的概率，计算量大减。
 
-K1估计的方差很大，若 q(x)<p(x)，k1 为负值，导致估计值波动大。
+K1估计的方差很大，若 q(x)\<p(x)，k1 为负值，导致估计值波动大。
 
 ###### K2估计（有偏低方差）
 
 K2估计定义为：
 
-$K2 = \frac{1}{2} (log \frac{p(x)}{q(x)})^2 = \frac{1}{2}(log r)^2$
+$$
+K2 = \frac{1}{2} (log \frac{p(x)}{q(x)})^2 = \frac{1}{2}(log r)^2
+$$
 
  K2确保所有事件的值都是正数，使其在计算中更加稳定。
 
 ###### K3估计（无偏低方差）
 
-$K3 = \frac{p(x)}{q(x)} - 1 - log \frac{p(x)}{q(x)} = r - 1 - log r$
+$$
+K3 = \frac{p(x)}{q(x)} - 1 - log \frac{p(x)}{q(x)} = r - 1 - log r
+$$
 
 由于$E(- logr) = KL(q || p)$，$E(r) = E_{x \sim q}[\frac{p(x)}{q(x)}] = \int q(x) \frac{p(x)}{q(x)} dx = \int p(x) dx = 1$
 
 K3 估计是KL-散度的无偏估计。并且通过求导可知，K3估计的值恒大于0，因此方差也更低。**GRPO中采用了K3估计。OpenRLHF库中ppo算法采用k1估计和k3估计计算KL散度，区别是将KL约束加在奖励之中：**
 
-$R_t =   
-\begin{cases}  
--kt\_ctl * (log\frac{ \pi(a_t|s_t)}{ \pi_{ref}(a_t|s_t)}), t \neq T \\  
--kt\_ctl * (log\frac{ \pi(a_t|s_t)}{ \pi_{ref}(a_t|s_t)}) + R_t, t = T   
-\end{cases}$
+$$
+R_t = 
+\begin{cases}
+-kt\_ctl * (log\frac{ \pi(a_t|s_t)}{ \pi_{ref}(a_t|s_t)}), t \neq T \\
+-kt\_ctl * (log\frac{ \pi(a_t|s_t)}{ \pi_{ref}(a_t|s_t)}) + R_t, t = T 
+\end{cases}
+$$
 
 - 当 t≠T 时，我们更加关心Actor是否有在Ref的约束下生产token $a_t$(T表示最后一个时刻)
 - 当 t=T 时，我们不仅关心Actor是否遵从了Ref的约束，也关心真正的即时收益$R_t$
@@ -2462,19 +2717,27 @@ $R_t =
 
 也就是采用**ORM（Outcome Reward Model）**，对于问题q，从旧策略$\pi_{\theta_{old}}$采样一系列的输出 {𝑜1,𝑜2,··· ,𝑜𝐺}，然后用奖励模型对输出进行评分，得到G个奖励 ，计算$r = \{r1,r2,...,rG\}$优势后将每个token的优势值都设置为此优势值。
 
-$A_{i, t} = \frac{r_i - mean(r)}{std(r)}$
+$$
+A_{i, t} = \frac{r_i - mean(r)}{std(r)}
+$$
 
 也就是对采样出的这一组输出的奖励计算标准化奖励作为每个输出的优势函数，每个输出的优势赋值给输出中每个token作为该token的优势函数。
 
-> 🏝️ **为什么用奖励值表示优势**
+> 🏝️
+>
+> **为什么用奖励值表示优势**
 >
 > 回顾贝尔曼方程中价值动作函数的定义：
 >
-> $Q_\pi(s, a) = E_\pi[G_t|S_t=s, A_t = a] = E_\pi[R_t + \gamma R_{t+1} + ...| S_t = s, A_t = a]$
+> $$
+> Q_\pi(s, a) = E_\pi[G_t|S_t=s, A_t = a] = E_\pi[R_t + \gamma R_{t+1} + ...| S_t = s, A_t = a]
+> $$
 >
 > 将从问题q到输出o的过程视为**单步MDP**，这样状态就是q，动作就是$o_i$，对应的奖励也就是$r(q, o_i)$,价值动作函数可以表示为：
 >
-> $Q(s, a) = E_\pi [R_t | S_t = s, A_t = a] = r(q, o_i)$
+> $$
+> Q(s, a) = E_\pi [R_t | S_t = s, A_t = a] = r(q, o_i)
+> $$
 >
 > 只要采样个数足够多，就可以用$mean(r) = \frac{1}{G} \sum_{i=1}^G r(q, o_i)$可来估计$V(q)$，因此优势$A(q, o_i) = Q(q, o_i) - V(q)$,除以$std(r)$是为了进行归一化。
 >
@@ -2484,11 +2747,15 @@ $A_{i, t} = \frac{r_i - mean(r)}{std(r)}$
 
 采用**PRM(Process-supervised Reward Model)**，为每个输出的每个token都计算奖励值：
 
-$r = \{\{r_1^{index(1)}, ..., r_1^{index(K_1)}\},...,  \{r_G^{index(1)}, ..., r_G^{index(K_G)}\}  \}$
+$$
+r = \{\{r_1^{index(1)}, ..., r_1^{index(K_1)}\},...,  \{r_G^{index(1)}, ..., r_G^{index(K_G)}\}  \}
+$$
 
 其中$index(j)$表示第j个步骤的end token的index，$K_i$表示第i个输出的步骤总数，第i个输出的第t个步骤的优势为：
 
-$A_{i, t} = \sum_{index(j) \ge t} \frac{r_i^{index(j)} - mean(r)}{std(r)}$
+$$
+A_{i, t} = \sum_{index(j) \ge t} \frac{r_i^{index(j)} - mean(r)}{std(r)}
+$$
 
 输出实际是由多个步骤组成的，所以当前步骤的优势应该包含后续步骤的期望，即当前步骤的优势为当前步骤和后续步骤的优势之和。这里的步骤可以理解为token，也就是每个token的优势为当前token和后续token的优势之和。
 
@@ -2551,7 +2818,9 @@ $\sigma$是sigmoid函数。在现实应用中，奖励模型r用SFT模型+一个
 
 **策略模型：**基于奖励模型对策略模型 $\pi_\theta$进行更新：
 
-$\mathop{\max}\limits_{\pi} E_{x \sim \mathcal{D}, y \sim \pi}[R(x, y) - \beta D_{KL}(\pi(y|x) || \pi_{ref}(y|x))]$
+$$
+\mathop{\max}\limits_{\pi} E_{x \sim \mathcal{D}, y \sim \pi}[R(x, y) - \beta D_{KL}(\pi(y|x) || \pi_{ref}(y|x))]
+$$
 
 其中$\pi_{ref}$表示参考策略，一般使用SFT模型。$\pi_\theta$也用SFT模型初始化，第二项的KL散度是为了防止$\pi_\theta$偏离奖励模型准确的分布，并保证模型模型生成的多样性。DPO的策略模型更新目标从上式开始推导。
 
@@ -2575,27 +2844,37 @@ $\mathop{\max}\limits_{\pi} E_{x \sim \mathcal{D}, y \sim \pi}[R(x, y) - \beta D
 
 Z(x)是一个归一化参数，确保分母是概率分布,$\pi_{ref}(y|x) * exp(\frac{1}{\beta}r(x, y))$所有可能输出y的概率之和为1。将$Z(x)$带入分母中就得到：
 
-$\frac{\pi_{ref}(y|x) * exp(\frac{1}{\beta}r(x, y))}{\sum_y \pi_{ref}(y|x) * exp(\frac{1}{\beta}r(x, y)) }$
+$$
+\frac{\pi_{ref}(y|x) * exp(\frac{1}{\beta}r(x, y))}{\sum_y \pi_{ref}(y|x) * exp(\frac{1}{\beta}r(x, y)) }
+$$
 
 上式分子表示在一个（x,y）下的期望奖励，分母表示给定x下所有y的期望之和。通过乘以$exp(\frac{1}{\beta}r(x, y))$, 将奖励函数r转换为概率的权重，再通过归一化调整这些权重，使得高奖励的输出在新的策略$\pi(y|x)$中获得更高的概率。$Z(x)$**只与x有关而与策略模型**$\pi$**无关，这很重要**。
 
 现在已知分母也是概率分布，将分母改写为$\pi^*(y|x) =  \frac{1}{Z(x) }\pi_{ref}(y|x) * exp(\frac{1}{\beta}r(x, y))$。这样第四行就变成了：
 
-$\mathop{min}\limits_{\pi} E_{x \sim \mathcal{D}}[E_{y \sim \pi(y|x)}[log \frac{\pi(y|x)}{\pi^*(y|x)}] - logZ(x)] = \mathop{min}\limits_{\pi} E_{x \sim \mathcal{D}}[D_{KL}(\pi(y|x) || \pi^*(y|x)) - logZ(x)]$
+$$
+\mathop{min}\limits_{\pi} E_{x \sim \mathcal{D}}[E_{y \sim \pi(y|x)}[log \frac{\pi(y|x)}{\pi^*(y|x)}] - logZ(x)] = \mathop{min}\limits_{\pi} E_{x \sim \mathcal{D}}[D_{KL}(\pi(y|x) || \pi^*(y|x)) - logZ(x)]
+$$
 
 上式中$Z(x)$与策略模型$\pi$无关，KL散度当两个分布完全相等时最小，因此策略模型$\pi$的最优解为：
 
-$\pi(y|x) = \pi^*(y|x) = \frac{1}{Z(x) }\pi_{ref}(y|x) * exp(\frac{1}{\beta}r(x, y))$
+$$
+\pi(y|x) = \pi^*(y|x) = \frac{1}{Z(x) }\pi_{ref}(y|x) * exp(\frac{1}{\beta}r(x, y))
+$$
 
 通过改变变量将奖励优化问题直接转化为策略优化问题，已经在奖励函数$r$与策略$\pi$之间建立一个显式的函数关系。在RLHF-PPO的训练中，奖励模型$r$是基于大量数据训练出的最优奖励模型$r^*$，然后再训练出最优策略模型$\pi^*$，二者之间的关系为：
 
-$\pi^*(y|x) = \frac{1}{Z(x) }\pi_{ref}(y|x) * exp(\frac{1}{\beta}r^*(x, y))$
+$$
+\pi^*(y|x) = \frac{1}{Z(x) }\pi_{ref}(y|x) * exp(\frac{1}{\beta}r^*(x, y))
+$$
 
 ###### 跳过奖励模型直接求解最优策略
 
 将最优奖励模型提取出来：
 
-$r^*(x, y) = \beta log\frac{\pi^*(y|x)}{\pi_{ref}(y|x)} + \beta logZ(x)$
+$$
+r^*(x, y) = \beta log\frac{\pi^*(y|x)}{\pi_{ref}(y|x)} + \beta logZ(x)
+$$
 
 先说结论，将其带入到**Bradley-Terry模型**中，可以得到用最优策略$\pi^*$和参考策略$\pi_{ref}$表示的人类偏好：
 
@@ -2607,7 +2886,9 @@ $r^*(x, y) = \beta log\frac{\pi^*(y|x)}{\pi_{ref}(y|x)} + \beta logZ(x)$
 
 $\sigma$是sigmoid函数。这样就替换掉了奖励模型和评估模型，直接对策略模型进行优化。
 
-> 🌟 **如何理解DPO的损失函数**：
+> 🌟
+>
+> **如何理解DPO的损失函数**：
 >
 > - 首先明确，$\pi_{ref}$在训练过程中保持不变
 > - 如果对于prefer的回复$y_w$预测概率增大，对disprefer的回复$y_l$概率减小，也就是$\pi_\theta(y_w|x) 增大， \pi_\theta(y_l|x) 减小$，那对应着$\beta log \frac{\pi_\theta(y_w|x)}{\pi_{ref}(y_w|x)} - \beta log \frac{\pi_\theta(y_l|x)}{\pi_{ref}(y_l|x)}$增大，对应着$\sigma(\beta log \frac{\pi_\theta(y_w|x)}{\pi_{ref}(y_w|x)})$更接近于1，损失越接近于0.
@@ -2617,7 +2898,9 @@ $\sigma$是sigmoid函数。这样就替换掉了奖励模型和评估模型，�
 
 ![](居丽叶LLM体系知识搭建/images/ART8bQmKcoIHxpxqP07camJWnFd.png)
 
-$\hat{r}_\theta(x, y) = \beta log \frac{\pi_\theta(y|x)}{\pi_{ref}(y|x)}$
+$$
+\hat{r}_\theta(x, y) = \beta log \frac{\pi_\theta(y|x)}{\pi_{ref}(y|x)}
+$$
 
 这是原论文中的推导，本质就是求导的**链式法则**，不过红色部分的w和l与公式(7)里标注的反的。
 
@@ -2634,29 +2917,41 @@ $\hat{r}_\theta(x, y) = \beta log \frac{\pi_\theta(y|x)}{\pi_{ref}(y|x)}$
 
 $y_w$和$y_l$分别表示chosen和reject回答，由**Bradley-Terry模型：**
 
-$p^*(y_w \succ y_l|x) = \frac{exp(r^*(x, y_w))}{exp(r^*(x, y_w)) + exp(r^*(x, y_l))}$
+$$
+p^*(y_w \succ y_l|x) = \frac{exp(r^*(x, y_w))}{exp(r^*(x, y_w)) + exp(r^*(x, y_l))}
+$$
 
 训练希望生成$y_w$的概率大于$y_l$，奖励函数的优化目标为：
 
-$L(r_\phi,\mathcal{D}) = - E_{(x, y_w, y_l) \sim \mathcal{D}} [ log p^*(y_w \succ y_l|x)] \\= - E_{(x, y_w, y_l) \sim \mathcal{D}}log [ \frac{exp(r^*(x, y_w))}{exp(r^*(x, y_w)) + exp(r^*(x, y_l))}] \\= - E_{(x, y_w, y_l) \sim \mathcal{D}}log [ \frac{1}{1 + exp^{-(r(x, y_w) - r(x, y_l))}}] \\= - E_{(x, y_w, y_l) \sim \mathcal{D}} [log \sigma[r(x, y_w) - r(x, y_l)]]$
+$$
+L(r_\phi,\mathcal{D}) = - E_{(x, y_w, y_l) \sim \mathcal{D}} [ log p^*(y_w \succ y_l|x)] \\= - E_{(x, y_w, y_l) \sim \mathcal{D}}log [ \frac{exp(r^*(x, y_w))}{exp(r^*(x, y_w)) + exp(r^*(x, y_l))}] \\= - E_{(x, y_w, y_l) \sim \mathcal{D}}log [ \frac{1}{1 + exp^{-(r(x, y_w) - r(x, y_l))}}] \\= - E_{(x, y_w, y_l) \sim \mathcal{D}} [log \sigma[r(x, y_w) - r(x, y_l)]]
+$$
 
 将最优奖励模型$r^*(x, y)$带入，优化目标变为：
 
-$L(r_\phi,\mathcal{D}) = - E_{(x, y_w, y_l) \sim \mathcal{D}} [log \sigma( \beta log\frac{\pi^*(y_w|x)}{\pi_{ref}(y_w|x)} - \beta log\frac{\pi^*(y_l|x)}{\pi_{ref}(y_l|x)} )]$
+$$
+L(r_\phi,\mathcal{D}) = - E_{(x, y_w, y_l) \sim \mathcal{D}} [log \sigma( \beta log\frac{\pi^*(y_w|x)}{\pi_{ref}(y_w|x)} - \beta log\frac{\pi^*(y_l|x)}{\pi_{ref}(y_l|x)} )]
+$$
 
 然后将最优策略模型$\pi^*$替换为待训练的策略模型$\pi_\theta$，就将奖励模型的目标函数转化成了只与策略模型$\pi_\theta$相关，绕过了奖励模型的训练：
 
-$L_{DPO}(\pi_\theta,\pi_{ref}) = - E_{(x, y_w, y_l) \sim \mathcal{D}} [log \sigma( \beta log\frac{\pi_\theta(y_w|x)}{\pi_{ref}(y_w|x)} - \beta log\frac{\pi_\theta(y_l|x)}{\pi_{ref}(y_l|x)} )]$
+$$
+L_{DPO}(\pi_\theta,\pi_{ref}) = - E_{(x, y_w, y_l) \sim \mathcal{D}} [log \sigma( \beta log\frac{\pi_\theta(y_w|x)}{\pi_{ref}(y_w|x)} - \beta log\frac{\pi_\theta(y_l|x)}{\pi_{ref}(y_l|x)} )]
+$$
 
 ###### **每个用户查询生成多于2个的回答**
 
 基于**Plackett-Luce**模型，$\tau$优于其他任何排序的概率为：
 
-$p^*(\tau| y_1, ..., y_k, x) = \Pi_{k=1}^{K} \frac{exp(r^*(x, y_{\tau(k)}))  }{\sum_{j=k}^K  exp(r^*(x, y_{\tau(j)}))}$
+$$
+p^*(\tau| y_1, ..., y_k, x) = \Pi_{k=1}^{K} \frac{exp(r^*(x, y_{\tau(k)}))  }{\sum_{j=k}^K  exp(r^*(x, y_{\tau(j)}))}
+$$
 
 其中， $τ_k$表示人类标注的偏好序列 $τ$ 中的第k个数据，序列 $τ$中的K个回答已经按照偏好从高到低进行排序。将$r^*$带入，就能得到损失函数：
 
-$L_{DPO}(\pi_\theta,\pi_{ref}) = - E_{(\tau, y_1, ...,y_K, x \sim \mathcal{D})} [log \Pi_{k=1}^{K} \frac{exp( \beta log \frac{\pi_\theta*(y_{\tau(k)} | x)}{\pi_{ref}*(y_{\tau(k)} | x)} ) }{\sum_{j=k}^K  exp( \beta log \frac{\pi_\theta*(y_{\tau(j)} | x)}{\pi_{ref}*(y_{\tau(j)} | x)} ) } ]$
+$$
+L_{DPO}(\pi_\theta,\pi_{ref}) = - E_{(\tau, y_1, ...,y_K, x \sim \mathcal{D})} [log \Pi_{k=1}^{K} \frac{exp( \beta log \frac{\pi_\theta*(y_{\tau(k)} | x)}{\pi_{ref}*(y_{\tau(k)} | x)} ) }{\sum_{j=k}^K  exp( \beta log \frac{\pi_\theta*(y_{\tau(j)} | x)}{\pi_{ref}*(y_{\tau(j)} | x)} ) } ]
+$$
 
 **实验结果：**
 
@@ -2676,7 +2971,9 @@ $L_{DPO}(\pi_\theta,\pi_{ref}) = - E_{(\tau, y_1, ...,y_K, x \sim \mathcal{D})} 
 
 ![](居丽叶LLM体系知识搭建/images/Blm9buhSMoroIwx3cKzcoURznld.png)
 
-> 🌟 **如何构建DPO训练数据集**
+> 🌟
+>
+> **如何构建DPO训练数据集**
 >
 > > 数据格式：{  
 > >     "prompt": "你好，请介绍一下transformers库？",  
@@ -2689,7 +2986,9 @@ $L_{DPO}(\pi_\theta,\pi_{ref}) = - E_{(\tau, y_1, ...,y_K, x \sim \mathcal{D})} 
 > 3. **多模型对比采样**：引入不同的模型分别生成回复，再利用其他大模型或者奖励模型进行排序。
 > 4. **人工构造**：首先构建领域（数学、代码）、任务类型（C++、python）、难度等级（easy、medium、hard）三层体系，为每个分类构建20条以上高质量样本。然后根据prompt生成模板（例如："请用{语言}实现{功能}，要求{约束条件}"）生成大量的用户问题，然后让模型生成回复，最后再对模型回复进行排序。
 
-> 🎼 **有哪些评估DPO训练的指标**
+> 🎼
+>
+> **有哪些评估DPO训练的指标**
 >
 > - **文本质量相关**：
 >     - **困惑度**：衡量模型对测试文本的预测能力
@@ -2703,7 +3002,9 @@ $L_{DPO}(\pi_\theta,\pi_{ref}) = - E_{(\tau, y_1, ...,y_K, x \sim \mathcal{D})} 
 > - **具体任务相关：**
 >     - 比如翻译任务的**BLEU**，摘要生成任务的**ROUGE**，语音识别任务的**WER，**代码生成任务的**代码执行成功率，**分类任务的**准确率、F1 score**
 
-> 🎼 **工业界做评估的流程**
+> 🎼
+>
+> **工业界做评估的流程**
 >
 > 1. **明确评估目标**：确定主要优化方向（如安全性、偏好对齐、生成质量）或者领域中明确的接受/拒绝偏好（如必须满足xx格式，不能出现xx违禁词）
 > 2. **构建测试集**：包含多样化的输入样本，包含难负样本（如诱导性提问）和常规用例（高频用户需求）。**严格隔离训练集与评估集**，避免信息泄露风险
@@ -2732,7 +3033,9 @@ $L_{DPO}(\pi_\theta,\pi_{ref}) = - E_{(\tau, y_1, ...,y_K, x \sim \mathcal{D})} 
 
 原论文：DAPO: An Open-Source LLM Reinforcement Learning System at Scale
 
-> 💡 字节与清华强强联合，推出了开源的DAPO算法，基于 Qwen2.5-32B 模型在 AIME 2024 上超过了之前最先进的 DeepSeek-RL-Zero-Qwen-32B，在long-CoT场景大放异彩。这个让模型更聪明的秘诀，藏在四大黑科技里：
+> 💡
+>
+> 字节与清华强强联合，推出了开源的DAPO算法，基于 Qwen2.5-32B 模型在 AIME 2024 上超过了之前最先进的 DeepSeek-RL-Zero-Qwen-32B，在long-CoT场景大放异彩。这个让模型更聪明的秘诀，藏在四大黑科技里：
 >
 > - **解耦裁剪**：提高clip上界，避免熵崩溃，既保持了思维的严谨性，又让模型的回答充满惊喜创意。
 > - **动态采样**：过滤掉准确率为 1 和 0 的数据，自动过滤掉太简单或超纲的题目，提升训练效率和稳定性。
@@ -2749,7 +3052,9 @@ $L_{DPO}(\pi_\theta,\pi_{ref}) = - E_{(\tau, y_1, ...,y_K, x \sim \mathcal{D})} 
 
 为了解决以上问题，作者开源了DAPO（Decoupled Clip and Dynamic sAmpling Policy Optimization）算法来提升long-CoT场景的效果，提出了4个关键创新：
 
-> 🐵 - **Clip-Higher**：通过解耦上下剪裁范围，避免熵崩溃，提升系统的多样性。
+> 🐵
+>
+> - **Clip-Higher**：通过解耦上下剪裁范围，避免熵崩溃，提升系统的多样性。
 > - **Dynamic Sampling**：动态采样策略，提升训练效率和稳定性。
 > - **Token-Level Policy Gradient Loss**：在长链推理（long-CoT）场景中，使用基于token的策略梯度损失，避免长序列样本对梯度的负面影响。
 > - **Overlong Reward Shaping**：通过软惩罚机制，减少过长样本的奖励噪声，稳定训练过程。
@@ -2835,7 +3140,9 @@ DAPO的核心在于**解耦裁剪**和**动态采样策略优化**，基于以�
 
 论文：https://arxiv.org/pdf/2507.18071
 
-> 🏕️ **为什么要提出 GSPO？一句话总结：**GSPO 的提出是为了解决 GRPO 在长序列和 MoE 模型训练中不稳定的问题。它将优化粒度从 **token** 提升到**序列级别**，基于序列似然定义**重要性比率**，并在序列层面执行奖励与优化，从而显著提升了训练的稳定性和效率，尤其适合大规模 MoE 架构。
+> 🏕️
+>
+> **为什么要提出 GSPO？一句话总结：**GSPO 的提出是为了解决 GRPO 在长序列和 MoE 模型训练中不稳定的问题。它将优化粒度从 **token** 提升到**序列级别**，基于序列似然定义**重要性比率**，并在序列层面执行奖励与优化，从而显著提升了训练的稳定性和效率，尤其适合大规模 MoE 架构。
 
 ###### **为什么 GRPO 会不稳定？**
 
@@ -2851,22 +3158,34 @@ GSPO（Group Sequence Policy Optimization）的核心创新在于：基于整个
 
 实验结果表明，GSPO 在训练稳定性、效率和性能方面都显著优于 GRPO，并且能够稳定 MoE 模型的训练，而无需借助诸如 Routing Replay 这类复杂的稳定化技巧（后文会详细介绍）。
 
-> 🎨 **回忆下PPO和GPRO**
+> 🎨
+>
+> **回忆下PPO和GPRO**
 >
 > 定义策略模型为$\pi_\theta$，$x \in \mathcal{D}$为查询集合，给定查询$x$和响应$y$，其似然表示为$\pi_\theta(y|x) = \Pi_{t=1}^{|y|} \pi_\theta(y_t|x, y_{<t})$，其中$|y|$表示响应中的token数，定义查询-响应对的奖励为$r(x, y) \in [0, 1]$.
 >
 > - **PPO**：使用旧策略$\pi_{old}$的样本更新当前策略$\pi_\theta$，利用clip将策略更新限制在旧策略附近，目标函数为：
 >
-> $\mathcal{J}_{\text{PPO}}(\theta) = \mathbb{E}_{x \sim \mathcal{D},\, y \sim \pi_{\theta_{\text{old}}}(\cdot|x)} \left[ \frac{1}{|y|} \sum_{t=1}^{|y|} \min \left( w_t(\theta) \hat{A}_t,\, \text{clip}\left(w_t(\theta),\, 1 - \varepsilon,\, 1 + \varepsilon \right) \hat{A}_t \right) \right]$
+> $$
+> \mathcal{J}_{\text{PPO}}(\theta) = \mathbb{E}_{x \sim \mathcal{D},\, y \sim \pi_{\theta_{\text{old}}}(\cdot|x)} \left[ \frac{1}{|y|} \sum_{t=1}^{|y|} \min \left( w_t(\theta) \hat{A}_t,\, \text{clip}\left(w_t(\theta),\, 1 - \varepsilon,\, 1 + \varepsilon \right) \hat{A}_t \right) \right]
+> $$
 >
 > 其中token$y_t$的重要性比率为$w_t(\theta) = \frac{\pi_{\theta}(y_t \mid x, y_{<t})}{\pi_{\theta_{\text{old}}}(y_t \mid x, y_{<t})}, \quad$衡量新旧策略对同一个token的生成概率比率。优势$\hat{A}_t$是由评估模型计算得到，$\epsilon$是clip范围。**PPO比较的是当下行动和过去的行动哪个更优**，PPO的核心问题在于过于依赖评估模型。
 >
 > - **GRPO**：为同一查询生成一组回复，计算组内回复的相对优势，省去了评估模型：
 >
-> $\mathcal{J}_{\text{GRPO}}(\theta) = \mathbb{E}_{x \sim \mathcal{D},\, \{y_i\}_{i=1}^{G} \sim \pi_{\theta_{\text{old}}}(\cdot|x)} \left[ \frac{1}{G} \sum_{i=1}^{G} \frac{1}{|y_i|} \sum_{t=1}^{|y_i|} \min \left( w_{i,t}(\theta) \hat{A}_{i,t},\, \text{clip}\left(w_{i,t}(\theta),\, 1 - \varepsilon,\, 1 + \varepsilon \right) \hat{A}_{i,t} \right) \right]$
+> $$
+> \mathcal{J}_{\text{GRPO}}(\theta) = \mathbb{E}_{x \sim \mathcal{D},\, \{y_i\}_{i=1}^{G} \sim \pi_{\theta_{\text{old}}}(\cdot|x)} \left[ \frac{1}{G} \sum_{i=1}^{G} \frac{1}{|y_i|} \sum_{t=1}^{|y_i|} \min \left( w_{i,t}(\theta) \hat{A}_{i,t},\, \text{clip}\left(w_{i,t}(\theta),\, 1 - \varepsilon,\, 1 + \varepsilon \right) \hat{A}_{i,t} \right) \right]
+> $$
 >
-> 其中$G$表示组的大小，重要性比率$w_{i,t}(\theta) = \frac{\pi_{\theta}(y_{i,t} \mid x, y_{i,<t})}{\pi_{\theta_{\text{old}}}(y_{i,t} \mid x, y_{i,<t})}$，优势$\quad  
-> \hat{A}_{i,t} = \hat{A}_i = \frac{r(x, y_i) - \text{mean}\left( \{ r(x, y_i) \}_{i=1}^{G} \right)}{\text{std}\left( \{ r(x, y_i) \}_{i=1}^{G} \right)}$，也就是所有一个回复中的所有token有相同的优势值。**GRPO比较的是组内的相对优势，即高于平均水平的响应优势值为正。**GRPO虽然省略了评估模型，但仍然使用token级重要性采样。
+> 其中$G$表示组的大小，重要性比率$w_{i,t}(\theta) = \frac{\pi_{\theta}(y_{i,t} \mid x, y_{i,<t})}{\pi_{\theta_{\text{old}}}(y_{i,t} \mid x, y_{i,<t})}$，优势
+>
+> $$
+> \quad
+> \hat{A}_{i,t} = \hat{A}_i = \frac{r(x, y_i) - \text{mean}\left( \{ r(x, y_i) \}_{i=1}^{G} \right)}{\text{std}\left( \{ r(x, y_i) \}_{i=1}^{G} \right)}
+> $$
+>
+> ，也就是所有一个回复中的所有token有相同的优势值。**GRPO比较的是组内的相对优势，即高于平均水平的响应优势值为正。**GRPO虽然省略了评估模型，但仍然使用token级重要性采样。
 
 ###### 重要性比率：token-level or sequence-level？
 
@@ -2874,11 +3193,15 @@ GSPO（Group Sequence Policy Optimization）的核心创新在于：基于整个
 
 因此，PPO 和 GRPO 都需要依赖 **clip 机制** 来缓解 off-policy 带来的偏差。然而，即使引入了 clip，GRPO 在长序列任务上仍然可能发生模型崩溃，根源就在于 **重要性比率的不合理定义**。
 
-> 🍰 回顾：重要性采样的原理
+> 🍰
+>
+> 回顾：重要性采样的原理
 >
 > 重要性采样的目标是纠正分布不匹配。设**行为分布**为$\pi_{beh}$ ，**目标分布**为 $\pi_{tar}$，有：
 >
-> $\mathbb{E}_{z \sim \pi_{\mathrm{tar}}} \bigl[ f(z) \bigr] = \mathbb{E}_{z \sim \pi_{\mathrm{beh}}} \left[ \frac{\pi_{\mathrm{tar}}(z)}{\pi_{\mathrm{beh}}(z)} \, f(z) \right]$
+> $$
+> \mathbb{E}_{z \sim \pi_{\mathrm{tar}}} \bigl[ f(z) \bigr] = \mathbb{E}_{z \sim \pi_{\mathrm{beh}}} \left[ \frac{\pi_{\mathrm{tar}}(z)}{\pi_{\mathrm{beh}}(z)} \, f(z) \right]
+> $$
 >
 > 当 $\frac{\pi_{\mathrm{tar}}(z)}{\pi_{\mathrm{beh}}(z)}$ 能准确反映分布差异时，这个估计是无偏的。
 >
@@ -2901,15 +3224,21 @@ GSPO（Group Sequence Policy Optimization）的核心创新在于：基于整个
 
 GSPO 将优化粒度从 **token 级** 提升到 **序列级**，其目标函数为：
 
-$\mathcal{J}_{\mathrm{GSPO}}(\theta) = \mathbb{E}_{x \sim \mathcal{D}, \{y_i\}_{i=1}^G \sim \pi_{\text{old}}(\cdot|x)} \left[ \frac{1}{G} \sum_{i=1}^{G} \min \left( s_i(\theta) \hat{A}_i, \operatorname{clip}\left( s_i(\theta), 1 - \epsilon, 1 + \epsilon \right) \hat{A}_i \right) \right]$
+$$
+\mathcal{J}_{\mathrm{GSPO}}(\theta) = \mathbb{E}_{x \sim \mathcal{D}, \{y_i\}_{i=1}^G \sim \pi_{\text{old}}(\cdot|x)} \left[ \frac{1}{G} \sum_{i=1}^{G} \min \left( s_i(\theta) \hat{A}_i, \operatorname{clip}\left( s_i(\theta), 1 - \epsilon, 1 + \epsilon \right) \hat{A}_i \right) \right]
+$$
 
 其中优势依旧基于组内相对奖励：
 
-$\hat{A}_i = \frac{r(x, y_i) - \operatorname{mean}\left( \{ r(x, y_i) \}_{i=1}^{G} \right)}{\operatorname{std}\left( \{ r(x, y_i) \}_{i=1}^{G} \right)}$
+$$
+\hat{A}_i = \frac{r(x, y_i) - \operatorname{mean}\left( \{ r(x, y_i) \}_{i=1}^{G} \right)}{\operatorname{std}\left( \{ r(x, y_i) \}_{i=1}^{G} \right)}
+$$
 
 重要性比率定义在**序列似然**上，并引入长度归一化：
 
-$s_i(\theta) = \left( \frac{\pi_{\theta}(y_i|x)}{\pi_{\theta_{\text{old}}}(y_i|x)} \right)^{\frac{1}{|y_i|}} = \exp \left( \frac{1}{|y_i|} \sum_{t=1}^{|y_i|} \log \frac{\pi_{\theta}(y_{i,t} | x, y_{i,<t})}{\pi_{\theta_{\text{old}}}(y_{i,t} | x, y_{i,<t})} \right)$
+$$
+s_i(\theta) = \left( \frac{\pi_{\theta}(y_i|x)}{\pi_{\theta_{\text{old}}}(y_i|x)} \right)^{\frac{1}{|y_i|}} = \exp \left( \frac{1}{|y_i|} \sum_{t=1}^{|y_i|} \log \frac{\pi_{\theta}(y_{i,t} | x, y_{i,<t})}{\pi_{\theta_{\text{old}}}(y_{i,t} | x, y_{i,<t})} \right)
+$$
 
 由此可以看到：
 
@@ -2923,23 +3252,31 @@ GSPO目标函数的梯度为（省略了clip）：
 
 ![](居丽叶LLM体系知识搭建/images/PLh9bm5cDo7z0ZxAPyXc8ya5nSb.png)
 
-> 🏕️ 公式8到9的原理是：
+> 🏕️
 >
-> $\nabla_\theta f(\theta) = f(\theta) \nabla_\theta log f(\theta)$
+> 公式8到9的原理是：
+>
+> $$
+> \nabla_\theta f(\theta) = f(\theta) \nabla_\theta log f(\theta)
+> $$
 
 与之对比的是GRPO目标函数的梯度为（$\hat{A}_{i, t} = \hat{A}_i$）：
 
-$\nabla_{\theta} \mathcal{J}_{\text{GRPO}}(\theta)   
-= \nabla_{\theta} \mathbb{E}_{x \sim \mathcal{D}, \{y_i\}_{i=1}^{G} \sim \pi_{\theta_{\text{old}}}(\cdot|x)}  
-\left[  
-\frac{1}{G} \sum_{i=1}^{G} \frac{1}{|y_i|} \sum_{t=1}^{|y_i|} w_{i,t}(\theta) \hat{A}_{i,t}  
-\right]$
+$$
+\nabla_{\theta} \mathcal{J}_{\text{GRPO}}(\theta) 
+= \nabla_{\theta} \mathbb{E}_{x \sim \mathcal{D}, \{y_i\}_{i=1}^{G} \sim \pi_{\theta_{\text{old}}}(\cdot|x)}
+\left[
+\frac{1}{G} \sum_{i=1}^{G} \frac{1}{|y_i|} \sum_{t=1}^{|y_i|} w_{i,t}(\theta) \hat{A}_{i,t}
+\right]
+$$
 
-$= \mathbb{E}_{x \sim \mathcal{D}, \{y_i\}_{i=1}^{G} \sim \pi_{\theta_{\text{old}}}(\cdot|x)}  
-\left[  
-\frac{1}{G} \sum_{i=1}^{G} \hat{A}_i \cdot \frac{1}{|y_i|} \sum_{t=1}^{|y_i|}   
-\left( \frac{\pi_{\theta}(y_{i,t} | x, y_{i,<t})}{\pi_{\theta_{\text{old}}}(y_{i,t} | x, y_{i,<t})} \nabla_{\theta} \log \pi_{\theta}(y_{i,t} | x, y_{i,<t}) \right)  
-\right]$
+$$
+= \mathbb{E}_{x \sim \mathcal{D}, \{y_i\}_{i=1}^{G} \sim \pi_{\theta_{\text{old}}}(\cdot|x)}
+\left[
+\frac{1}{G} \sum_{i=1}^{G} \hat{A}_i \cdot \frac{1}{|y_i|} \sum_{t=1}^{|y_i|} 
+\left( \frac{\pi_{\theta}(y_{i,t} | x, y_{i,<t})}{\pi_{\theta_{\text{old}}}(y_{i,t} | x, y_{i,<t})} \nabla_{\theta} \log \pi_{\theta}(y_{i,t} | x, y_{i,<t}) \right)
+\right]
+$$
 
 **GSPO和GRPO的根本区别**在于对token的对数似然梯度加权方式不同**。**
 
@@ -2955,7 +3292,9 @@ $= \mathbb{E}_{x \sim \mathcal{D}, \{y_i\}_{i=1}^{G} \sim \pi_{\theta_{\text{old
 - 对于优秀的响应，所有 token 都会得到同等强度的正向更新，从而保证优化方向一致；对于差的响应，所有 token 都会被整体削弱。
 - 这种一致性消除了 token 间的差异，使训练更稳定可控。
 
-> 🎹 **GRPO 的更新粒度仍然停留在 token 级别。**  
+> 🎹
+>
+> **GRPO 的更新粒度仍然停留在 token 级别。**  
 > 虽然 GRPO 的奖励和优势函数都是基于 **完整序列**的，但优化时的单位却是单个 token，因为在梯度项$\nabla_{\theta} \log \pi_{\theta}(y_{i,t} | x, y_{i,<t})$前面的权重是 token 级的重要性比率$w_{i,t}(\theta)$。
 >
 > 这种**粒度不匹配**带来了两个问题：
@@ -2971,30 +3310,34 @@ $= \mathbb{E}_{x \sim \mathcal{D}, \{y_i\}_{i=1}^{G} \sim \pi_{\theta_{\text{old
 
 其优化目标为：
 
-$\mathcal{J}_{\text{GSPO-token}}(\theta) = \mathbb{E}_{x \sim \mathcal{D}, \{y_i\}_{i=1}^{G} \sim \pi_{\theta_{\text{old}}}(\cdot|x)} \left[ \frac{1}{G} \sum_{i=1}^{G} \frac{1}{|y_i|} \sum_{t=1}^{|y_i|} \min \left( s_{i,t}(\theta) \hat{A}_{i,t}, \operatorname{clip} \left( s_{i,t}(\theta), 1 - \epsilon, 1 + \epsilon \right) \hat{A}_{i,t} \right) \right] \\$
+$$
+\mathcal{J}_{\text{GSPO-token}}(\theta) = \mathbb{E}_{x \sim \mathcal{D}, \{y_i\}_{i=1}^{G} \sim \pi_{\theta_{\text{old}}}(\cdot|x)} \left[ \frac{1}{G} \sum_{i=1}^{G} \frac{1}{|y_i|} \sum_{t=1}^{|y_i|} \min \left( s_{i,t}(\theta) \hat{A}_{i,t}, \operatorname{clip} \left( s_{i,t}(\theta), 1 - \epsilon, 1 + \epsilon \right) \hat{A}_{i,t} \right) \right] \\
+$$
 
 其中 token 级的重要性比率定义为：$s_{i,t}(\theta) = \text{sg}\left[s_i(\theta)\right] \cdot \frac{\pi_{\theta}(y_{i,t} \mid x, y_{i,<t})}{\text{sg}\left[\pi_{\theta}(y_{i,t} \mid x, y_{i,<t})\right]}$
 
 $sg[\cdot]$表示取数值但停止梯度传播（即Pytorch 中的detach），进一步推导可得 GSPO-token 的梯度为：
 
-$\nabla_{\theta} \mathcal{J}_{\text{GSPO-token}}(\theta)   
-= \nabla_{\theta} \mathbb{E}_{x \sim \mathcal{D}, \{y_i\}_{i=1}^G \sim \pi_{\theta_{\text{old}}}(\cdot|x)}   
-\left[  
-\frac{1}{G} \sum_{i=1}^G \frac{1}{|y_i|} \sum_{t=1}^{|y_i|} s_{i,t}(\theta) \hat{A}_{i,t}  
-\right] \\  
-= \mathbb{E}_{x \sim \mathcal{D}, \{y_i\}_{i=1}^G \sim \pi_{\theta_{\text{old}}}(\cdot|x)}   
-\left[  
-\frac{1}{G} \sum_{i=1}^G s_i(\theta) \cdot \frac{1}{|y_i|} \sum_{t=1}^{|y_i|} \hat{A}_{i,t}  
-\frac{\nabla_{\theta} \pi_{\theta}(y_{i,t} | x, y_{i,<t})}{\pi_{\theta}(y_{i,t} | x, y_{i,<t})}  
-\right] \\   
-= \mathbb{E}_{x \sim \mathcal{D}, \{y_i\}_{i=1}^G \sim \pi_{\theta_{\text{old}}}(\cdot|x)}   
-\left[  
-\frac{1}{G} \sum_{i=1}^G   
-\left(  
-\frac{\pi_{\theta}(y_i|x)}{\pi_{\theta_{\text{old}}}(y_i|x)}  
-\right)^{\frac{1}{|y_i|}}   
-\cdot \frac{1}{|y_i|} \sum_{t=1}^{|y_i|} \hat{A}_{i,t} \nabla_{\theta} \log \pi_{\theta}(y_{i,t} | x, y_{i,<t})  
-\right].$
+$$
+\nabla_{\theta} \mathcal{J}_{\text{GSPO-token}}(\theta) 
+= \nabla_{\theta} \mathbb{E}_{x \sim \mathcal{D}, \{y_i\}_{i=1}^G \sim \pi_{\theta_{\text{old}}}(\cdot|x)} 
+\left[
+\frac{1}{G} \sum_{i=1}^G \frac{1}{|y_i|} \sum_{t=1}^{|y_i|} s_{i,t}(\theta) \hat{A}_{i,t}
+\right] \\
+= \mathbb{E}_{x \sim \mathcal{D}, \{y_i\}_{i=1}^G \sim \pi_{\theta_{\text{old}}}(\cdot|x)} 
+\left[
+\frac{1}{G} \sum_{i=1}^G s_i(\theta) \cdot \frac{1}{|y_i|} \sum_{t=1}^{|y_i|} \hat{A}_{i,t}
+\frac{\nabla_{\theta} \pi_{\theta}(y_{i,t} | x, y_{i,<t})}{\pi_{\theta}(y_{i,t} | x, y_{i,<t})}
+\right] \\ 
+= \mathbb{E}_{x \sim \mathcal{D}, \{y_i\}_{i=1}^G \sim \pi_{\theta_{\text{old}}}(\cdot|x)} 
+\left[
+\frac{1}{G} \sum_{i=1}^G 
+\left(
+\frac{\pi_{\theta}(y_i|x)}{\pi_{\theta_{\text{old}}}(y_i|x)}
+\right)^{\frac{1}{|y_i|}} 
+\cdot \frac{1}{|y_i|} \sum_{t=1}^{|y_i|} \hat{A}_{i,t} \nabla_{\theta} \log \pi_{\theta}(y_{i,t} | x, y_{i,<t})
+\right].
+$$
 
 这样设计GSPO-token有以下好处：
 
@@ -3052,7 +3395,9 @@ MoE 模型的稀疏性使 GRPO 更容易失稳。实验发现，在 Qwen3-30B-A3
 
 ###### GFPO
 
-> 🍞 **论文总结**
+> 🍞
+>
+> **论文总结**
 >
 > 尽管增大响应长度，可以提升在复杂问题上的准确率，但却会让大模型变成话痨，即**许多token是作为填充内容，对推理没有实际意义**。GFPO通过对每个问题采样更大的响应组，并基于回复长度和token效率（奖励与响应长度的比值）过滤回复，教会模型推理时减少思考（**训练时更多采样，推理时更少思考**）。还可以根据问题难度动态调整分配的计算资源，实现在复杂问题上计算效率和准确率的平衡。
 
@@ -3076,22 +3421,32 @@ MoE 模型的稀疏性使 GRPO 更容易失稳。实验发现，在 Qwen3-30B-A3
 
 **增加训练时间的计算资源可直接转化为测试时间计算资源的减少**，这一转化是极为有利的，因为训练时的资源投入是一次性的，推理的成本节约则可以在部署后持续受益。GFPO通过在训练阶段引入过滤机制，能在不牺牲推理能力的情况下，让模型生成更简洁的推理过程。
 
-> ✏️ **回顾下GRPO**
+> ✏️
 >
-> GRPO为每个问题采样一组多个响应，并使用组内平均奖励计算优势值，从而省去了评估模型。令$\theta$表示模型参数，$q$表示问题，$o$表示从旧策略$\pi_{\theta_{old}}$采样的响应，$R(q, o_i)$表示回复的奖励，优势为$\hat{A}_{i,t} =  
-> \frac{ R(q,o_i) - \tfrac{1}{k} \sum_{j=1}^G R(q,o_j) }  
-> { \sqrt{ \tfrac{1}{k} \sum_{i=1}^G \left( R(q,o_i) - \tfrac{1}{k} \sum_{j=1}^G R(q,o_j) \right)^2}}$，重要性比率为$r_{i,t} = \frac{ \pi_\theta(o_{i,t} \mid q,o_{i,<t}) }{ \pi_{\theta_{\text{old}}}(o_{i,t} \mid q,o_{i,<t}) }$，KL-惩罚为$\beta \, \mathcal{D}_{KL}(\pi_\theta \,\|\, \pi_{\theta_{\text{old}}})$，$Entropy(\cdot)$是熵正则项，鼓励探索：
+> **回顾下GRPO**
 >
-> $\begin{align}  
-> \mathcal{J}_{\text{GRPO}}(\theta)   
-> &= \mathbb{E}_{[q \sim P(Q), \{o_i\}_{i=1}^G \sim \pi_{\theta_{\text{old}}}(O|q)]} \Bigg[  
->     \frac{1}{G} \sum_{i=1}^G \frac{1}{|o_i|} \sum_{t=1}^{|o_i|}  
->     \min \Big( r_{i,t} \hat{A}_{i,t}, \,  
->     \text{clip}(r_{i,t}, 1-\epsilon, 1+\epsilon)\hat{A}_{i,t} \Big)  
-> \Bigg] \notag \\  
-> &\quad - \beta \, \mathcal{D}_{\text{KL}}(\pi_\theta \, \| \, \pi_{\theta_{\text{old}}})  
-> + \gamma \, \text{Entropy}(\pi_\theta)  
-> \end{align}$
+> GRPO为每个问题采样一组多个响应，并使用组内平均奖励计算优势值，从而省去了评估模型。令$\theta$表示模型参数，$q$表示问题，$o$表示从旧策略$\pi_{\theta_{old}}$采样的响应，$R(q, o_i)$表示回复的奖励，优势为
+>
+> $$
+> \hat{A}_{i,t} =
+> \frac{ R(q,o_i) - \tfrac{1}{k} \sum_{j=1}^G R(q,o_j) }
+> { \sqrt{ \tfrac{1}{k} \sum_{i=1}^G \left( R(q,o_i) - \tfrac{1}{k} \sum_{j=1}^G R(q,o_j) \right)^2}}
+> $$
+>
+> ，重要性比率为$r_{i,t} = \frac{ \pi_\theta(o_{i,t} \mid q,o_{i,<t}) }{ \pi_{\theta_{\text{old}}}(o_{i,t} \mid q,o_{i,<t}) }$，KL-惩罚为$\beta \, \mathcal{D}_{KL}(\pi_\theta \,\|\, \pi_{\theta_{\text{old}}})$，$Entropy(\cdot)$是熵正则项，鼓励探索：
+>
+> $$
+> \begin{align}
+> \mathcal{J}_{\text{GRPO}}(\theta) 
+> &= \mathbb{E}_{[q \sim P(Q), \{o_i\}_{i=1}^G \sim \pi_{\theta_{\text{old}}}(O|q)]} \Bigg[
+>     \frac{1}{G} \sum_{i=1}^G \frac{1}{|o_i|} \sum_{t=1}^{|o_i|}
+>     \min \Big( r_{i,t} \hat{A}_{i,t}, \,
+>     \text{clip}(r_{i,t}, 1-\epsilon, 1+\epsilon)\hat{A}_{i,t} \Big)
+> \Bigg] \notag \\
+> &\quad - \beta \, \mathcal{D}_{\text{KL}}(\pi_\theta \, \| \, \pi_{\theta_{\text{old}}})
+> + \gamma \, \text{Entropy}(\pi_\theta)
+> \end{align}
+> $$
 >
 > 注意，本文在实现GRPO时，中将上式中的 $\frac{1}{G} \sum_{i=1}^G \frac{1}{|o_i|} \sum_{t=1}^{|o_i|}$要替换成DAPO 的 token 级损失归一化$\frac{1}{\sum_{i=1}^G |o_i|} \sum_{i=1}^G \sum_{t=1}^{|o_i|}$ 。
 >
@@ -3110,8 +3465,10 @@ GFPO可以分为几个步骤：
 
 ![](居丽叶LLM体系知识搭建/images/Hr4XbVX6Uo8apVxBd1XcAIHNn9c.png)
 
-$S, m = REJECTIONSAMPLE(G, k, \text{metric}, \text{order}), \quad   
-m_i = \mathbb{I}_{\{i \in S\}}$
+$$
+S, m = REJECTIONSAMPLE(G, k, \text{metric}, \text{order}), \quad 
+m_i = \mathbb{I}_{\{i \in S\}}
+$$
 
 其中不在$S$中的响应优势值为0，GFPO虽然采样更多响应，但训练目标中包含生成更短的响应，不会导致计算成本大幅增加，本文的评分指标为：
 
@@ -3131,7 +3488,7 @@ GFPO虽然鼓励生成更简短的推理链，但难题可能需要更长的推�
 - **基座模型**：Phi-4-reasoning
 - **对照实验**：对比了GRPO和GFPO算法，GRPO的组大小为8，GFPO测试了$G ∈ \{8, 16, 24\} , k \leq 8$。
 - **数据集**：7.2万数学题，RL训练100步，batch-size为64。
-- **奖励函数：**设置为二值准确性奖励 $R_{acc}$与n-gram重复奖励的加权和，$LENGTHSCALE$表示对正确的长度进行惩罚，这个奖励函数自身的长度惩罚不足以抑制GRPO的长度膨胀。 
+- **奖励函数：**设置为二值准确性奖励 $R_{acc}$与n-gram重复奖励的加权和，$LENGTHSCALE$表示对正确的长度进行惩罚，这个奖励函数自身的长度惩罚不足以抑制GRPO的长度膨胀。
 
 ![](居丽叶LLM体系知识搭建/images/VoHubrV2vo5qL6xHaz7coJjGnQf.png)
 
@@ -3166,7 +3523,9 @@ GFPO虽然鼓励生成更简短的推理链，但难题可能需要更长的推�
 
 ##### 2.2.12 SAPO
 
-> 🍰 **SAPO（Soft Adaptive Policy Optimization）论文总结**
+> 🍰
+>
+> **SAPO（Soft Adaptive Policy Optimization）论文总结**
 >
 > **面对问题**：在MoE模型中，**token级重要性比率**高方差会导致训练不稳定性。
 >
@@ -3192,25 +3551,35 @@ GFPO虽然鼓励生成更简短的推理链，但难题可能需要更长的推�
     - **对比 GSPO**：与 GSPO 相似，SAPO 保持了序列级别的连贯性，其软门控形成了一个连续的信任域。当序列中只有少数高度离策略的token时，GSPO 会抑制该序列的所有梯度，而 SAPO **选择性地仅降低**有问题的token的梯度权重，同时保留来自接近在策略点的token的学习信号，从而减轻了硬截断的信号损失并提高了样本效率。
     - **对比 GRPO**：相对于 GRPO，稳定性和任务性能都有所提升，能更长时间的连贯学习，在训练崩溃前实现更高的 Pass@1 性能。（所有算法训练到最后都会崩溃，但SAPO崩的时候效果最好。）
 
-> 🏆 **回忆下GRPO和GSPO**
+> 🏆
+>
+> **回忆下GRPO和GSPO**
 >
 > 将参数为 $\theta$ 的自回归语言模型建模为一个对token序列的随机策略 $\pi_\theta$，$q$ 表示用户查询，$D$ 表示查询集；$y$ 表示对 $q$ 的响应，$|y|$ 是 $y$ 中token的数量，策略 $\pi_\theta$ 下响应 $y$ 的似然为： $\pi_\theta(y | q) = \prod_{t=1}^{|y|} \pi_\theta(y_t | q, y_{<t})$
 >
 > - **GRPO**：一种**token-level**的优化方法，对于每个查询 $q$，从行为策略 $\pi_{\theta_{\text{old}}}$ 中采样一组 $G$ 个响应$\{y_1, \ldots, y_G \}$，计算它们的奖励 $\{R_1, \ldots, R_G\}$，并最大化以下**token-level**目标函数：
 >
-> $\mathcal{J}_{\text{GRPO}}(\theta) = \mathbb{E}_{q \sim \mathcal{D}, \{y_i\}_{i=1}^G \sim \pi_{\text{old}}(\cdot | q)} \left[ \frac{1}{G} \sum_{i=1}^G \frac{1}{|y_i|} \sum_{t=1}^{|y_i|} \min \left( r_{i,t}(\theta) \hat{A}_{i,t}, \text{clip} \left( r_{i,t}(\theta), 1 - \varepsilon, 1 + \varepsilon \right) \hat{A}_{i,t} \right) \right], \ (1)$
+> $$
+> \mathcal{J}_{\text{GRPO}}(\theta) = \mathbb{E}_{q \sim \mathcal{D}, \{y_i\}_{i=1}^G \sim \pi_{\text{old}}(\cdot | q)} \left[ \frac{1}{G} \sum_{i=1}^G \frac{1}{|y_i|} \sum_{t=1}^{|y_i|} \min \left( r_{i,t}(\theta) \hat{A}_{i,t}, \text{clip} \left( r_{i,t}(\theta), 1 - \varepsilon, 1 + \varepsilon \right) \hat{A}_{i,t} \right) \right], \ (1)
+> $$
 >
 > 其中，重要性比率$r_{i,t}(\theta)$ 和群组归一化优势$\hat{A}_{i,t}$ 定义为：
 >
-> $r_{i,t}(\theta) = \frac{\pi_\theta(y_{i,t} | q, y_{i,<t})}{\pi_{\theta_{\text{old}}}(y_{i,t} | q, y_{i,<t})}, \quad \hat{A}_{i,t} = \hat{A}_i = \frac{R_i - \text{mean}\left( \{ R_j \}_{j=1}^G \right)}{\text{std}\left( \{ R_j \}_{j=1}^G \right)}, \tag{2}$
+> $$
+> r_{i,t}(\theta) = \frac{\pi_\theta(y_{i,t} | q, y_{i,<t})}{\pi_{\theta_{\text{old}}}(y_{i,t} | q, y_{i,<t})}, \quad \hat{A}_{i,t} = \hat{A}_i = \frac{R_i - \text{mean}\left( \{ R_j \}_{j=1}^G \right)}{\text{std}\left( \{ R_j \}_{j=1}^G \right)}, \tag{2}
+> $$
 >
 > $\epsilon > 0$表示clip范围，$G$ 是组中响应的数量，同一响应内的所有token中共享优势$\hat{A}_i$。
 >
 > - **GSPO**：在**sequence-level（序列级别）**应用clip，保持奖励和重要性比率同一粒度，通过在$s_i(\theta)$进行长度归一化降低方差。采用以下**sequence-level**的优化目标：
 >
-> $\mathcal{J}_{\text{GSPO}}(\theta) = \mathbb{E}_{q \sim \mathcal{D}, \{y_i\}_{i=1}^G \sim \pi_{\text{old}}(\cdot | q)} \left[ \frac{1}{G} \sum_{i=1}^G \min \left( s_i(\theta) \hat{A}_i, \text{clip}(s_i(\theta), 1-\epsilon, 1+\epsilon) \hat{A}_i \right) \right], \quad (3)$
+> $$
+> \mathcal{J}_{\text{GSPO}}(\theta) = \mathbb{E}_{q \sim \mathcal{D}, \{y_i\}_{i=1}^G \sim \pi_{\text{old}}(\cdot | q)} \left[ \frac{1}{G} \sum_{i=1}^G \min \left( s_i(\theta) \hat{A}_i, \text{clip}(s_i(\theta), 1-\epsilon, 1+\epsilon) \hat{A}_i \right) \right], \quad (3)
+> $$
 >
-> $s_i(\theta) = \left( \frac{\pi_\theta(y_i | q)}{\pi_{\text{old}}(y_i | q)} \right)^{\frac{1}{|y_i|}} = \exp \left( \frac{1}{|y_i|} \sum_{t=1}^{|y_i|} \log \frac{\pi_\theta(y_{i,t} | q, y_{i,<<t})}{\pi_{\text{old}}(y_{i,t} | q, y_{i,<<t})} \right), \quad \hat{A}_i = \frac{R_i - \text{mean}\left( \{R_j\}_{j=1}^G \right)}{\text{std}\left( \{R_j\}_{j=1}^G \right)} \quad (4)$
+> $$
+> s_i(\theta) = \left( \frac{\pi_\theta(y_i | q)}{\pi_{\text{old}}(y_i | q)} \right)^{\frac{1}{|y_i|}} = \exp \left( \frac{1}{|y_i|} \sum_{t=1}^{|y_i|} \log \frac{\pi_\theta(y_{i,t} | q, y_{i,<<t})}{\pi_{\text{old}}(y_{i,t} | q, y_{i,<<t})} \right), \quad \hat{A}_i = \frac{R_i - \text{mean}\left( \{R_j\}_{j=1}^G \right)}{\text{std}\left( \{R_j\}_{j=1}^G \right)} \quad (4)
+> $$
 >
 > GRPO和GSPO都是用了硬截断，即$\text{clip} \left( r_{i,t}(\theta), 1 - \varepsilon, 1 + \varepsilon \right)$，将超过$( 1 - \epsilon, 1+ \epsilon )$范围外的重要性比率都会直接截断，对应上左图的黄色线。
 
@@ -3218,12 +3587,16 @@ GFPO虽然鼓励生成更简短的推理链，但难题可能需要更长的推�
 
 SAPO训练最大化以下目标：
 
-$\mathcal{J}(\theta) = \mathbb{E}_{q \sim \mathcal{D}, \{y_i\}_{i=1}^G \sim \pi_{\theta_{\text{old}}}(\cdot | q)} \left[ \frac{1}{G} \sum_{i=1}^G \frac{1}{|y_i|} \sum_{t=1}^{|y_i|} f_{i,t}\left(r_{i,t}(\theta)\right) \hat{A}_{i,t} \right], \quad (5)$
+$$
+\mathcal{J}(\theta) = \mathbb{E}_{q \sim \mathcal{D}, \{y_i\}_{i=1}^G \sim \pi_{\theta_{\text{old}}}(\cdot | q)} \left[ \frac{1}{G} \sum_{i=1}^G \frac{1}{|y_i|} \sum_{t=1}^{|y_i|} f_{i,t}\left(r_{i,t}(\theta)\right) \hat{A}_{i,t} \right], \quad (5)
+$$
 
-$f_{i,t}(x) = \sigma\left( \tau_{i,t} \left( x - 1 \right) \right) \cdot \frac{4}{\tau_{i,t}}, \quad \tau_{i,t} = \begin{cases}   
-\tau_{\text{pos}}, & \text{if } \hat{A}_{i,t} > 0 \\  
-\tau_{\text{neg}}, & \text{otherwise}  
-\end{cases}, \quad (6)$
+$$
+f_{i,t}(x) = \sigma\left( \tau_{i,t} \left( x - 1 \right) \right) \cdot \frac{4}{\tau_{i,t}}, \quad \tau_{i,t} = \begin{cases} 
+\tau_{\text{pos}}, & \text{if } \hat{A}_{i,t} > 0 \\
+\tau_{\text{neg}}, & \text{otherwise}
+\end{cases}, \quad (6)
+$$
 
 其中重要性比率 $r_{i,t}(\theta)$ 和优势 $\hat{A}_{i,t}$ 的计算方式与 GRPO 相同（公式 (2)），$\sigma(x) = 1/(1 + e^{-x})$ 是 Sigmoid 函数，$\tau_{pos}$ 和 $\tau_{neg}$ 分别是对应于**正优势**和**负优势**token的温度参数。下面结合SAPO的原理看下是如何实现SAPO的两个创新点的
 
@@ -3232,9 +3605,13 @@ $f_{i,t}(x) = \sigma\left( \tau_{i,t} \left( x - 1 \right) \right) \cdot \frac{4
 - 之所以说SAPO是token-level的，是因为**SAPO是在token粒度进行梯度计算**。当策略步长小且序列中没有off-policy token 时，其平均token门控会集中为一个平滑的序列级门控$g\left(\log s_{i}(\theta)\right)=\operatorname{sech}^{2}\left(\frac{G}{2} \log s_{i}(\theta)\right)$ ，类似于GSPO中的形式。 当序列中出现少数off-policy token时，SAPO只会抑制这些token的梯度，提高了样本效率，而GSPO会抑制整个序列的梯度。
 - 软信任域对应目标函数中的$f_{i,t}(x)$项，这是一个有界的sigmoid形状的函数，用于对重要性比率进行调整。对目标函数进行求导得到加权对数策略梯度：
 
-$\nabla_\theta \mathcal{J}(\theta) = \mathbb{E}_{q \sim \mathcal{D}, \{y_i\}_{i=1}^G \sim \pi_{\theta_{\text{old}}}(\cdot | q)} \left[ \frac{1}{G} \sum_{i=1}^G \frac{1}{|y_i|} \sum_{t=1}^{|y_i|} w_{i,t}(\theta) r_{i,t}(\theta) \nabla_\theta \log \pi_\theta(y_{i,t} \mid q, y_{i,<t}) \right]\hat{A}_{i,t}, \quad (7)$
+$$
+\nabla_\theta \mathcal{J}(\theta) = \mathbb{E}_{q \sim \mathcal{D}, \{y_i\}_{i=1}^G \sim \pi_{\theta_{\text{old}}}(\cdot | q)} \left[ \frac{1}{G} \sum_{i=1}^G \frac{1}{|y_i|} \sum_{t=1}^{|y_i|} w_{i,t}(\theta) r_{i,t}(\theta) \nabla_\theta \log \pi_\theta(y_{i,t} \mid q, y_{i,<t}) \right]\hat{A}_{i,t}, \quad (7)
+$$
 
-$w_{i,t}(\theta) = 4 p_{i,t}(\theta) \left(1 - p_{i,t}(\theta)\right), \quad p_{i,t}(\theta) = \sigma\left( \tau_{i,t}\left(r_{i,t}(\theta) - 1\right) \right), \quad (8)$
+$$
+w_{i,t}(\theta) = 4 p_{i,t}(\theta) \left(1 - p_{i,t}(\theta)\right), \quad p_{i,t}(\theta) = \sigma\left( \tau_{i,t}\left(r_{i,t}(\theta) - 1\right) \right), \quad (8)
+$$
 
 - 当 $r_{i,t}(\theta) = 1$ 时，策略梯度达到最大值，$w_{i,t}(\theta)=1$（如上右图），软门控梯度等于未截断目标函数$r_{i,t}(\theta)A_{i,t}$的梯度，与$\tau_{i,t}$无关。当重要性比率 $r_{i,t}(\theta)$ 偏离1时，梯度会被**平滑地近似指数的衰减，**从而实现了**连续软信任域**，如上左图蓝、绿、紫线。而不是像GSPO/GRPO中硬截断那样被截断为零，这样能防止更新过大，也能防止梯度消失，保留了一定的学习信号。
 
@@ -3242,10 +3619,12 @@ $w_{i,t}(\theta) = 4 p_{i,t}(\theta) \left(1 - p_{i,t}(\theta)\right), \quad p_{
 
 SAPO对优势为正和负的样本采用不同的温度：
 
-$\tau_{i,t} = \begin{cases}   
-\tau_{\text{pos}}, & \text{if } \hat{A}_{i,t} > 0 \\  
-\tau_{\text{neg}}, & \text{otherwise}  
-\end{cases}$
+$$
+\tau_{i,t} = \begin{cases} 
+\tau_{\text{pos}}, & \text{if } \hat{A}_{i,t} > 0 \\
+\tau_{\text{neg}}, & \text{otherwise}
+\end{cases}
+$$
 
 ![](居丽叶LLM体系知识搭建/images/MmpwbjxW8oH8V6xaZrzcQOLpnIg.png)
 
@@ -3255,15 +3634,19 @@ $\tau_{i,t} = \begin{cases}
 
 已知负向token 会增加异常的token的 logits，更容易引入不稳定性。设$z = [z_1, z_2,...,z_{|V|}]$表示logits，$v$表示一个token，通过softmax计算输出概率，$\pi_{\theta}\left(v \mid q, y_{i,<t}\right)=\exp \left(z_{v}\right) / \sum_{v^{\prime}} \exp \left(z_{v^{\prime}}\right)$，策略梯度的更新为：
 
-$\begin{align}  
-\frac{\partial \log \pi_{\theta}\left(y_{i, t} \mid q, y_{i,<<t}\right) \hat{A}_{i, t}}{\partial z_{v}} &= \frac{\partial \pi_{\theta}\left(y_{i, t} \mid q, y_{i,<<t}\right)}{\partial z_{v}} \cdot \frac{\hat{A}_{i, t}}{\pi_{\theta}\left(y_{i, t} \mid q, y_{i,<<t}\right)} \\  
-&= \frac{\mathbb{I}\left(v=y_{i, t}\right) \exp \left(z_{y_{i, t}}\right) \sum_{v^{\prime} \in \mathcal{V}} \exp \left(z_{v^{\prime}}\right)-\exp \left(z_{y_{i, t}}\right) \exp \left(z_{v}\right)}{\left(\sum_{v^{\prime} \in \mathcal{V}} \exp \left(z_{v^{\prime}}\right)\right)^{2}} \cdot \frac{\hat{A}_{i, t}}{\pi_{\theta}\left(y_{i, t} \mid q, y_{i,<<t}\right)} \\  
-&= \begin{cases}\left(1-\pi_{\theta}\left(y_{i, t} \mid q, y_{i,<<t}\right)\right) \cdot \hat{A}_{i, t} & \text { if } v=y_{i, t} \quad \text { (sampled token) } \\  
--\pi_{\theta}\left(v \mid q, y_{i,<<t}\right) \cdot \hat{A}_{i, t} & \text { otherwise } \quad \text { (unsampled token) }\end{cases}  
-\end{align}  
-\tag{9}$
+$$
+\begin{align}
+\frac{\partial \log \pi_{\theta}\left(y_{i, t} \mid q, y_{i,<<t}\right) \hat{A}_{i, t}}{\partial z_{v}} &= \frac{\partial \pi_{\theta}\left(y_{i, t} \mid q, y_{i,<<t}\right)}{\partial z_{v}} \cdot \frac{\hat{A}_{i, t}}{\pi_{\theta}\left(y_{i, t} \mid q, y_{i,<<t}\right)} \\
+&= \frac{\mathbb{I}\left(v=y_{i, t}\right) \exp \left(z_{y_{i, t}}\right) \sum_{v^{\prime} \in \mathcal{V}} \exp \left(z_{v^{\prime}}\right)-\exp \left(z_{y_{i, t}}\right) \exp \left(z_{v}\right)}{\left(\sum_{v^{\prime} \in \mathcal{V}} \exp \left(z_{v^{\prime}}\right)\right)^{2}} \cdot \frac{\hat{A}_{i, t}}{\pi_{\theta}\left(y_{i, t} \mid q, y_{i,<<t}\right)} \\
+&= \begin{cases}\left(1-\pi_{\theta}\left(y_{i, t} \mid q, y_{i,<<t}\right)\right) \cdot \hat{A}_{i, t} & \text { if } v=y_{i, t} \quad \text { (sampled token) } \\
+-\pi_{\theta}\left(v \mid q, y_{i,<<t}\right) \cdot \hat{A}_{i, t} & \text { otherwise } \quad \text { (unsampled token) }\end{cases}
+\end{align}
+\tag{9}
+$$
 
-> 🏆 **公式解释**
+> 🏆
+>
+> **公式解释**
 >
 > 公式第一行是因为求导链式法则$\frac{\partial \log \pi_{\theta}(y_{i,t}|\cdot) \cdot \hat{A}_{i,t}}{\partial z_v} = \underbrace{\frac{\partial \pi_{\theta}(y_{i,t} \mid \cdot)}{\partial z_v}}_{\text{softmax梯度}} \cdot \underbrace{\frac{\hat{A}_{i,t}}{\pi_{\theta}(y_{i,t} \mid \cdot)}}_{\text{对数梯度的链式法则}}$
 >
@@ -3276,7 +3659,9 @@ $\begin{align}
 
 可以看到正向优势会提高采样token $v$的对数概率，同时降低所有未采样token的对数概率；而负向优势则起到相反作用，提升许多未采样token的对数概率。由于LLM 词表巨大，**负优势会扩散到许多不相关的token从而导致不稳定性**。因此SAPO 采用**非对称温度**（$\tau_{neg}>\tau_{pos}$）来增强训练的鲁棒性，温度$\tau$越大时这样让负向token的梯度衰减得比正向token更快，显著降低了训练早期崩溃的可能性，提高了稳定性和性能。
 
-> 📚 **重要性比率**$r_{i,t}(\theta)$**与优势的关系**
+> 📚
+>
+> **重要性比率**$r_{i,t}(\theta)$**与优势的关系**
 >
 > $r_{i,t}(\theta)$实际反映的是当前策略与采样策略之间的差异，策略差异越大时（$r_{i,t}(\theta)$越偏离1）这个token的梯度权重就越小，这个token对策略更新的影响也就越小。而负优势会导致不相关的token的概率提升。两者相结合会有以下效果：
 >
@@ -3288,28 +3673,40 @@ $\begin{align}
 
 引入SAPO/GSPO/GRPO的统一目标函数：
 
-$\mathcal{J}(\theta) = \mathbb{E}_{q \sim \mathcal{D}, \{y_i\}_{i=1}^G \sim \pi_{\theta_{\text{old}}}(\cdot|q)} \left[ \frac{1}{G} \sum_{i=1}^G \frac{1}{|y_i|} \sum_{t=1}^{|y_i|} f_{i,t}(r_{i,t}(\theta)) \hat{A}_{i,t} \right],(10)$
+$$
+\mathcal{J}(\theta) = \mathbb{E}_{q \sim \mathcal{D}, \{y_i\}_{i=1}^G \sim \pi_{\theta_{\text{old}}}(\cdot|q)} \left[ \frac{1}{G} \sum_{i=1}^G \frac{1}{|y_i|} \sum_{t=1}^{|y_i|} f_{i,t}(r_{i,t}(\theta)) \hat{A}_{i,t} \right],(10)
+$$
 
 其中 $f_{i,t}(\cdot)$ 是特定算法的**门控函数。**GSPO中的长度归一化的序列级比率 $s_i(\theta)$ 为token比率的几何平均值**：**
 
-$s_i(\theta) = \left( \frac{\pi_\theta(y_i | q)}{\pi_{\theta_{\text{old}}}(y_i | q)} \right)^{\frac{1}{|y_i|}} = \exp\left( \frac{1}{|y_i|} \sum_{t=1}^{|y_i|} \log r_{i,t}(\theta) \right), \quad s_{i,t}(\theta) = \text{sg}\left[ s_i(\theta) \right] \cdot \frac{\pi_\theta(y_{i,t}|q,y_{i,<<t})}{\text{sg}\left[ \pi_\theta(y_{i,t}|q,y_{i,<<t}) \right]},(11)$
+$$
+s_i(\theta) = \left( \frac{\pi_\theta(y_i | q)}{\pi_{\theta_{\text{old}}}(y_i | q)} \right)^{\frac{1}{|y_i|}} = \exp\left( \frac{1}{|y_i|} \sum_{t=1}^{|y_i|} \log r_{i,t}(\theta) \right), \quad s_{i,t}(\theta) = \text{sg}\left[ s_i(\theta) \right] \cdot \frac{\pi_\theta(y_{i,t}|q,y_{i,<<t})}{\text{sg}\left[ \pi_\theta(y_{i,t}|q,y_{i,<<t}) \right]},(11)
+$$
 
 $sg[\cdot]$表示取数值但停止梯度传播（即Pytorch 中的detach）。不同算法的门控函数$f_{i,t}(\theta)$为：
 
 - SAPO：采用token-level的、平滑的函数作为门控，采用非对称温度。当策略变化变大时，梯度平滑地衰减而不是直接截断。
 
-$f_{i,t}^{\text{SAPO}}(r_{i,t}(\theta)) = \frac{4}{\tau} \sigma\left( \tau_i (r_{i,t}(\theta) - 1) \right), \quad \tau_i = \begin{cases} \tau_{\text{pos}}, & \hat{A}_i > 0, \\ \tau_{\text{neg}}, & \hat{A}_i \leq 0, \end{cases}  
-(12)$
+$$
+f_{i,t}^{\text{SAPO}}(r_{i,t}(\theta)) = \frac{4}{\tau} \sigma\left( \tau_i (r_{i,t}(\theta) - 1) \right), \quad \tau_i = \begin{cases} \tau_{\text{pos}}, & \hat{A}_i > 0, \\ \tau_{\text{neg}}, & \hat{A}_i \leq 0, \end{cases}
+(12)
+$$
 
 - GRPO：采用token-level的、硬截断作为门控函数。信任域$(1 - \epsilon, 1+ \epsilon)$内token的梯度与未截断一致，信任域外的token没有梯度，容易导致训练不稳定。
 
-$f_{i,t}^{\text{GRPO}}(r_{i,t}(\theta); \hat{A}_i) = \begin{cases} \min(r_{i,t}(\theta), 1+\varepsilon), & \hat{A}_i > 0, \\ \max(r_{i,t}(\theta), 1-\varepsilon), & \hat{A}_i \leq 0, \end{cases} (13)$
+$$
+f_{i,t}^{\text{GRPO}}(r_{i,t}(\theta); \hat{A}_i) = \begin{cases} \min(r_{i,t}(\theta), 1+\varepsilon), & \hat{A}_i > 0, \\ \max(r_{i,t}(\theta), 1-\varepsilon), & \hat{A}_i \leq 0, \end{cases} (13)
+$$
 
 - GSPO：采用sequence-level的、硬截断作为门控函数。当序列中有高度偏离策略token时，会抑制整个序列的梯度。
 
-$f_{i,t}^{\text{GSPO}}(r_{i,t}(\theta); \hat{A}_i) \equiv f_{i,t}^{\text{seq}}(s_{i,t}(\theta); \hat{A}_i) = \begin{cases} \min(s_{i,t}(\theta), 1+\varepsilon), & \hat{A}_i > 0, \\ \max(s_{i,t}(\theta), 1-\varepsilon), & \hat{A}_i \leq 0. \end{cases}(14)$
+$$
+f_{i,t}^{\text{GSPO}}(r_{i,t}(\theta); \hat{A}_i) \equiv f_{i,t}^{\text{seq}}(s_{i,t}(\theta); \hat{A}_i) = \begin{cases} \min(s_{i,t}(\theta), 1+\varepsilon), & \hat{A}_i > 0, \\ \max(s_{i,t}(\theta), 1-\varepsilon), & \hat{A}_i \leq 0. \end{cases}(14)
+$$
 
-> ✏️ **总结下论文中推导的结论**
+> ✏️
+>
+> **总结下论文中推导的结论**
 >
 > - **SAPO相比于GRPO**：都是**token-level的门控函数**，通过软门控缓解了硬截断带来的梯度消失，增强训练的稳定性。采用**非对称温度设计**，让负token的梯度更快衰减，避免负优势扩散到不相关token。
 > - **SAPO相比于GSPO**：同样通过软门控缓解了硬截断带来的梯度消失，增强训练的稳定性。并且条件温和的情况下，SAPO可以简化为类似GSPO的序列级方法；条件不温和情况下，SAPO能简化类似于为GRPO token-level方法，只对高度偏离策略的token进行抑制，而不是像SAPO中抑制整个序列的梯度。
@@ -3336,7 +3733,7 @@ $f_{i,t}^{\text{GSPO}}(r_{i,t}(\theta); \hat{A}_i) \equiv f_{i,t}^{\text{seq}}(s
 
 ###### 温度消融实验
 
-- **配置对比：** 评估了三种配置： 
+- **配置对比：** 评估了三种配置：
     - $\tau_{neg} = 1.05 > \tau_{pos} = 1.0$（非对称，负向更高）
     - $\tau_{neg} = \tau_{pos} = 1.0$（对称）
     - $\tau_{neg} = 0.95 < \tau_{pos} = 1.0$（非对称，负向更低）。
@@ -3373,13 +3770,17 @@ $f_{i,t}^{\text{GSPO}}(r_{i,t}(\theta); \hat{A}_i) \equiv f_{i,t}^{\text{seq}}(s
 
 因为即使两个阶段使用完全相同的模型权重，针对同一Token 序列计算出的对数概率也会有所不同。这种差异在 Dense 模型中通常较小，但在 **MoE 模型**中会被显著放大。
 
-为了量化这种不一致，我们引入 K3 KL 散度$\mathcal{D}_{\text{KL}}\big(\pi_{\text{train}}(\theta) \parallel \pi_{\text{infer}}(\theta)\big)  
-\approx  
-\frac{1}{|T|} \sum_{t \in T} \left[  
-\frac{\pi_{\text{train}}^{(\theta)}(t)}{\pi_{\text{infer}}^{(\theta)}(t)}  
-- 1  
-- \log \frac{\pi_{\text{train}}^{(\theta)}(t)}{\pi_{\text{infer}}^{(\theta)}(t)}  
-\right]$
+为了量化这种不一致，我们引入 K3 KL 散度
+
+$$
+\mathcal{D}_{\text{KL}}\big(\pi_{\text{train}}(\theta) \parallel \pi_{\text{infer}}(\theta)\big)
+\approx
+\frac{1}{|T|} \sum_{t \in T} \left[
+\frac{\pi_{\text{train}}^{(\theta)}(t)}{\pi_{\text{infer}}^{(\theta)}(t)}
+- 1
+- \log \frac{\pi_{\text{train}}^{(\theta)}(t)}{\pi_{\text{infer}}^{(\theta)}(t)}
+\right]
+$$
 
 在Dense模型 Qwen3-8B中，这个值为$6.4 \times 10 ^{-4}$ ；在MoE模型Qwen3-30B-A3B中，这个值为$1.535 \times 10 ^ {-3}$。
 
@@ -3453,11 +3854,13 @@ R2 的优势在于它在第一轮 mini-batch 梯度更新时不会改变目标�
 
 GRPO 在 Token 级别应用重要性采样权重。然而，由于奖励通常是序列级给出的，在 Token 级别进行off-policy修正是不准确的，这种做法会引入高方差噪声，并随序列长度线性累积。
 
-**GSPO 的创新在于采用序列级重要性比率**$s_i(\theta)$，**并进行长度归一化：**  
+**GSPO 的创新在于采用序列级重要性比率**$s_i(\theta)$，**并进行长度归一化：**
 
 ![](居丽叶LLM体系知识搭建/images/JyG6b3UHqorDJExFRU0cj4POn4c.png)
 
-$s_i(\theta) = \exp \left( \frac{1}{|y_i|} \sum_{t=1}^{|y_i|} \log \frac{\pi_\theta(y_{i,t}|x, y_{i,<t})}{\pi_{\theta_{old}}(y_{i,t}|x, y_{i,<t})} \right)$
+$$
+s_i(\theta) = \exp \left( \frac{1}{|y_i|} \sum_{t=1}^{|y_i|} \log \frac{\pi_\theta(y_{i,t}|x, y_{i,<t})}{\pi_{\theta_{old}}(y_{i,t}|x, y_{i,<t})} \right)
+$$
 
 实验数据（Qwen3-30B-A3B-SFT，mini_step=8，max_global_step=180）：
 
@@ -3482,7 +3885,9 @@ $s_i(\theta) = \exp \left( \frac{1}{|y_i|} \sum_{t=1}^{|y_i|} \log \frac{\pi_\th
 
 ![](居丽叶LLM体系知识搭建/images/ZGlZbTX96ogos6xuZwNc6WWPnIg.png)
 
-> 🌰 #### **延伸：还有哪些思路**
+> 🌰
+>
+> #### **延伸：还有哪些思路**
 >
 > 参考：https://www.emergentmind.com/topics/training-inference-discrepancies-in-moe-models
 >
@@ -3491,10 +3896,10 @@ $s_i(\theta) = \exp \left( \frac{1}{|y_i|} \sum_{t=1}^{|y_i|} \log \frac{\pi_\th
 > 1. **Random Token Selection (RTS)**
 > - 路由前打乱Token顺序，避免容量限制下优先分配前缀Token，缓解前缀偏置，让专家分配更公平、收敛更稳。
 > - 链接：https://arxiv.org/abs/2109.10465
-> 1. **Aggregation of Experts (AoE)** 
+> 2. **Aggregation of Experts (AoE)**
 > - 合并专家与门控矩阵，用早期 checkpoint 做合并初始化，稳定专家表示，便于续训/微调后迁移到推理场景。
 > - 链接：https://arxiv.org/html/2111.15365v4
-> 1. **Auxiliary Load-Balancing Losses**  
+> 3. **Auxiliary Load-Balancing Losses**
 > - 加入辅助损失强制专家均匀利用，防止训练中专家崩塌；但会导致训练均匀、推理稀疏的分布错位，需要权衡。
 > - 链接：https://arxiv.org/pdf/2502.17187.pdf
 >
@@ -3503,13 +3908,13 @@ $s_i(\theta) = \exp \left( \frac{1}{|y_i|} \sum_{t=1}^{|y_i|} \log \frac{\pi_\th
 > 1. **Expert Pruning**
 > - 按验证集激活频率剪去低利用率专家，推理后微调剩余专家，大幅降计算开销几乎不损精度。
 > - 链接：https://arxiv.org/abs/2109.10465
-> 1. **Task-Level Routing** 
+> 2. **Task-Level Routing**
 > - 按句子/任务粗粒度分配专家子网，同任务共享路由，降低显存与通信，提升推理吞吐量
 > - 链接：https://arxiv.org/abs/2110.03742
-> 1. **Matryoshka MoE** 
+> 3. **Matryoshka MoE**
 > - 方训练时用可变数量专家，学到由粗到细的层级排名；推理可灵活切专家数，兼顾速度与精度，适配不同算力预算。
 > - 链接：https://arxiv.org/pdf/2509.26520
-> 1. **Capacity-Aware Inference** 
+> 4. **Capacity-Aware Inference**
 > - 为每个专家设最大容量，过载Token重路由或丢弃，缓解滞后效应，推理提速约1.9×，精度几乎无损。
 > - 链接：https://arxiv.org/pdf/2503.05066
 
@@ -3517,7 +3922,9 @@ $s_i(\theta) = \exp \left( \frac{1}{|y_i|} \sum_{t=1}^{|y_i|} \log \frac{\pi_\th
 
 ##### 2.3.1 量化
 
-> 🏆 **什么是量化？**
+> 🏆
+>
+> **什么是量化？**
 >
 > - **量化**: 将连续/高精度值映射为离散/低精度值
 > - **反量化**: 将量化后的值映射回原始值域（有损）
@@ -3525,14 +3932,18 @@ $s_i(\theta) = \exp \left( \frac{1}{|y_i|} \sum_{t=1}^{|y_i|} \log \frac{\pi_\th
 ![](居丽叶LLM体系知识搭建/images/GnmEbESsRoCfpSxXtVecJUYbnQc.png)
 
 - **为什么要做量化？**
-    1. 减少模型的存储空间和显存的占用。  
-    2. 在显卡中，数据从HBM中加载到Tensor Core中计算，计算速度受限于数据加载的速度。通过对模型进行量化，减少HBM和Tensor Core之间的数值传输量，从而加快模型推理时间。 
+    1. 减少模型的存储空间和显存的占用。
+    2. 在显卡中，数据从HBM中加载到Tensor Core中计算，计算速度受限于数据加载的速度。通过对模型进行量化，减少HBM和Tensor Core之间的数值传输量，从而加快模型推理时间。
     3. 显卡对整数运算速度快于浮点型数据，从而加快模型推理时间。
 
-    > 🏖️ **量化矩阵运算**
+    > 🏖️
     >
-    > $X_f W_f = (X_q - Z_x) \cdot s_x \; @ \; (W_q - Z_w) \cdot s_w \\  
-    > = s_x \cdot s_w \left( X_q W_q - X_q Z_w - W_q Z_x + Z_x Z_w \right)$
+    > **量化矩阵运算**
+    >
+    > $$
+    > X_f W_f = (X_q - Z_x) \cdot s_x \; @ \; (W_q - Z_w) \cdot s_w \\
+    > = s_x \cdot s_w \left( X_q W_q - X_q Z_w - W_q Z_x + Z_x Z_w \right)
+    > $$
     >
     > 其中：
     >
@@ -3541,7 +3952,7 @@ $s_i(\theta) = \exp \left( \frac{1}{|y_i|} \sum_{t=1}^{|y_i|} \log \frac{\pi_\th
     > - `Z_x`、`Z_w` 是零点（zero point）；
     > - `X_q`、`W_q` 是量化后的输入和权重；
     > - `X_f`、`W_f` 是反量化后的结果或浮点表示。
-- **Post-training quantization（PTQ）**：先训练模型再做量化，直接将浮点权重和激活值转换为低精度（如INT8）表示，无需重新训练模型**。**量化时拿一些训练数据集做校准，得到量化过程中的常数（比如缩放数值的选择）。这种方法无需修改训练过程，成本更低，但是后量化会导致精度下降。   
+- **Post-training quantization（PTQ）**：先训练模型再做量化，直接将浮点权重和激活值转换为低精度（如INT8）表示，无需重新训练模型**。**量化时拿一些训练数据集做校准，得到量化过程中的常数（比如缩放数值的选择）。这种方法无需修改训练过程，成本更低，但是后量化会导致精度下降。
 - **Quantization-aware Training（QAT）：**在模型训练过程中模拟量化操作，使模型权重在训练阶段适应低精度表示，减少量化导致的精度损失，例如QLoRA。这种方法需要修改训练流程，时间和资源消耗更大。
 
 ![表格](居丽叶LLM体系知识搭建/images/sheet_W9kcs6GqahaiPStZRm1cBNgAnAb_g5tauH.png)
@@ -3556,7 +3967,9 @@ $s_i(\theta) = \exp \left( \frac{1}{|y_i|} \sum_{t=1}^{|y_i|} \log \frac{\pi_\th
 
 对于激活值X，采用**token-wise粒度**；对于权重W，采用**group-wise粒度**。
 
-> 🐵 为什么激活值X采用横向量而权重W采用列向量？
+> 🐵
+>
+> 为什么激活值X采用横向量而权重W采用列向量？
 >
 > - 可以化简为低精度矩阵乘法再乘以量化常数矩阵的形式，GPU做低精度矩阵乘法更快。
 >
@@ -3572,7 +3985,9 @@ $s_i(\theta) = \exp \left( \frac{1}{|y_i|} \sum_{t=1}^{|y_i|} \log \frac{\pi_\th
 
 ![](居丽叶LLM体系知识搭建/images/S3cTbmtujo8xYtxwZSlcbHudnHd.png)
 
-> 🌟 LLM.int8()训练流程：
+> 🌟
+>
+> LLM.int8()训练流程：
 >
 > 1. 从输入的隐含状态中，按列提取异常值 (离群特征，即大于某个阈值的值)。
 > 2. 对离群特征进行 FP16 矩阵运算，对非离群特征进行量化，做 INT8 矩阵运算；
@@ -3592,20 +4007,26 @@ $s_i(\theta) = \exp \left( \frac{1}{|y_i|} \sum_{t=1}^{|y_i|} \log \frac{\pi_\th
 
 ![](居丽叶LLM体系知识搭建/images/ARNmbzc4iozde8xzvE2cltkFnMe.png)
 
-> 🏕️ **总结LLM.int8()**
+> 🏕️
 >
-> - 离群值 仅占所有特征的 0.1%  
-> - Weight 在加载模型时量化，显存占用比 float16 减半  
-> - 使用 LLM.int8() 对精度几乎没有影响  
+> **总结LLM.int8()**
+>
+> - 离群值 仅占所有特征的 0.1%
+> - Weight 在加载模型时量化，显存占用比 float16 减半
+> - 使用 LLM.int8() 对精度几乎没有影响
 > - 模型推理速度会变慢 20% 左右
 
-> 🏝️ 在这里插播一下之前频繁提到的困惑度（PPL），参考文献：https://www.statlect.com/asymptotic-theory/empirical-distribution：
+> 🏝️
+>
+> 在这里插播一下之前频繁提到的困惑度（PPL），参考文献：https://www.statlect.com/asymptotic-theory/empirical-distribution：
 >
 > ###### 信息量：
 >
 > 设随机变量X的概率密度函数为p(X)，对于$X=x$这件事的信息量为：
 >
-> $I(x)=−log_2p(x)$
+> $$
+> I(x)=−log_2p(x)
+> $$
 >
 > log底数为2表示用二进制数据对x进行编码时，所需要的bit数。当$p(x)=1$时，信息量为0，即不需要编码，也知道x一定会发生。当$p(x)=0.5$时，信息量为1，此时需要1个bit对其进行编码。
 >
@@ -3613,7 +4034,9 @@ $s_i(\theta) = \exp \left( \frac{1}{|y_i|} \sum_{t=1}^{|y_i|} \log \frac{\pi_\th
 >
 > 随机变量X的平均信息量，定义为：
 >
-> $H(x) = -\sum_{x\in \mathcal{X} }p(x) log_2p(x)$
+> $$
+> H(x) = -\sum_{x\in \mathcal{X} }p(x) log_2p(x)
+> $$
 >
 > 其中$\mathcal{X}$时X的样本空间。X的分布越均匀，事件的不确定性越大，需要的存储空间越大。
 >
@@ -3623,7 +4046,9 @@ $s_i(\theta) = \exp \left( \frac{1}{|y_i|} \sum_{t=1}^{|y_i|} \log \frac{\pi_\th
 >
 > 设两个定义在相同样本空间上的概率分布 p 和 q，假设p为真实概率分布，q是对p的近似。使用q来衡量随机变量X的信息熵为：
 >
-> $H(p,q) = -\sum_{x\in \mathcal{X} }p(x) log_2q(x)$
+> $$
+> H(p,q) = -\sum_{x\in \mathcal{X} }p(x) log_2q(x)
+> $$
 >
 > 即p和q之间的交叉熵，交叉熵定义为：衡量在给定的真实分布下，使用非真实分布指定的策略消除系统的不确定性所需要付出努力的大小。
 >
@@ -3631,31 +4056,47 @@ $s_i(\theta) = \exp \left( \frac{1}{|y_i|} \sum_{t=1}^{|y_i|} \log \frac{\pi_\th
 
 ![](居丽叶LLM体系知识搭建/images/ZHVzb92zroICO8x8GwKcxQ4snfd.png)
 
-> 💡 定义概率分布的perplexity为：
+> 💡
 >
-> $PPL(q) = 2^{H(p,q)}$
+> 定义概率分布的perplexity为：
+>
+> $$
+> PPL(q) = 2^{H(p,q)}
+> $$
 >
 > 现实中，当真实概率分布未知时，采用经验分布替代真实概率分布。在样本集$\{x_i\}_{i=1}^n$上，经验分布定义为：
 
 ![](居丽叶LLM体系知识搭建/images/UKRCbCC53oEnpQxhtEsckjs6nzF.png)
 
-> 🏖️ 其中$\hat {F}_n(x)$为累积概率分布函数，根据 [**Glivenko–Cantelli 定理**](https://en.wikipedia.org/wiki/Glivenko%E2%80%93Cantelli_theorem)**，**当$n→∞$时，经验分布函数收敛到真实分布函数。基于经验分布函数有$P(X=x) = \frac{1}{n}$
+> 🏖️
 >
-> $PPL(q) = 2^{-\frac{1}{n} \sum_{x \in \mathcal X }log_2 q(x)}$
+> 其中$\hat {F}_n(x)$为累积概率分布函数，根据 [**Glivenko–Cantelli 定理**](https://en.wikipedia.org/wiki/Glivenko%E2%80%93Cantelli_theorem)**，**当$n→∞$时，经验分布函数收敛到真实分布函数。基于经验分布函数有$P(X=x) = \frac{1}{n}$
 >
-> $PPL(q) = 2^{-\frac{1}{n} log_2 \prod_{x \in \mathcal X }q(x)}$
+> $$
+> PPL(q) = 2^{-\frac{1}{n} \sum_{x \in \mathcal X }log_2 q(x)}
+> $$
 >
-> $PPL(q) = \left( \prod_{x \in \mathcal X}q(x) \right)^{-\frac{1}{n}}$
+> $$
+> PPL(q) = 2^{-\frac{1}{n} log_2 \prod_{x \in \mathcal X }q(x)}
+> $$
+>
+> $$
+> PPL(q) = \left( \prod_{x \in \mathcal X}q(x) \right)^{-\frac{1}{n}}
+> $$
 >
 > ###### 语言模型的困惑度
 >
 > 语言模型可以看作是给定一个token序列，根据已知的token来预测下一个token出现的概率。整个句子出现的概率为：
 >
-> $p(X_1, X_2,...,X_m) = p(X_1)p(X_2|X_1)...p(X_m|X_1,...X_{m-1})$
+> $$
+> p(X_1, X_2,...,X_m) = p(X_1)p(X_2|X_1)...p(X_m|X_1,...X_{m-1})
+> $$
 >
 > 对于长度为m的序列，其困惑度为：
 >
-> $PPL = \left( \prod_{i=1}^m q(X_i|X_1,...,X_{i-1}) \right)^{-\frac{1}{n}}$
+> $$
+> PPL = \left( \prod_{i=1}^m q(X_i|X_1,...,X_{i-1}) \right)^{-\frac{1}{n}}
+> $$
 >
 > PPL越小说明q越大，即我们期望的序列出现的概率就越高。一般模型越大、训练数据越多越丰富，复杂度越低。
 
@@ -3737,7 +4178,9 @@ AWQ为w中的关键参数乘以一个放大系数$s > 1$，同时再反向缩放
 
 ![](居丽叶LLM体系知识搭建/images/UJKybIfC3ohc9SxkgENcH5qZnBe.png)
 
-> 🎹 证明AWQ的误差更小：
+> 🎹
+>
+> 证明AWQ的误差更小：
 >
 > 图（a）的$Err = |w - Q(w)| = |w - ( \Delta * Round(\frac{w}{\Delta}))|$
 >
@@ -3785,14 +4228,16 @@ AWQ为w中的关键参数乘以一个放大系数$s > 1$，同时再反向缩放
 ![](居丽叶LLM体系知识搭建/images/VEEEbiZfro21h1xMWlEc7piIngf.png)
 
 **优点：**
-    - 实现简单，只需大模型生成数据、小模型学习
-    - 不需要直接访问大模型的参数或中间状态
-    - 可以生成针对特定任务的专用数据
+
+- 实现简单，只需大模型生成数据、小模型学习
+- 不需要直接访问大模型的参数或中间状态
+- 可以生成针对特定任务的专用数据
 
 **缺点：**
-    - 蒸馏效率低，需要大量样本
-    - 生成的数据可能包含大模型的偏见或错误
-    - 无法直接学习大模型内部表示
+
+- 蒸馏效率低，需要大量样本
+- 生成的数据可能包含大模型的偏见或错误
+- 无法直接学习大模型内部表示
 
 - **白盒蒸馏**：可以大致分为三种：
     - **Knowledge-based:** 对结果进行蒸馏
@@ -3807,7 +4252,9 @@ AWQ为w中的关键参数乘以一个放大系数$s > 1$，同时再反向缩放
 
 ![](居丽叶LLM体系知识搭建/images/NmiUb7Wpco5Csfx7BdocB5e5nrg.png)
 
-> 🎨 **黑盒蒸馏 vs 白盒蒸馏**
+> 🎨
+>
+> **黑盒蒸馏 vs 白盒蒸馏**
 >
 > 黑盒蒸馏的效率低于白盒蒸馏，可能需要大量的数据进行SFT训练，但仍是现实中使用最多的方法，主要原因有下：
 >
@@ -3829,7 +4276,9 @@ AWQ为w中的关键参数乘以一个放大系数$s > 1$，同时再反向缩放
 
 随着模型参数的不断增大，单个显卡已经远远无法满足训练需求。分布式训练通过多设备（GPU/TPU）并行计算加速模型训练，解决单设备显存不足、计算效率低的问题。分布式训练面临的主要问题有设备间通信效率、负载均衡、显存优化等。
 
-> 🏝️ 分布式总训练速度 = 单设备计算速度 x 计算设备总量 x 多设备加速比
+> 🏝️
+>
+> 分布式总训练速度 = 单设备计算速度 x 计算设备总量 x 多设备加速比
 >
 > - **单设备计算速度**：主要由单卡的运算速度和数据I/O能力决定，主要的优化手段有混合精度训练、算子融合、梯度累加等。
 > - **计算设备总量**：随着计算设备数量的增加，理论上峰值计算速度会增加，然而受通信效率的影响，计算设备增多会造成加速比急速降低。
@@ -3970,18 +4419,20 @@ All-reduce最常用的显现方式是**Ring-AllReduce**，nvidia的NCCL通信库
 
 虽然所有显卡的总通讯量相同，但搬运相同数据量的时间却不一定相同。DDP把通讯量均衡负载到了每一时刻的每个Worker上，而DP仅让Server做勤劳的搬运工。当越来越多的GPU分布在距离较远的机器上时，DP的通讯时间是会增加的。
 
-> ✍️ **DDP的Ring-AllReduce通信 和 DP 的parameter-server通信的对比**
+> ✍️
+>
+> **DDP的Ring-AllReduce通信 和 DP 的parameter-server通信的对比**
 >
 > 1. **带宽利用率**:
 > - parameter-server模式中，所有GPU同时与主GPU通信，导致主GPU的网络带宽成为瓶颈
 > - Ring-AllReduce中，每个GPU只与两个相邻GPU通信，带宽分配更均匀
-> 1. **并行度**:
+> 2. **并行度**:
 > - parameter-server模式是星型拓扑，通信必须经过中心节点
 > - Ring-AllReduce是环形拓扑，通信可以并行进行
-> 1. **负载均衡**:
+> 3. **负载均衡**:
 > - parameter-server模式中，主GPU承担了大量计算和通信负担
 > - Ring-AllReduce中，所有GPU负载基本均衡
-> 1. **可扩展性**:
+> 4. **可扩展性**:
 > - parameter-server模式在实践中随着GPU数量增加，主GPU的瓶颈效应会更明显
 > - Ring-AllReduce在实践中表现出更好的可扩展性
 
@@ -4002,7 +4453,9 @@ All-reduce最常用的显现方式是**Ring-AllReduce**，nvidia的NCCL通信库
 
 ![](居丽叶LLM体系知识搭建/images/C5rUbGauLoUgOOxOzBXcLodHnid.png)
 
-> 🏝️ **分桶策略的优化**
+> 🏝️
+>
+> **分桶策略的优化**
 >
 > PyTorch 默认的分桶策略是会按照参数层的逆序，在计算图中越“靠后”（例如网络的后几层）的梯度会先被计算出来，并开始通信，从而在后向剩余部分计算梯度时，之前触发的通信能够并行进行，做到更好的 overlap。
 >
@@ -4258,12 +4711,12 @@ Deepspeed则是在DDP的基础上，采用Zero分片策略。ZeRO有三个阶段
 
 1. **启动阶段**
 - 在每张 GPU 上各放一份完整的模型参数 **W**；把当前批数据 **X** 均分成 2 份（各卡一份）。
-- 仅**优化器状态**做分片：第 i 张卡持有自己那一份 $O_i$（例如 Adam 的一二阶矩等），而 **W** 与反向产生的梯度最初仍是全量副本。 
-1. **反向与梯度更新**
+- 仅**优化器状态**做分片：第 i 张卡持有自己那一份 $O_i$（例如 Adam 的一二阶矩等），而 **W** 与反向产生的梯度最初仍是全量副本。
+2. **反向与梯度更新**
 - 每张 GPU 用本地的 **X** 子批在完整 **W** 上做前后向传播，得到各自的梯度。
 - 随后执行一次 **Reduce-Scatter**，把同一参数分片对应的梯度聚到负责该分片优化器状态的那张卡上；**单卡通信量为 Ψ**。
-- 如果用 **Ring-AllReduce**（本质上是 Reduce-Scatter + All-Gather 的两步实现），则每卡的通信量是 **2Ψ**。图中画的就是这一等价实现，因此每张卡上看到的是“各梯度块求和后的结果”。 
-1. **参数同步**
+- 如果用 **Ring-AllReduce**（本质上是 Reduce-Scatter + All-Gather 的两步实现），则每卡的通信量是 **2Ψ**。图中画的就是这一等价实现，因此每张卡上看到的是“各梯度块求和后的结果”。
+3. **参数同步**
 - 第 i 张卡用本地的 $O_i$ 与收到的“对应梯度块之和”去更新属于自己的那一块参数，得到一块更新后的 **W**。
 - 为了让所有设备继续持有**完整且一致**的参数，需要对各块 **W** 做一次 **All-Gather**，把分片拼回全量；**单卡通信量为 Ψ**
 
@@ -4276,12 +4729,12 @@ Deepspeed则是在DDP的基础上，采用Zero分片策略。ZeRO有三个阶段
 1. **启动阶段**
 - 在每张 GPU 上各放一份**完整参数 W**，把当前批次数据 **X**均分成 2 份（示图中的 **输入数据1/输入数据2**）。
 - 第 *i* 张卡只持有自己那一份优化器状态 $O_i$（如 Adam 的一、二阶矩）和梯度$G_1$。
-1. **反向与梯度更新**
+2. **反向与梯度更新**
 - 各GPU用本地 **X** 在**完整 W** 上做前后向传播，得到本地梯度。
 - 随后对梯度执行 **Reduce-Scatter**：把“同一参数分块”的梯度**约定归到**负责该分块的那张卡上——  
-   例如 GPU1 只“收齐并保留” $G_1$ 的加和（图里 GPU1 上 **G2/G3** 被删掉），GPU2/3 同理各自只留下 $G_2$、$G_3$。  
-   **单卡通信量为 Ψ**。
-1. **参数同步**
+    例如 GPU1 只“收齐并保留” $G_1$ 的加和（图里 GPU1 上 **G2/G3** 被删掉），GPU2/3 同理各自只留下 $G_2$、$G_3$。  
+    **单卡通信量为 Ψ**。
+3. **参数同步**
 - 第 i 张卡用本地的 $O_i$ 与收到的已归并的 $G_i$去更新属于自己的那一块参数，得到一块更新后的 **W**。
 - 为了让后续计算仍在**完整 W** 上进行，对这些更新后的**W**块执行一次 **All-Gather**，把分片**拼回**每张卡的全量参数；**单卡通信量为 Ψ**。完成后，三张 GPU 再次都持有同步后的完整 **W**。
 
@@ -4294,12 +4747,12 @@ Deepspeed则是在DDP的基础上，采用Zero分片策略。ZeRO有三个阶段
 1. **启动阶段**
 - 把当前批次数据 **X**均分成 2 份（示图中的**输入数据1/输入数据2**）。
 - 第 i 张卡持有自己那一份优化器状态 $O_i$（如 Adam 的一、二阶矩）和梯度$G_1$和参数$W_1$。
-1. **前向传播 & 反向传播**
+2. **前向传播 & 反向传播**
 - 当某一层需要用到它的权重时，对该层对应的 **W** 触发一次 **All-Gather**，临时在每卡形成“那层所需的完整 W”；层内计算结束，立刻把非本卡负责的权重片段**丢弃/还原为分片**。**单卡通信量为 Ψ**。同一层的 **反向** 也遵循同样的“**聚合→计算→释放**”节奏。
 - 说明：工业实现里常把 All-Gather 与后续计算流水化或重叠，以减少等待时间（如 ZeRO++ 的做法）。
-1. **更新梯度**
+3. **更新梯度**
 - 反向完毕，各卡先得到“本地计算出的梯度”。随后对梯度执行 **Reduce-Scatter**：把“属于本卡负责分片”的梯度从其他卡**规约并汇总到本卡**，只保留 **G**的本地分片，其它分片当场丢弃。**单卡通信量为 Ψ**。
-1. **更新参数**
+4. **更新参数**
 - 第 i 张卡用“归并后的 $G_i$+ 本地 $O_i$”**仅更新自己负责的那一块 W**，完成后每卡只保存“**更新后的参数分片**”。下一轮前/反向需要某层权重时，再按步骤2去 **All-Gather** 对应层的 **W**。
 
 特别值得注意的是，最新的Zero3采用的层内（intra）分割，也就是把完整的权重矩阵分成几块，而早期的Zero3采用的是层间（inter）分割，如下图这种。包括微软官方的介绍视频（[Zero & Deepspeed](https://www.microsoft.com/en-us/research/blog/zero-deepspeed-new-system-optimizations-enable-training-models-with-over-100-billion-parameters/)）也是早期版本的实现。
@@ -4314,8 +4767,8 @@ Deepspeed则是在DDP的基础上，采用Zero分片策略。ZeRO有三个阶段
 以下是对deepspeed的一些优化：
 
 - **ZeRO ++** ：针对ZeRO3通信进行优化，通过权重量化、权重分层存储、梯度量化降低跨节点通信量
-- **ZeRO-Infinity** ：是ZeRO3的拓展，允许通过使用NUVMe固态硬盘扩展GPU和CPU内存来训练LLM 
-- **Zero offload**：将优化器、模型参数从显存卸载至内存，或者二者协同搭配(offload ++) 
+- **ZeRO-Infinity** ：是ZeRO3的拓展，允许通过使用NUVMe固态硬盘扩展GPU和CPU内存来训练LLM
+- **Zero offload**：将优化器、模型参数从显存卸载至内存，或者二者协同搭配(offload ++)
 - **DeepSpeed Ulysses**：针对长序列训练，将各个样本在序列维度上分割给参与的GPU
 
 总结以上方法：
@@ -4326,7 +4779,9 @@ Deepspeed则是在DDP的基础上，采用Zero分片策略。ZeRO有三个阶段
 
 Megatron-LM 是一个基于 **PyTorch** 的分布式训练框架，用来训练基于Transformer的大型语言模型。Megatron-LM 综合应用了**数据并行DP**，**张量并行TP**和**流水线并行PP**。
 
-> 🎨 模型参数数量暴增面临的挑战：
+> 🎨
+>
+> 模型参数数量暴增面临的挑战：
 >
 > 1. **显存限制：** 即便是目前最大的GPU主显存也难以容纳这些模型的参数。举例来说，一个1750亿参数的GPT-3模型需要约700GB的参数空间，对应的梯度约为700GB，而优化器状态还需额外的1400GB，总计需求高达2.8TB。
 > 2. **计算挑战：** 即使我们设法将模型适应单个GPU（例如通过在主机显存和设备显存之间进行参数交换），模型所需的大量计算操作也会导致训练时间大幅延长。举个例子，使用一块NVIDIA V100 GPU来训练拥有1750亿参数的GPT-3模型，大约需要耗时288年。
@@ -4376,12 +4831,14 @@ Megatron-LM提出了**PTD-P**技术，它结合了**流水线、张量和数据�
 
 ![](居丽叶LLM体系知识搭建/images/NB7xb3l7loc7l9x0xKCcvXvMnac.png)
 
-> 📚 **分布式训练的建议：**
+> 📚
+>
+> **分布式训练的建议：**
 >
 > - **并行模式的相互作用**： 不同的并行化策略之间以复杂的方式相互影响。并行模式的选择会影响通信量、计算核的效率以及由于流水线刷新（流水线气泡）而导致的worker空闲时间。例如，张量模型并行在多GPU服务器上表现良好，但对于大型模型，最好采用流水线模型并行。
 > - **流水线并行的调度影响**： 用于流水线并行的调度方式会影响通信量、流水线气泡的大小以及存储激活所需的显存。Megatron提出了一种新的交错调度方式，相比先前的调度方式，它在稍微增加显存占用的基础上，可以提高多达10%的吞吐量。
 > - **超参数的影响**： 超参数的值，如微批量大小（micro-batch size），会影响显存占用、在worker上执行的核效果以及流水线气泡的大小。
-> - **通信密集性**： 分布式训练是通信密集型的过程。使用较慢的节点间连接或者更多的通信密集型分区会限制性能表现。 
+> - **通信密集性**： 分布式训练是通信密集型的过程。使用较慢的节点间连接或者更多的通信密集型分区会限制性能表现。
 > - **通信网络速度**：由于前向和后向传播中每层都有两个 all reduce，因此 TP 需要设备间有非常快速的互联。因此，除非有一个非常快的网络，否则不建议跨多个节点进行 TP。
 
 ###### 张量并行的GEMM计算
@@ -4418,13 +4875,17 @@ Megatron-LM提出了**PTD-P**技术，它结合了**流水线、张量和数据�
 - **f 和 g**：分别表示两个算子，每个算子都包含 forward 与 backward。图中每一行表示在一块 GPU 上的独立计算过程。这里我们以 **行并行** 为例，展示其 forward 与 backward 的传递逻辑。
 - **g 的 backward（加法聚合的反向传播）**：在前向中，多个 GPU 各自得到 $Y_1, Y_2, \dots$，再通过加法得到最终输出 $Y = Y_1 + Y_2$。反向时，若要对参数 $A_i$ 求梯度，有：
 
-$\frac{\partial L}{\partial A_i} = \frac{\partial L}{\partial Y} \cdot \frac{\partial Y}{\partial Y_i} \cdot \frac{\partial Y_i}{\partial A_i}$
+$$
+\frac{\partial L}{\partial A_i} = \frac{\partial L}{\partial Y} \cdot \frac{\partial Y}{\partial Y_i} \cdot \frac{\partial Y_i}{\partial A_i}
+$$
 
 因为 $\frac{\partial Y}{\partial Y_i} = 1$，所以只要把 $\frac{\partial L}{\partial Y}$ 广播到所有 GPU，每块 GPU 就能独立计算属于自己的梯度。
 
 - **f 的 backward（拼接的反向传播）**：在前向中，输入 X 被切分为 $[X_1, X_2]$，分别送到不同 GPU 计算。反向时，需要把梯度重新拼接回原始维度：
 
-$\frac{\partial L}{\partial X} = concat\Big[\frac{\partial L}{\partial X_1}, \frac{\partial L}{\partial X_2}\Big]$
+$$
+\frac{\partial L}{\partial X} = concat\Big[\frac{\partial L}{\partial X_1}, \frac{\partial L}{\partial X_2}\Big]
+$$
 
 这意味着，梯度要先局部计算，然后在张量维度上拼接，才能继续向上一层传递。
 
@@ -4440,13 +4901,17 @@ $\frac{\partial L}{\partial X} = concat\Big[\frac{\partial L}{\partial X_1}, \fr
 
 - **g 的 backward**：对于列并行场景，输出向量 Y 被拆分为 $[Y_1, Y_2]$，分别在不同 GPU 上计算得到。若要求参数$A_i$的梯度，有：
 
-$\frac{\partial L}{\partial A_i} = \frac{\partial L}{\partial Y_i} \cdot \frac{\partial Y_i}{\partial A_i}$
+$$
+\frac{\partial L}{\partial A_i} = \frac{\partial L}{\partial Y_i} \cdot \frac{\partial Y_i}{\partial A_i}
+$$
 
 这意味着每块 GPU 可以独立计算自己负责的参数分片的梯度，无需跨 GPU 通信。
 
 - **f 的 backward**：在前向过程中，输入 X 同时参与了 $X W_1$与 $X W_2$ 的计算。因此在反向传播时，关于输入 X 的梯度需要对不同分片贡献进行求和：
 
-$\frac{\partial L}{\partial X} = \frac{\partial L}{\partial X}\Big|_1 + \frac{\partial L}{\partial X}\Big|_2$
+$$
+\frac{\partial L}{\partial X} = \frac{\partial L}{\partial X}\Big|_1 + \frac{\partial L}{\partial X}\Big|_2
+$$
 
 其中 $\frac{\partial L}{\partial X}\big|_i$ 表示在第 i 块 GPU 上计算得到的对 X 的局部梯度。最终结果需要在各 GPU 之间进行 **All-Reduce 操作** 来完成梯度聚合。
 
@@ -4466,10 +4931,11 @@ Megatron没有实现模型并行性的框架和编译器，而是对现有的**P
 - **切分MLP**：
 
 MLP的计算包含GEMM矩阵计算和GeLU激活两部分：$Y = GeLU(XA)$。
-    - 并行化GEMM选择行并行，沿行的方向分割A，沿着列的方向分割X：$X = [X_1, X_2], A = [\begin{matrix} A_1 \\ A_2 \end{matrix}]$。行并行之后的计算变成了$Y=GeLU(X_1A_1+X_2A_2)$，每一项分别在一个GPU上完成，再通过All-reduce求和（All-reduce通信就需要一个同步点，因为All-reduce需要所有设备的计算结果）。因为GeLU是一个非线性函数，那么就有 $GeLU(X_1A_1+X_2A_2)≠GeLU(X_1A_1)+GeLU(X_2A_2)$ ，所以这种方案需要在GeLU函数之前加上一个同步点，这个同步点让不同GPU之间交换信息。
-    - 对应的，如果采用列并行，即：$[Y_1, Y_2] = [GeLU(XA_1), GeLU(XA_2)]$。这个方法不需要同步点，直接把两个 GeLU 的输出拼接在一起就行（也就是All-gather通信）。
 
-    > 简单的区分列并行和行并行的方式，看输入有没有被切块，列并行不对输入切块。
+- 并行化GEMM选择行并行，沿行的方向分割A，沿着列的方向分割X：$X = [X_1, X_2], A = [\begin{matrix} A_1 \\ A_2 \end{matrix}]$。行并行之后的计算变成了$Y=GeLU(X_1A_1+X_2A_2)$，每一项分别在一个GPU上完成，再通过All-reduce求和（All-reduce通信就需要一个同步点，因为All-reduce需要所有设备的计算结果）。因为GeLU是一个非线性函数，那么就有 $GeLU(X_1A_1+X_2A_2)≠GeLU(X_1A_1)+GeLU(X_2A_2)$ ，所以这种方案需要在GeLU函数之前加上一个同步点，这个同步点让不同GPU之间交换信息。
+- 对应的，如果采用列并行，即：$[Y_1, Y_2] = [GeLU(XA_1), GeLU(XA_2)]$。这个方法不需要同步点，直接把两个 GeLU 的输出拼接在一起就行（也就是All-gather通信）。
+
+> 简单的区分列并行和行并行的方式，看输入有没有被切块，列并行不对输入切块。
 
 完整的MLP计算首先以列并行方式划分第一个GEMM，以行并行方式分割第二个GEMM，以便它直接获取GeLU层的输出，不再需要All-reduce通信。
 
@@ -4483,7 +4949,9 @@ MLP的计算包含GEMM矩阵计算和GeLU激活两部分：$Y = GeLU(XA)$。
 
 ![](居丽叶LLM体系知识搭建/images/AByibKb0koSGHhxoWowcNYTLnLg.png)
 
-> 🌰 **同步点：**
+> 🌰
+>
+> **同步点：**
 >
 > 各个GPU独立进行计算，当遇到同步点时，训练快的GPU就得停下来等待训练慢的GPU，造成训练资源的浪费。并且All-reduce操作也会带来较大的通信量。为了提升训练效率，应该尽可能减少同步点。
 
@@ -4499,7 +4967,9 @@ MLP的计算包含GEMM矩阵计算和GeLU激活两部分：$Y = GeLU(XA)$。
 
 **通信量计算**：总通讯量为 4Φ。
 
-> 🎉 **Megatron-LM 中的张量并行**
+> 🎉
+>
+> **Megatron-LM 中的张量并行**
 >
 > Megatron-LM 针对 Transformer 结构设计了张量并行。不管是哪一种 block（MLP，自注意力或者是 embedding 层）它都是把层内的参数平均切分到各个 GPU 单元上，并且在每一层都需要通过 All Reduce 获取完整的输出。
 >
@@ -4585,7 +5055,9 @@ micro-batch 𝑏 的选择也影响到模型训练的吞吐量。例如，在单
 
 ![](居丽叶LLM体系知识搭建/images/N06mbkXXpoSoHlxbZAHcURdGnFd.png)
 
-> 🏕️ **论文中给出的混合并行训练的建议**
+> 🏕️
+>
+> **论文中给出的混合并行训练的建议**
 >
 > - 张量并行会导致巨大的通信量，当 t 大于单个节点中的GPU数量时，在较慢的节点间链路上执行张量并行是不合算的。
 > - 模型并行和数据并行一起使用时，模型并行大小为$M = t \cdot p$，以保障模型参数和激活值能放入每个GPU中，通过数据并行拓展到更多的GPU。
@@ -4595,7 +5067,9 @@ micro-batch 𝑏 的选择也影响到模型训练的吞吐量。例如，在单
 
 ![表格](居丽叶LLM体系知识搭建/images/sheet_W9kcs6GqahaiPStZRm1cBNgAnAb_MbzfbD.png)
 
-> 📚 **Megatron存在的一些bug：**
+> 📚
+>
+> **Megatron存在的一些bug：**
 >
 > - 框架没有分层分模块设计，导致模型与框架无法解耦，需要手动适配模型
 > - 只支持gpt/llama模型
@@ -4686,7 +5160,9 @@ adam收敛速度快，sgd精确度高。可以先用adam在用sgd，定期在验
 
 Weight decay（l2正则），dropout(删除部分神经元)，batchnorm
 
-> 🍰 **以下是一些降低显存的方法：**
+> 🍰
+>
+> **以下是一些降低显存的方法：**
 >
 > 1. **Gradient accumulation**：降低batch-size大小为1，增大Gradient accumulation。缺点是延长了训练时间，因为GPU擅长并行训练，而每次只训练一条数据，浪费计算能力。
 > 2. **Gradient checkpoint**：前向传播的激活值不保留，在反向传播时重新计算
@@ -4699,7 +5175,9 @@ Weight decay（l2正则），dropout(删除部分神经元)，batchnorm
 
 Flash Attention 是一种优化 Transformer 模型中注意力机制的算法，旨在提高计算效率和内存利用率。自注意力的缺点之一是计算和空间复杂度巨大。这导致在处理长序列时速度变慢且内存需求巨大，也限制了模型输入输出的序列长度。
 
-> 🥖 **如何计算自注意力计算的空间复杂度？**
+> 🥖
+>
+> **如何计算自注意力计算的空间复杂度？**
 >
 > 自注意力模块的空间复杂度为$O(N^2)$，其中N为序列长度（假设$Q,K,V \in R^{N \times d}$，batch大小为b, 注意力头数为a，计算$QK^T$的计算复杂度为$2bN^2d$，用fp16存储$QK^T$的空间复杂度为$2bN^2a$）。
 
@@ -4717,24 +5195,31 @@ GPU主要分为以下三部分：
 
 例如在GPT3中，一般N=2048，d=128。对于传统算法，`S`**和**`P`**远大于Q K V O**，在SRAM中放不下，需要在HBM中进行存储，计算时需要反复访问HBM，搬运数据浪费了大量时间。
 
-$\begin{equation}  
-\mathbf{S}=\mathbf{Q K}^{\top} \in \mathbb{R}^{N \times N}, \quad \mathbf{P}=\operatorname{softmax}(\mathbf{S}) \in \mathbb{R}^{N \times N}, \quad \mathbf{O}=\mathbf{P} \mathbf{V} \in \mathbb{R}^{N \times d},  
-\end{equation}$
+$$
+\begin{equation}
+\mathbf{S}=\mathbf{Q K}^{\top} \in \mathbb{R}^{N \times N}, \quad \mathbf{P}=\operatorname{softmax}(\mathbf{S}) \in \mathbb{R}^{N \times N}, \quad \mathbf{O}=\mathbf{P} \mathbf{V} \in \mathbb{R}^{N \times d},
+\end{equation}
+$$
 
 ![](居丽叶LLM体系知识搭建/images/BuzJbsRuVoTM6hxGC0ocZ6VUnAd.png)
 
-> 👍 **传统自注意力计算的内存访问复杂度：**
+> 👍
+>
+> **传统自注意力计算的内存访问复杂度：**
 >
 > 需要把输入$\mathbf{Q}, \mathbf{K}, \mathbf{V}$从HBM中读取，并计算完毕后把输出$\mathbf{O}$写入到HBM中。
->     1. 第一步把$\mathbf{Q}, \mathbf{K}$读取出来计算出$\mathbf{S}=\mathbf{Q K}^{\top}$，然后把$\mathbf{S}$存回去，内存访问复杂度$\Theta\left(N d+N^2\right)$
->     2. 第二步把$\mathbf{S}$读取出来计算出$\mathbf{P}=\operatorname{softmax}(\mathbf{S})$，然后把$\mathbf{P}$存回去，内存访问复杂度$\Theta\left(N^2\right)$
->     3. 第三步把$\mathbf{V}, \mathbf{P}$读取出来计算出$\mathbf{O}=\mathbf{P} \mathbf{V}$，然后计算出结果$\mathbf{O}$，内存访问复杂度$\Theta\left(N d+N^2\right)$
+>
+> 1. 第一步把$\mathbf{Q}, \mathbf{K}$读取出来计算出$\mathbf{S}=\mathbf{Q K}^{\top}$，然后把$\mathbf{S}$存回去，内存访问复杂度$\Theta\left(N d+N^2\right)$
+> 2. 第二步把$\mathbf{S}$读取出来计算出$\mathbf{P}=\operatorname{softmax}(\mathbf{S})$，然后把$\mathbf{P}$存回去，内存访问复杂度$\Theta\left(N^2\right)$
+> 3. 第三步把$\mathbf{V}, \mathbf{P}$读取出来计算出$\mathbf{O}=\mathbf{P} \mathbf{V}$，然后计算出结果$\mathbf{O}$，内存访问复杂度$\Theta\left(N d+N^2\right)$
 >
 > 综上所述，整体的内存访问复杂度为$\Theta\left(N d+N^2\right)$。
 >
 > > 可能会有同学疑问为什么第一步存到HBM，第二步又从HBM读取到SRAM中。其实这里算法写的比较简略，假设将S矩阵分成三部分$[s1, s2, s3]$, SRAM只能存储一部分。实际的计算应该是先计算出s1，将s1存储到HBM中，然后再计算s2再计算s3。第二步中的计算也是分别将$[s1, s2, s3]$送入SRAM进行softmax计算。
 
-> 🎁 **内存访问复杂度**
+> 🎁
+>
+> **内存访问复杂度**
 >
 > 内存访问复杂度是对算法中**每个存储器访问操作工作量的度量**。具体来说，它指的是在执行某个算法时，访问内存（如主存或缓存）的频率和模式。较低的内存访问复杂度通常意味着算法在数据访问方面更为高效。
 >
@@ -4754,27 +5239,33 @@ $\begin{equation}
 
 上图右面表示分块后的状态，由于分块使得SRAM能存储下所有中间态，因而可以在SRAM执行完所有计算操作后才写回到HBM中，降低了访问HBM的次数。具体如何分片参考《https://www.bilibili.com/video/BV1Zz4y1q7FX/》。
 
-> 👍 对于精度为float32和bfloat16的注意力计算来说，当 x≥89 时，就会变得很大甚至变成inf，故为了避免发生数值溢出（上溢和下溢）的问题，需要对指数项减去最大值$m(x)$，
+> 👍
 >
-> $\begin{equation}  
-> m(x):=\max _i x_i, \quad f(x):=\left[\begin{array}{lll}  
-> e^{x_1-m(x)} & \ldots & e^{x_B-m(x)}  
-> \end{array}\right], \quad \ell(x):=\sum_i f(x)_i, \quad \operatorname{softmax}(x):=\frac{f(x)}{\ell(x)}  
-> \end{equation}$
+> 对于精度为float32和bfloat16的注意力计算来说，当 x≥89 时，就会变得很大甚至变成inf，故为了避免发生数值溢出（上溢和下溢）的问题，需要对指数项减去最大值$m(x)$，
+>
+> $$
+> \begin{equation}
+> m(x):=\max _i x_i, \quad f(x):=\left[\begin{array}{lll}
+> e^{x_1-m(x)} & \ldots & e^{x_B-m(x)}
+> \end{array}\right], \quad \ell(x):=\sum_i f(x)_i, \quad \operatorname{softmax}(x):=\frac{f(x)}{\ell(x)}
+> \end{equation}
+> $$
 >
 > - **上溢**：如果输入向量 x 中包含很大的正数，那么 $e^x$ 的结果可能会变得非常巨大，超出计算机浮点数能够表示的最大范围，导致上溢（结果变成 Infinity 或 Inf）。减去$max(x)$使得指数结果在$(0,1)$之间，避免上溢问题。
 > - **下溢**：如果输入向量 x 中包含绝对值很大的负数，那么 $e^x$的结果会非常接近于 0。如果向量中所有的值都导致 e^x 小于计算机浮点数能表示的最小正数，就可能发生下溢（结果变成 0）。如果在计算分母的求和时，所有项都因下溢变成 0，那么分母就会是 0，导致除以零错误（结果为 Inf 或 NaN）。通过减去 max(x)，至少有一个元素（即原先最大的元素）的指数输入变成了 0，其结果为 e^0 = 1。这就保证了分母的求和中至少有一个值为 1 的项，使得分母不会因为所有项都下溢而变成 0。
 >
 > 对于分块计算，矩阵乘法和逐点操作(scale，mask，dropout)的分块计算是容易实现的。需要注意的是，在进行softmax分块计算时，需要完整的一行作为输入数据，因为**其分母需要对完整一行求和**。当我们将输入进行分片后，无法对完整的行数据执行Softmax操作。我们可以通过如下所示方法来获得与完整行Softmax相同的结果，而无需使用近似操作。
 >
-> $\begin{equation}  
-> \begin{aligned}  
-> & m(x)=m\left(\left[x^{(1)} x^{(2)}\right]\right)=\max \left(m\left(x^{(1)}\right), m\left(x^{(2)}\right)\right), \quad f(x)=\left[\begin{array}{ll}  
-> e^{m\left(x^{(1)}\right)-m(x)} f\left(x^{(1)}\right) & e^{m\left(x^{(2)}\right)-m(x)} f\left(x^{(2)}\right)  
-> \end{array}\right], \\  
-> & \ell(x)=\ell\left(\left[x^{(1)} x^{(2)}\right]\right)=e^{m\left(x^{(1)}\right)-m(x)} \ell\left(x^{(1)}\right)+e^{m\left(x^{(2)}\right)-m(x)} \ell\left(x^{(2)}\right), \quad \operatorname{softmax}(x)=\frac{f(x)}{\ell(x)} .  
-> \end{aligned}  
-> \end{equation}$
+> $$
+> \begin{equation}
+> \begin{aligned}
+> & m(x)=m\left(\left[x^{(1)} x^{(2)}\right]\right)=\max \left(m\left(x^{(1)}\right), m\left(x^{(2)}\right)\right), \quad f(x)=\left[\begin{array}{ll}
+> e^{m\left(x^{(1)}\right)-m(x)} f\left(x^{(1)}\right) & e^{m\left(x^{(2)}\right)-m(x)} f\left(x^{(2)}\right)
+> \end{array}\right], \\
+> & \ell(x)=\ell\left(\left[x^{(1)} x^{(2)}\right]\right)=e^{m\left(x^{(1)}\right)-m(x)} \ell\left(x^{(1)}\right)+e^{m\left(x^{(2)}\right)-m(x)} \ell\left(x^{(2)}\right), \quad \operatorname{softmax}(x)=\frac{f(x)}{\ell(x)} .
+> \end{aligned}
+> \end{equation}
+> $$
 
 原理参考《https://www.zhihu.com/question/611236756/answer/3132304304》
 
@@ -4804,11 +5295,15 @@ $softmax(x^{(2)})$也是局部的,利用$x^{(2)}$更新$m_{max}$和$l_{all}$：
 
 因此，全局的$softmax^{new}(x^{(2)})$就更新成了：
 
-$\space softmax^{new}(x^{(2)}) = \frac{f^{new}(x^{(2)})} {l_{all}^{new}} = \frac{f(x^{(2)}) \cdot e^{m(x^{(2)} - m_{max}^{new})}} {l_{all}^{new}}  (22) \\  = \frac{softmax(x^{(2)}) \cdot l(x^{(2)}) \cdot e^{m(x^{(2)} - m_{max}^{new})}} {l_{all}^{new}} (23)$
+$$
+\space softmax^{new}(x^{(2)}) = \frac{f^{new}(x^{(2)})} {l_{all}^{new}} = \frac{f(x^{(2)}) \cdot e^{m(x^{(2)} - m_{max}^{new})}} {l_{all}^{new}}  (22) \\  = \frac{softmax(x^{(2)}) \cdot l(x^{(2)}) \cdot e^{m(x^{(2)} - m_{max}^{new})}} {l_{all}^{new}} (23)
+$$
 
 将公式中的$x^{(2)}$替换成$x^{(1)}$就可以对$x^{(1)}$的softmax进行更新。
 
-> 📚 上述其实是一个增量计算的过程
+> 📚
+>
+> 上述其实是一个增量计算的过程
 >
 > 1. 我们首先计算一个分块的局部softmax值，然后存储起来
 > 2. 当处理完下一个分块时，可以根据此时的新的全局最大值和全局exp求和项来更新旧的softmax值，接着再处理下一个分块，然后再更新
@@ -4856,7 +5351,9 @@ $\space softmax^{new}(x^{(2)}) = \frac{f^{new}(x^{(2)})} {l_{all}^{new}} = \frac
 
 ![](居丽叶LLM体系知识搭建/images/BHM5bxkhBoSwuCxSrkOcdzpUn8d.png)
 
-$(22) \space softmax^{new}(x^{(2)}) = \frac{f^{new}(x^{(2)})} {l_{all}^{new}} = \frac{f(x^{(2)}) \cdot e^{m(x^{(2)} - m_{max}^{new})}} {l_{all}^{new}} \\ (23) = \frac{softmax(x^{(2)}) \cdot l(x^{(2)}) \cdot e^{m(x^{(2)} - m_{max}^{new})}} {l_{all}^{new}}$
+$$
+(22) \space softmax^{new}(x^{(2)}) = \frac{f^{new}(x^{(2)})} {l_{all}^{new}} = \frac{f(x^{(2)}) \cdot e^{m(x^{(2)} - m_{max}^{new})}} {l_{all}^{new}} \\ (23) = \frac{softmax(x^{(2)}) \cdot l(x^{(2)}) \cdot e^{m(x^{(2)} - m_{max}^{new})}} {l_{all}^{new}}
+$$
 
 ![](居丽叶LLM体系知识搭建/images/LYQVbHrqeojJ5ZxXt2wcsVhFnFh.png)
 
@@ -4870,13 +5367,17 @@ $(22) \space softmax^{new}(x^{(2)}) = \frac{f^{new}(x^{(2)})} {l_{all}^{new}} = 
 
 **13行：**更新$l_i$和$m_i$。
 
-> 🎁 计算flash attention的**内存访问复杂度**：
+> 🎁
+>
+> 计算flash attention的**内存访问复杂度**：
 >
 > - 内循环访问Q，开销为Nd
 > - 外循环执行$T_c$次，$T_c = \left \lceil \frac{N}{B_c} \right \rceil = \left \lceil \frac{4dN}{M} \right \rceil$，总开销为$O(N^2d^2M^{-1})$.
 > - 由于分配给一次运算的M=100KB远大于$d^2$（一般为64或128），因此内存访问复杂度也低于传统自注意力计算的$O(N^2 + Nd)$
 
-> ⚽ Flash attention总结
+> ⚽
+>
+> Flash attention总结
 >
 > - **为什么加快了计算？**
 >     - 降低了耗时的HBM（显存）访问次数。采用Tiling技术分块从HBM加载数据到SRAM缓存进行融合计算。
@@ -5131,7 +5632,9 @@ Auto-CoT首先对具有多样性的问题进行采样，并生成推理链来构
 
 模型在回答新问题时，会参考这些演示生成的推理链，从而提高推理的准确性和逻辑性。
 
-> 🌅 **Auto-CoT 的优势**
+> 🌅
+>
+> **Auto-CoT 的优势**
 >
 > - **自动化**：Auto-CoT 通过自动构建演示，减少了手动设计示例的工作量，提高了效率。
 > - **多样性**：通过问题聚类和多样化的采样方法，Auto-CoT 能够生成多样化的推理链，提高模型的适应性和鲁棒性。
@@ -5222,7 +5725,9 @@ A:
 
 #### 2.8 混合精度训练
 
-> ✍️ **训练过程中显存占用分几部分？**
+> ✍️
+>
+> **训练过程中显存占用分几部分？**
 >
 > 参照Deepspeed论文《ZeRO: Memory Optimizations Toward Training Trillion Parameter Model》的分类方式，可以分为两大部分：
 >
@@ -5232,9 +5737,10 @@ A:
 >     - **parameters**：模型参数
 >
 > **Residual States：**非模型必须的，但在训练过程中会额外产生的内容，具体包括：
->     - **activation**：激活值，在反向传播过程中使用链式法则计算梯度时会用到。有了它算梯度会更快，但它不是必须存储的，因为可以通过重新做前向传播来算它。
->     - **temporary buffers**: 临时存储，例如把梯度发送到某块GPU上做加总聚合时产生的存储。
->     - **unusable fragment memory**：碎片化的存储空间，虽然总存储空间是够的，但是如果取不到连续的存储空间，相关的请求也会被fail掉。对这类空间浪费可以通过内存整理来解决。
+>
+> - **activation**：激活值，在反向传播过程中使用链式法则计算梯度时会用到。有了它算梯度会更快，但它不是必须存储的，因为可以通过重新做前向传播来算它。
+> - **temporary buffers**: 临时存储，例如把梯度发送到某块GPU上做加总聚合时产生的存储。
+> - **unusable fragment memory**：碎片化的存储空间，虽然总存储空间是够的，但是如果取不到连续的存储空间，相关的请求也会被fail掉。对这类空间浪费可以通过内存整理来解决。
 
 **混合精度训练的主要目的之一是为了节省显存消耗和加快训练速度。**深度学习训练中，一般采用fp32，但出于节省存储，加快训练的目的，会采用**混合精度训练**，即**fp32 + fp16/bf16。**
 
@@ -5247,18 +5753,19 @@ A:
 1. **计算准备**：存储一份fp32的parameter，momentum和variance。然后，将parameter复制一份，再将其精度减半，得到一份fp16的parameter。
 - **fp32的parameter相当于“主权重”**。在模型训练的过程中，执行`optimizer.step()`更新的就应该是这份权重。当模型训练完毕后，保存的也是它。
 - **fp16的parameter相当于“训练权重”**，也就是在训练过程中实际参与前向传播过程的权重。
-1. **前向传播**：**使用fp16的parameter做前向计算**，在这过程中会得到fp16的activation（将在反向传播过程中被使用）。计算出来的**loss用fp32精度来表示**，这样做是为了保证反向传播计算梯度的精确性。
-2. **Loss Scaling**：为了防止**梯度溢出（主要是下溢情况）**，对loss做scale处理，得到**fp32的scaled loss**。
-3. **反向传播**：**利用fp32的scaled loss做反向传播计算梯度**。因为loss做过scale了，那自然得到的也是scaled gradients，为了节省显存，scaled gradients以fp16的形式存储。
-4. **Unscaled 梯度**：梯度以fp16的形式存储，但等到需要用梯度去更新模型权重时，就必须转换成fp32的形式了。在转换的同时，需要对梯度做unscale操作，让其恢复到原始值。
-5. **Clip 梯度**：在转换为fp32的梯度后，还可以执行**clip**等操作，来进一步预防梯度爆炸/消失。
+2. **前向传播**：**使用fp16的parameter做前向计算**，在这过程中会得到fp16的activation（将在反向传播过程中被使用）。计算出来的**loss用fp32精度来表示**，这样做是为了保证反向传播计算梯度的精确性。
+3. **Loss Scaling**：为了防止**梯度溢出（主要是下溢情况）**，对loss做scale处理，得到**fp32的scaled loss**。
+4. **反向传播**：**利用fp32的scaled loss做反向传播计算梯度**。因为loss做过scale了，那自然得到的也是scaled gradients，为了节省显存，scaled gradients以fp16的形式存储。
+5. **Unscaled 梯度**：梯度以fp16的形式存储，但等到需要用梯度去更新模型权重时，就必须转换成fp32的形式了。在转换的同时，需要对梯度做unscale操作，让其恢复到原始值。
+6. **Clip 梯度**：在转换为fp32的梯度后，还可以执行**clip**等操作，来进一步预防梯度爆炸/消失。
 
 ##### 2.8.2 混合精度训练显存占用分析
 
 首先忽略activation占用的显存，用$\Phi$表示模型参数量，首先看下Deepspeed论文**《**ZeRO: Memory Optimizations Toward Training Trillion Parameter Models**》**中的计算方式。
-    |  | fp32参数 | fp32二阶动量 | fp32一阶动量 | fp16参数 | fp16梯度 |
-    |---|---|---|---|---|---|
-    | 占用空间 | 4$\phi$ | 4$\phi$ | 4$\phi$ | 2$\phi$ | 2$\phi$ |
+
+|  | fp32参数 | fp32二阶动量 | fp32一阶动量 | fp16参数 | fp16梯度 |
+|---|---|---|---|---|---|
+| 占用空间 | 4$\phi$ | 4$\phi$ | 4$\phi$ | 2$\phi$ | 2$\phi$ |
 
 其他部分都好理解，分析下fp16的梯度：
 
@@ -5266,27 +5773,37 @@ A:
 - 在第5步中将fp16的梯度转变为fp32的梯度时，如果将fp16的梯度删除，而保留fp32的梯度，那总存储为18$\Phi$.
 - 参照DeepSpeed作者后续论文**《ZeRO-Infinity: Breaking the GPU Memory Wall for Extreme Scale Deep Learning》**中的理论**，**fp16和fp32的梯度共存，那么总存储为20$\Phi$。
 
-> 📍 **不建议大家过于纠结这里是16、18还是20**
+> 📍
+>
+> **不建议大家过于纠结这里是16、18还是20**
 >
 > 因为不同的框架实现混合精度训练的代码不一样，并且与开不开梯度累加有关（开梯度累加需要存储fp32的梯度）。并且实际训练时受硬件条件、分布式训练设置等因素影响，无法精确计算到底消耗多少显存。总之无论是16、18还是20，都大于等于不采用混合精度训练的16$\Phi$（参数4+梯度4+优化器8），但混合精度训练能大幅度降低激活值参数量，而激活值即使在开了梯度检查点的情况下，还是会占一部分显存，整体上混合精度训练还是能一定程度上降低显存占用的。
 
-> 🐵 **Adam优化器**
+> 🐵
+>
+> **Adam优化器**
 >
 > 上述计算使用的**Adam优化器**，其中的momentum和variance对应了**一阶动量**和**二阶动量。**
 >
 > 1. **普通SGD（无动量）：**直接用当前梯度更新参数。容易震荡，学习率固定。
 >
-> $\theta_{t+1} = \theta_t - \alpha \cdot g_t$
+> $$
+> \theta_{t+1} = \theta_t - \alpha \cdot g_t
+> $$
 >
 > 1. **一阶动量**：用一阶动量代替直接梯度，方向更稳定
 >
-> $m_t = \beta \cdot m_{t-1} + (1 - \beta) \cdot g_t  , \quad \theta_{t+1} = \theta_t - \alpha \cdot m_t$
+> $$
+> m_t = \beta \cdot m_{t-1} + (1 - \beta) \cdot g_t  , \quad \theta_{t+1} = \theta_t - \alpha \cdot m_t
+> $$
 >
 > 1. **Adam（一阶 + 二阶动量）：**一阶动量控制方向，二阶动量控制步长
 >
-> $[  
-> m_t = \beta_1 \cdot m_{t-1} + (1 - \beta_1) \cdot g_t    
-> \quad v_t = \beta_2 \cdot v_{t-1} + (1 - \beta_2) \cdot g_t^2 , \quad \theta_{t+1} = \theta_t - \alpha \cdot \frac{m_t}{\sqrt{v_t} + \epsilon}$
+> $$
+> [
+> m_t = \beta_1 \cdot m_{t-1} + (1 - \beta_1) \cdot g_t  
+> \quad v_t = \beta_2 \cdot v_{t-1} + (1 - \beta_2) \cdot g_t^2 , \quad \theta_{t+1} = \theta_t - \alpha \cdot \frac{m_t}{\sqrt{v_t} + \epsilon}
+> $$
 
 接下来分析**激活值显存**，假设激活值采用fp16，只有dropout操作的mask矩阵每个元素只占1字节。b表示batch-size，s表示sequence-length，h表示hidden-size，a表示注意力头数，$h = a * per\_head\_hidden\_size$。每个**transformer层**包含了一个**self-attention**块和**MLP**块，并分别对应了一个**layer normalization**连接。
 
@@ -5318,7 +5835,9 @@ A:
 
 基于以上分析可知，**只有激活值是与batch-size和sequence_length有关的**。在实际训练中，**通过调整batch-size和输入长度，实际节省的也是激活值所占显存**。而开启梯度检查点，理论上可以将中间激活显存从$O(l)$降低到$O(\sqrt l)$。
 
-> ✍️ **推理时显存占用分析**
+> ✍️
+>
+> **推理时显存占用分析**
 >
 > **推理阶段没有优化器状态和梯度，也不需要保存中间激活，显存大头来自模型参数，如果采用fp16推理，那就是**$2\Phi$**。**
 >
@@ -5346,7 +5865,9 @@ fp16的绝对值范围是$5.95e^{-8} \sim 65504$，超出这个范围就会出�
 
 对于舍入误差问题，可以选择在更新模型权重时，将梯度从fp16转成fp32进行更新，对应训练流程中的第五步。
 
-> 🌅 **BF16**
+> 🌅
+>
+> **BF16**
 >
 > - 与FP32相比，BF16 只使用 2 字节存储，数值范围与 FP32 相同。这是因为 BF16 与 FP32 都采用 8 位指数，因此将小数缩减至 7 位。
 > - 与 FP16 相比，BF16 拥有更宽的表示区间，但精度略逊一筹。在实际训练中，防止数值上溢或下溢更为重要，否则训练过程将无效，因此 BF16 的应用更为普遍。
@@ -5397,7 +5918,9 @@ fp16的绝对值范围是$5.95e^{-8} \sim 65504$，超出这个范围就会出�
 
 ![](居丽叶LLM体系知识搭建/images/MHRLbadTpo22jCxz2CDcrzIKnfq.png)
 
-> 🥇 **RAG有哪些好处？**
+> 🥇
+>
+> **RAG有哪些好处？**
 >
 > - **提升生成内容的准确性**：通过引入外部知识库的信息，能够在生成文本时补充模型自身的知识缺陷，提高生成内容的准确性和可靠性。尤其是在特定领域中，RAG可能检索到相比模型训练时更丰富的知识。
 > - **即时更新知识**：RAG模型具备检索库的更新机制，可以实现知识的即时更新，无需重新训练模型，从而提供与最新信息相关的回答。
@@ -5439,7 +5962,9 @@ Retrieval和Generation阶段在线运行，对每个用户查询都会实时执�
 
 ![](居丽叶LLM体系知识搭建/images/PIGubMkESoTVGbxaXm5chq9Mnsd.png)
 
-> 🌅 **RAG的核心优化方法主要有两方面**：
+> 🌅
+>
+> **RAG的核心优化方法主要有两方面**：
 >
 > - 如何根据用户查询检索到所有最相关的知识
 > - 如何根据知识生成准确的回复，并且支持多轮交互
@@ -5542,7 +6067,9 @@ HyDE大致可以分为三个步骤：
 - 然后将生成的假设文档输入编码器生成嵌入向量表示；
 - 最后利用该向量去检索知识库中与之**语义相似**的真实文档。
 
-> 🎼 **HyDE的优点**：
+> 🎼
+>
+> **HyDE的优点**：
 >
 > 对于专业领域或长尾问句，直接基于关键词的匹配效果可能不佳，而通过生成一个“理想答案”再去搜索，能显著提高召回的相关性和丰富度。在没有大规模标注数据的情况下，HyDE 属于一种**零样本**的增强检索策略，对垂直领域（金融、医疗等）的长尾问题尤其有效。
 >
@@ -5600,12 +6127,12 @@ def hyde_retrieval(query: str, embed_model, doc_embeddings, doc_ids):
 
 Query Construction是RAG pipeline的第三个阶段，利用命名实体识别等技术将自然语言question转成合适的搜索和过滤参数，根据关键词从数据库中的中进行搜索。
 
-用户query：how to use multi-modal models in an agent, only videos under 5 minutes 
+用户query：how to use multi-modal models in an agent, only videos under 5 minutes
 
-输出： 
+输出：
 
-- content_search: multi-modal models agent 
-- title_search: multi-modal models agent 
+- content_search: multi-modal models agent
+- title_search: multi-modal models agent
 - max_length_sec: 300
 
 ![](居丽叶LLM体系知识搭建/images/FmRcbOX1noC4UaxvKDecdHPInzc.png)
@@ -5634,18 +6161,22 @@ Rag pipeline的第四阶段，将文档拆成vector形式，建立索引。
 - **Character**：按固定字符数分割。 可以设置重叠字符来保持上下文
 - **Recursive**：Langchain的默认文本分割器，它按不同的字符递归地分割文档（默认使用[“\n\n” ,"\n" ," ",""]），按照顺序逐个遍历列表中的分隔符直到块足够小为止，可以实现结构化的文档切分。 可以设置重叠字符来保持上下文。
 - **Token**：按照token数量进行分块。常用的分词器有BPE、tiktoken等
-- **Document**：使用特定的分隔符或规则进行分割，如markdown中的标题符号、Python代码中的类和函数等。 
-- **Semantic**：通过计算句子间embedding距离，把具有相似主题或内容的句子分为一块。 
+- **Document**：使用特定的分隔符或规则进行分割，如markdown中的标题符号、Python代码中的类和函数等。
+- **Semantic**：通过计算句子间embedding距离，把具有相似主题或内容的句子分为一块。
 - **Agentic**：最高级别的chunking方法，通过LLM做决策，将文本分块为独立的命题。
 
-> 🚅 **分块时应该考虑的因素：**
+> 🚅
+>
+> **分块时应该考虑的因素：**
 >
 > 1. **被索引内容的性质是什么**? 是处理较长的文档(如文章或书籍)，还是处理较短的内容(如微博或即时消息)？
 > 2. **使用的是哪种Embedding模型**？例如，sentence-transformer模型在单个句子上工作得很好，但像text- embedt-ada -002这样的模型在包含256或512个tokens的块上表现得更好。
 > 3. **对用户查询的长度和复杂性有什么期望**？用户输入的问题文本是简短而具体的还是冗长而复杂的？这也直接影响到我们选择分组内容的方式，以便在嵌入查询和嵌入文本块之间有更紧密的相关性。
 > 4. **如何使用检索结果**？ 例如，它们是否用于语义搜索、问答、摘要或其他目的？
 
-> 📚 - **一个比较好的文档解析**
+> 📚
+>
+> - **一个比较好的文档解析**
 >     - **统一文档解析与OCR改进**：构建通用的解析模块，针对不同格式分别处理：
 >         - **PDF解析：**优先使用文本层提取（如pdfplumber或PyMuPDF读取），保持读取顺序；对于扫描PDF或嵌入的图片，调用OCR引擎（如 Tesseract 或 PaddleOCR）。特别地，OCR时针对表格区域采用专门处理（例如先检测表格边框或使用表格OCR算法），确保按单元格顺序输出文本；对于代码块图片，可设置OCR保持换行和空格格式。（这里推荐Marker和MinerU）
 >         - **PPT解析：**利用幻灯片结构提取标题和文本框内容。每页幻灯片输出时保留其标题，项目符号列表作为子内容。对于包含图片的幻灯片，可对图片执行OCR（如截图后OCR）以提取其中的文字说明。
@@ -5698,11 +6229,15 @@ Rag pipeline的第四阶段，将文档拆成vector形式，建立索引。
 
 - **词频（TF）**：一个词在文档中出现的频率。一个词在文档中出现的次数越多，它就越重要：
 
-$TF(t, d) = \frac{词汇t在文档d中出现的次数}{文档d中的总词数}$
+$$
+TF(t, d) = \frac{词汇t在文档d中出现的次数}{文档d中的总词数}
+$$
 
 - **逆文档频率（IDF）**：反映了一个词在整个文档集合中有多罕见。如果一个词在很多文档中都出现，那么它的重要性就低；反之，如果它在少数文档中出现，则它的重要性就高。
 
-$IDF(t) = log(\frac{文档总数}{包含词汇t的文档数量})$
+$$
+IDF(t) = log(\frac{文档总数}{包含词汇t的文档数量})
+$$
 
 - **TF-IDF**：$TF-IDF(t,d)=TF(t,d)×IDF(t)$
 - BM25的核心思想是计算查询词项和文档词项之间的相关性得分，然后综合这些得分来评估整个文档的相关性:
@@ -5719,7 +6254,9 @@ BM25的优点在于其简单性和有效性，它能够快速计算文档与查�
 
 ![](居丽叶LLM体系知识搭建/images/TlecbXzH8oZC1txhh3fcywXSnRe.png)
 
-> 🥇 **提供一个比较好的混合检索方案**：
+> 🥇
+>
+> **提供一个比较好的混合检索方案**：
 >
 > 1. **意图识别与路由**：通过简单的规则或训练分类模型对查询进行分类。如果检测到查询是流程/制度类问题（通常包含“制度”、“流程”等关键词），则可以对BM25检索给予更高权重；如果是开放性思考类问题（包含“如何”、“怎么办”等），则侧重向量检索结果。此前置步骤保证不同查询走最合适的检索路径。
 > 2. **BM25检索**：构建文档的关键词倒排索引（可使用Elasticsearch或其他搜索库），检索出Top N候选文档片段。BM25根据查询词在文档中的频率、文档长度等打分。对于短查询，可直接采用BM25结果；对于长查询，BM25结果可作为补充。
@@ -5758,7 +6295,9 @@ BM25的优点在于其简单性和有效性，它能够快速计算文档与查�
 - **Precision@K（P@K，前K精度）**：衡量在返回的前K个结果中，有多少比例是相关的。例如Precision@5 = 前5个结果中相关结果数量/5。它直接反映用户看前K条结果能找到多少正确答案，**不考虑顺序**（非rank-aware指标）。常和**Recall@K**（在所有相关文档中前K找到多少）一起使用。
 - **Recall@K（召回率）**：相关文档中有多大比例在前K结果里。由于问答系统往往每问只需一两个相关片段即可回答，有时Precision和MRR更受关注，但在多文档综合场景下Recall也重要。
 
-> 🍰 **总结以上的方法：**
+> 🍰
+>
+> **总结以上的方法：**
 >
 > - **混合检索**：结合**BM25**和**向量相似度**，弥补单一检索缺陷，确保不同类型查询都能召回相关文档 。
 > - **Embedding模型微调**：在下游语料上微调Embedding，使模型更懂领域语言，提高语义匹配效果。
@@ -5806,17 +6345,17 @@ prompt = ChatPromptTemplate.from_template(template)
 
 1. **内容缺失**：知识库中缺失上下文，rag只能提供不精确、甚至是错误的答案。
 - 解决方案：可以通过**数据清洗**和**prompt优化**（比如在prompt中加入“如果你不确定答案是什么，就告诉我你不知道”的提示，防止模型胡说八道）缓解。
-1. **错过排名靠前的文档**：由于检索时缺乏上下文，导致检索到的关键的文档排名靠后，没有返回给用户。
+2. **错过排名靠前的文档**：由于检索时缺乏上下文，导致检索到的关键的文档排名靠后，没有返回给用户。
 - 解决方案：可以通过**chunk_size 和 similarity_top_k**平衡计算效率和质量，以及采用**Rerank算法**。
-1. **不在上下文中**：无法将检索到的文档全部放在输入模型的上下文中，尤其是检索到大量文档时。
+3. **不在上下文中**：无法将检索到的文档全部放在输入模型的上下文中，尤其是检索到大量文档时。
 - 解决方案：使用**长上下文**的方法，例如需要对文档进行合并、插值等。
-1. **未提取**：LLM倾向于检索近似值而不是精确值，导致包含很多不相关的甚至互相矛盾的信息，可能因为这些噪音损害响应质量。
+4. **未提取**：LLM倾向于检索近似值而不是精确值，导致包含很多不相关的甚至互相矛盾的信息，可能因为这些噪音损害响应质量。
 - 解决方案：**数据清洗，压缩prompt**，避免**中部丢失问题**（模型对输入上下文开头和结尾的信息理解能力更强，应避免将关键的信息放在中部）。
-1. **格式错误**： LLM 忽视了提取特定格式的信息（如表格或列表）的指令。
+5. **格式错误**： LLM 忽视了提取特定格式的信息（如表格或列表）的指令。
 - 解决方案：prompt中给出**示例**，简化清晰prompt，对**输出进行解析**。
-1. **特异度不正确**：输出的粒度与输入不一致，比如用户问题很具体，模型回答很宏观；或者用户问题包含详细的上下文，模型生成简短的回复。
+6. **特异度不正确**：输出的粒度与输入不一致，比如用户问题很具体，模型回答很宏观；或者用户问题包含详细的上下文，模型生成简短的回复。
 - 解决方案：改进检索策略，如从**小到大检索、句子窗口检索、递归检索；**在prompt中引导模型生成特定粒度的内同。
-1. **不完整**：输出只回答了输入的部分问题。
+7. **不完整**：输出只回答了输入的部分问题。
 - 解决方案：之前RAG的文章中提到的一些方法，如**routing**到最相关的文档库，用户查询重写和分解成子问题。
 
 ##### 3.1.9 RAG 效果评估
@@ -6044,7 +6583,9 @@ async def answer_cached(question: str):
 
 RAG从大规模语料库中检索相关信息，将长文本压缩成简洁、关键的输入形式，以在不直接修改模型的情况下扩展上下文。为了提高检索效率，RAG在建库的时候需要将长文本拆成小块，为每个块生成embedding，通过比较用户查询和文档之间的embedding的相似度来检索最相关的块并作为输入。
 
-> 🏝️ **分块带来了严重的问题：**
+> 🏝️
+>
+> **分块带来了严重的问题：**
 >
 > - **破坏上下文连贯性**：即长文本被切割成不连续的部分（为了尽可能保证连续性，每一块可以有一些重复的），会破坏上下文的完整性。当模型需要理解段落中的复杂关系或连续语义时，分块会使得这些语义信息被分散，导致嵌入表示的准确性降低。
 > - **信息不完整**：检索系统容易选择显著性较高的块，然而其他重要但不显著的块可能会被忽略。这样一来，模型可能无法获取完整的背景信息，影响检索的完整性。
@@ -6059,7 +6600,9 @@ RAG从大规模语料库中检索相关信息，将长文本压缩成简洁、�
 
 Landmark Embedding提出一种不需要分块的检索方法$\gamma'(\cdot)$，直接在一个完整的上下文内生成对查询最有帮助的信息表示：
 
-$C*: \{c_1,...,c_k\} <- \gamma'(q, ctx)$
+$$
+C*: \{c_1,...,c_k\} <- \gamma'(q, ctx)
+$$
 
 $c_i$表示细粒度单元（例如句子）。拥有了完整的上下文信息，每个细粒度单元的语义信息都能被完整保留，这能保障对用户query进行精确的检索。
 
@@ -6098,7 +6641,9 @@ LMK通过对比学习得到，对用户query有用的信息往往聚集在连续
 
 上一章介绍Indexing中提到，要将这些embedding后的向量存储在专门的数据库中，构建索引结构（如倒排索引或向量索引），以便快速检索。这就需要用到向量数据库了。向量数据库是一种专门用于存储、索引、查询和检索高维向量数据的数据库系统。它特别适合处理非结构化数据，如图像、音频和文本，能够实现传统数据库难以完成的高级分析和相似性搜索，具备高效存储和处理高维向量数据的能力。
 
-> 🎨 **如何选择向量数据库？**
+> 🎨
+>
+> **如何选择向量数据库？**
 >
 > 常见的向量数据库包含**milvus、Elasticsearch、Faiss、Chroma**等，选择时可以考虑的因素有：
 >
@@ -6125,7 +6670,9 @@ ANNS的核心思想是在可接受的精度范围内，牺牲部分准确性，�
 
 这是最简单的索引方式，进行**暴力搜索（brute-force）**，可以保证精确度，但效率低，尤其在数据量大时。
 
-> 🏖️ 适合场景：在小型、百万级数据集上寻求完全精确的搜索结果。
+> 🏖️
+>
+> 适合场景：在小型、百万级数据集上寻求完全精确的搜索结果。
 
 ##### 3.3.3 IVF_FLAT
 
@@ -6145,7 +6692,9 @@ ANNS的核心思想是在可接受的精度范围内，牺牲部分准确性，�
         - 减少 `nprobe` 可以缩小搜索范围，降低计算时间，查询速度更快，但可能会牺牲一些精度。
 4. **降低搜索成本**：由于IVF_FLAT通过划分子空间来限制搜索范围，它能够显著减少传统线性搜索所带来的高维数据中的计算开销，从而提高查询效率。与传统的暴力搜索方法相比，IVF_FLAT的时间复杂度大大降低，尤其适合在大规模数据集上使用。
 
-> 🍰 ###### 适用场景：
+> 🍰
+>
+> ###### 适用场景：
 >
 > IVF_FLAT适用于需要平衡精度和查询速度的场景，尤其是在大规模、高维数据集上，可以有效减少查询时间。它适合那些要求较高精度但能容忍一定查询延迟的应用。
 
@@ -6207,7 +6756,7 @@ HNSW的图结构结合了两种技术：**跳表**（Skip List）和**可导航�
 
 - **邻接列表**：每个节点连接若干相似节点，称为邻接节点。每个节点都保存一个邻接列表。
 - **遍历过程**：从随机选定的入口节点开始，通过图的边逐步找到最接近查询向量的节点。
-1. HNSW的工作原理
+2. HNSW的工作原理
 
 HNSW将跳表的层次化结构与NSW的小世界理论结合起来，形成了一个高效的近似最近邻搜索算法。其工作分为两个主要阶段：索引构建和查询过程。
 
@@ -6246,7 +6795,9 @@ Rerank作为RAG模型中在retrieve和generation之间的一个重要环节，�
 
 ![](居丽叶LLM体系知识搭建/images/HrxQbT1EYoxqUCxlocPcZyoWncb.png)
 
-> ⛱️ **rerank的作用：**
+> ⛱️
+>
+> **rerank的作用：**
 >
 > - **提升检索结果相关性：**RAG粗排返回的文档质量和相关性可能较差，rerank采用更精细的语义匹配模型，过滤掉与用户问题相关性较低的文档，以及噪声和不相关的信息。
 > - **复杂语义理解：**rerank能帮助大模型更好地理解和利用检索到的信息，强化相关文档的影响，从而提升生成结果的相关性和准确性。
@@ -6330,9 +6881,10 @@ $S_Y和S_N$表示“真”或“假”的log-likelihood分数
 LLM的输入是用户query和一些检索到的document，要求LLM对其进行排序。由于LLM的上下文长度有限，这里也会采用一些Longcontext的方法（例如**滑动窗口、分批次排序**）。能够同时考虑多个文档的相关性，生成更全局的重排结果，使用GPT-4做LLM的方法取得了比较好的性能。
 
 **缺点：**
-    - 只有在使用很大的模型（例如GPT4）才能取得良好的性能
-    - 对document在prompt中的**顺序敏感**，当document随机时，其效果甚至差于BM25。
-    - 滑动窗口大小限制了一次能排序的文档数量，相邻窗口之间的依赖限制了并行推理
+
+- 只有在使用很大的模型（例如GPT4）才能取得良好的性能
+- 对document在prompt中的**顺序敏感**，当document随机时，其效果甚至差于BM25。
+- 滑动窗口大小限制了一次能排序的文档数量，相邻窗口之间的依赖限制了并行推理
 
 - 举例：**Zero-Shot Listwise Document Reranking with a Large Language Model**
 
@@ -6365,7 +6917,9 @@ pairwise方法利用了大模型天生擅长做对比的特点，输入为用户
 首先分辨一下rerank模型和embedding模型的异同：
 
 - embedding模型（例如**bi-encoder**）的目的是将文本转化成向量表示，以便直接用于计算用户问题和文档之间的相似度。使用bi-encoder进行向量搜索时，**在创建document文档时**就完成了所有繁重的transformer计算。当用户发起查询时，**只需要运行一个Transformer计算生成查询向量**，在计算用户查询和document之间的相似度，效率极高。
-    > 🎹 **embedding模型存在的问题**
+    > 🎹
+    >
+    > **embedding模型存在的问题**
     >
     > - embedding模型只是将文本信息压缩为固定长度的向量，可能会导致**语义信息丢失**、**理解多义词困难**、**长文本语义平均化**等问题。
     > - 因为**在用户提出问题之前就已经为文档创建了嵌入，无法理解用户问题的上下文信息。**
@@ -6377,7 +6931,9 @@ pairwise方法利用了大模型天生擅长做对比的特点，输入为用户
 
 ![](居丽叶LLM体系知识搭建/images/ZT9hbqz4AoTGdDxBrWdcoDIunYd.png)
 
-> 🎹 为什么Rerank精度更高？
+> 🎹
+>
+> 为什么Rerank精度更高？
 >
 > - reranker不进行预计算，而是将用户查询和一个文档一起输入到transformer中，能更好的捕捉两者之间语义和上下文信息。
 > - embedding模型将用户查询和文档压缩到低维向量中，可能丢失细粒度语义。
@@ -6588,7 +7144,9 @@ embedding模型需要保持**batch-size足够大**才能充分学习文本之间
 - 处理长序列数据时，将batch进一步**细分成sub-batch**，使用**梯度检查点**（Gradient Checkpointing）以降低显存，逐个sub-batch编码后合并结果。此外该方法能有效扩大batch-size，长文本（如 8192 token）批次大小提升 20 倍以上
 - **跨 GPU 广播编码结果**，扩大负样本规模。
 
-> 🥛 总结**BGE-M3**的特点：
+> 🥛
+>
+> 总结**BGE-M3**的特点：
 >
 > 1. **多语言统一表示**：通过大规模跨语言数据构建，支持 100+ 语言的语义对齐。
 > 2. **多功能检索集成**：首次在单一模型中实现密集、稀疏、多向量检索的统一。
@@ -6605,7 +7163,9 @@ jina-Reranker-v2支持多语言，表格搜索，代码检索和函数调用，�
 - 该模型能够处理多达 524,288 个token的序列，同时保持出色的速度。为了使模型能够处理超过 1024 个token的长文本，该模型使用**滑动窗口方法**将输入文本分块为较小的部分，并分别重新排列每个块。
 - 使用 **flash attention** 进行快速推理，吞吐量比其前代产品高出 6 倍
 
-> 🦄  **Jina Reranker v2训练pipeline**
+> 🦄
+>
+>  **Jina Reranker v2训练pipeline**
 >
 > 1. **英文数据准备：**我们仅使用英语数据训练骨干模型，准备了第一个版本，包括配对数据（对比训练）或三元组（查询、正确响应、错误响应）、查询-函数模式配对和查询-表模式配对。
 > 2. **添加跨语言数据：**在下一阶段，我们添加了跨语言配对和三元组数据集，专门改进骨干模型在检索任务上的多语言能力。
@@ -6627,7 +7187,9 @@ jina-Reranker-v2是在Jina Embeddings v2的基础上采用Cross Encoder，但没
 - **Gated Linear Units（GLU）：**对于small模型和base模型，使用GEGLU（GELU激活函数）；对于large模型，使用ReGLU（ReLU激活函数），以提高训练稳定性。
 - **Layer Normalization（LN）**：采用post-norm的LN。
 
-> 🌟 **预训练过程要点**：
+> 🌟
+>
+> **预训练过程要点**：
 >
 > - 采用**MLM**任务训练，随机掩盖输入词元的30%，使用全词掩盖策略，并让模型推断这些被掩盖的词元。被掩盖的词元中，80%被替换为[MASK]，10%被替换为随机词元，剩余10%保持不变。
 > - 预训练阶段序列长度限制在512以内，每个批次的全局批量大小为4096，由于序列长度不同，计算损失时每个批次包含的被掩盖词元数量也不同。
@@ -6647,13 +7209,17 @@ jina-Reranker-v2是在Jina Embeddings v2的基础上采用Cross Encoder，但没
 
 ![](居丽叶LLM体系知识搭建/images/PaW6b40GuoSsv4xEbDGcj4amnbe.png)
 
-> 📍 对于embedding模型的训练来说，InfoNCE损失依赖批次内所有样本的对比，一般批次越大，对比信息越丰富，模型性能越好。但大的batch-size会导致显存资源吃紧，Jina Reranker v2采用了以下显存优化技术：
+> 📍
+>
+> 对于embedding模型的训练来说，InfoNCE损失依赖批次内所有样本的对比，一般批次越大，对比信息越丰富，模型性能越好。但大的batch-size会导致显存资源吃紧，Jina Reranker v2采用了以下显存优化技术：
 >
 > - **FP16混合精度训练**
 > - **deepspeed**
 > - **梯度检查点**
 
-> 🥇 Jina Reranker v2的优点
+> 🥇
+>
+> Jina Reranker v2的优点
 >
 > - **多语言支持**：覆盖 100+ 种语言，打造真正无界的全球化搜索体验。
 > - **结构化数据处理**：支持表格搜索和函数调用，为 Agentic RAG 强势助力。
@@ -6672,7 +7238,9 @@ jina-Reranker-v2是在Jina Embeddings v2的基础上采用Cross Encoder，但没
 
 ###### 文本编码器
 
-> 🏖️ 对BERT模型采用了如下的改进：
+> 🏖️
+>
+> 对BERT模型采用了如下的改进：
 >
 > - 用**RoPE**代替绝对位置编码
 > - 用**GLU**代替FFN
@@ -6702,7 +7270,9 @@ jina-Reranker-v2是在Jina Embeddings v2的基础上采用Cross Encoder，但没
 - 输入格式：拼接查询与文档为`[CLS] query [SEP] document`。
 - 输出：通过[CLS]标记的隐藏状态预测相关性分数。
 
-> 🌰 总结下ReRank模型的一些技术特点：
+> 🌰
+>
+> 总结下ReRank模型的一些技术特点：
 >
 > - 使用**Cross-Encoder**，将用户查询和文档拼接起来，交给Transformer编码器，能更好的建模两者之间的语义关系。
 > - 一般都采用**多阶段训练**的方式，逐步扩充上下文长度。
@@ -6766,16 +7336,24 @@ Reranker 模型采用交叉编码器架构（Cross-encoder），虽然计算成�
 
 - **检索任务：**第一阶段采用InfoNCE损失：
 
- $L_{\text{retrieval}} = - \frac{1}{N} \sum_{i}^{N} \log \frac{e^{s(q_i, d_i^+)/\tau}}{Z_i}$ 
+ 
+
+$$
+L_{\text{retrieval}} = - \frac{1}{N} \sum_{i}^{N} \log \frac{e^{s(q_i, d_i^+)/\tau}}{Z_i}
+$$
 
 其中$s()$表示余弦相似度， $Z_i$ 聚合了正样本$d_i^+$、难负样本$\{d_{i,k}^-\}_{k=1}^K$、其他批次$\{q_j\}_{j \neq i}$、其他批次中文档$\{d_j\}_{j \neq i}$与$d_i^+$对比、其他批次中文档$\{d_j\}_{j \neq i}$与$d_i^+$对比：
 
-$Z_i = e^{(s(q_i, d_i^+) / \tau)} + \sum_{k}^{K} m_{ik} e^{(s(q_i, d_{i,k}^-) / \tau)} + \sum_{j \neq i} m_{ij} e^{(s(q_i, q_j) / \tau)} + \sum_{j \neq i} m_{ij} e^{(s(d_i^+, d_j) / \tau)} + \sum_{j \neq i} m_{ij} e^{(s(q_i, d_j) / \tau)}$
+$$
+Z_i = e^{(s(q_i, d_i^+) / \tau)} + \sum_{k}^{K} m_{ik} e^{(s(q_i, d_{i,k}^-) / \tau)} + \sum_{j \neq i} m_{ij} e^{(s(q_i, q_j) / \tau)} + \sum_{j \neq i} m_{ij} e^{(s(d_i^+, d_j) / \tau)} + \sum_{j \neq i} m_{ij} e^{(s(q_i, d_j) / \tau)}
+$$
 
-$m_{ij} = \begin{cases}   
-0, & \text{if } s_{ij} > s(q_i, d_i^+) + 0.1 \text{ or } d_j = d_i^+, \\   
-1, & \text{otherwise},   
-\end{cases}$
+$$
+m_{ij} = \begin{cases} 
+0, & \text{if } s_{ij} > s(q_i, d_i^+) + 0.1 \text{ or } d_j = d_i^+, \\ 
+1, & \text{otherwise}, 
+\end{cases}
+$$
 
 $s_{ij}$表示相似度得分
 
@@ -6784,7 +7362,9 @@ $s_{ij}$表示相似度得分
 - **分类数据：**也视为对比学习，待分类样本视为查询，其类别的标签视为文档$d^+$,负样本视为错误标签。
 - **语义文本相似度**：数据是对称的（没有query和document区别），采用Cosent损失
 
-$L_{\text{sts}} = \log \left( 1 + \sum_{\hat{s}(q_i, d_j) > \hat{s}(q_m, d_n)} \exp \left( \frac{\cos(q_m, d_n) - \cos(q_i, d_j)}{\tau} \right) \right)$
+$$
+L_{\text{sts}} = \log \left( 1 + \sum_{\hat{s}(q_i, d_j) > \hat{s}(q_m, d_n)} \exp \left( \frac{\cos(q_m, d_n) - \cos(q_i, d_j)}{\tau} \right) \right)
+$$
 
 $\hat{s}(q_i, d_j)$表示这对数据的ground-truth分数。
 
@@ -6792,7 +7372,9 @@ $\hat{s}(q_i, d_j)$表示这对数据的ground-truth分数。
 
 基于s0模型数据挖掘出高质量数据，在各类任务上进行对比学习微调，每类任务采用定制化的对比目标，产出 s1 版本 Embedding 模型。损失函数与上一致。并同时训练出 Reranker 模型，训练目标为二分类交叉熵损失：其中标签 $l$ 为“yes”或“no”
 
-$L_{\text{reranking}} = - \log p(l|I, q, d)$ 
+$$
+L_{\text{reranking}} = - \log p(l|I, q, d)
+$$
 
 最终相关性分数通过 logit 差值计算：$s = \text{sigmoid}(\text{logit}(\text{yes}) - \text{logit}(\text{no}))$
 
@@ -6800,7 +7382,9 @@ $L_{\text{reranking}} = - \log p(l|I, q, d)$
 
 利用 Reranker 的精细判别能力对 Embedding 模型进行知识蒸馏（产出 s2 版本 Embedding 模型）。最后通过模型合并技术平衡各项任务表现，得到最终的 s3 版本Embedding 模型。蒸馏损失为交叉熵，1个正样本，k个负样本：
 
-$\mathcal{L}_{distill} = -\sum_{i=1}^{k+1} P_{reranker}\left(d_{i} | q\right) \log P_{embedding}\left(d_{i} | q\right)$
+$$
+\mathcal{L}_{distill} = -\sum_{i=1}^{k+1} P_{reranker}\left(d_{i} | q\right) \log P_{embedding}\left(d_{i} | q\right)
+$$
 
 ###### 工程落地实战：MRL、QAT 与架构权衡
 
@@ -6872,13 +7456,17 @@ Long context，也就是长上下文，通过增加模型直接处理的文本�
 
 举个例子：给定一个10进制的数字m，求其$\beta$进制的从右往左数的第n位数字，采用如下公式：
 
-$\lfloor(\frac{m}{\beta^{n-1}} )  \rfloor \space mod \space  \beta$
+$$
+\lfloor(\frac{m}{\beta^{n-1}} )  \rfloor \space mod \space  \beta
+$$
 
 又知道RoPE的定义中有以下cos序列（sin也同理）：$[cos \space m\theta_0, cos \space m\theta_1,..., cos \space m\theta_{d/2-1}]$
 
 ![](居丽叶LLM体系知识搭建/images/DfIUb0W7joie6dxlidVcGyaenhh.png)
 
-$cos(\frac{m}{10000^{2i/d}}) = cos(\frac{m}{10000^{(2/d)*i}}) = cos(\frac{m}{\beta^i}), \beta = 10000^{(2/d)}$
+$$
+cos(\frac{m}{10000^{2i/d}}) = cos(\frac{m}{10000^{(2/d)*i}}) = cos(\frac{m}{\beta^i}), \beta = 10000^{(2/d)}
+$$
 
 cos序列就可以表示为：$[cos \space \frac{m}{\beta^0}, cos \space \frac{m}{\beta^1},..., cos \space \frac{m}{\beta^{d/2-1}}]$，将其翻转过来：$[cos \space \frac{m}{\beta^{d/2-1}},..., cos \space \frac{m}{\beta^1}, cos \space \frac{m}{\beta^0}]$。
 
@@ -6900,7 +7488,9 @@ PI通过直接将位置索引缩小，这对于RoPE等位置编码更合适，�
 
 ![](居丽叶LLM体系知识搭建/images/T4JmbEqlloQ8vmxHS7mcK97znvb.png)
 
-> 🎉 **位置插值法存在的问题**
+> 🎉
+>
+> **位置插值法存在的问题**
 >
 > 与RoPE一起使用时，RoPE中的每个维度$sin \space m\theta_j, \theta_j = 10000^{-\frac{2j}{d}}, j \in [0,1,...,d/2-1]$，其周期为$\frac{2\pi}{m}10000^{\frac{2j}{d}}$，对于维度较低的j，其对应的周期比较小，频率较高。对于这种维度，插值后会变得很拥挤（本来一个周期包含10个值，但是内插之后能包含20个值）。
 
@@ -6912,7 +7502,9 @@ PI通过直接将位置索引缩小，这对于RoPE等位置编码更合适，�
 
 而对于最高频项$cos \space \frac{m}{\beta}$，引入$\lambda$变成$\frac{m}{\beta \lambda}$，但由于d一般很大，λ很接近于1，所以还是接近于$\frac{m}{\beta}$，基本等价于外推。
 
-> ⚽ **NTK插值存在的问题**
+> ⚽
+>
+> **NTK插值存在的问题**
 >
 > 1. 由于它不仅仅是一种插值方案，一些维度被轻微外推到“超出边界”的值，因此使用“NTK-aware”插值进行微调的结果不如PI。
 > 2. 此外，由于存在“越界”值，理论尺度因子 k 并不能准确描述真实的上下文扩展尺度。在实践中，对于给定的上下文长度扩展，尺度值 k 必须设置得高于预期尺度
@@ -6921,11 +7513,15 @@ PI通过直接将位置索引缩小，这对于RoPE等位置编码更合适，�
 
 **波长**：维度d上嵌入的RoPE，执行完整旋转($2\pi$)所需的token长度：
 
-$\lambda_d = \frac{2\pi}{\theta_d} = 2\pi b^{\frac{2d}{D}}, \theta_d = 10000^{-\frac{2d}{D}}$
+$$
+\lambda_d = \frac{2\pi}{\theta_d} = 2\pi b^{\frac{2d}{D}}, \theta_d = 10000^{-\frac{2d}{D}}
+$$
 
 - [ ] **“盲”插值方法**不关心不同维度对应的不同波长，比如像PI和“NTK-aware”插值，对所有RoPE维度的没有做针对性的处理(因为它们对网络有相同的影响)，而其他方法(如**YaRN**)，定义为**“有针对性的”插值方法**。
 
-> 🎼 对RoPE有以下观察：
+> 🎼
+>
+> 对RoPE有以下观察：
 >
 > - 给定上下文大小L，有一些维数d的波长长于预训练期间看到的最大上下文长度($\lambda > L$)，这表明一些维数的嵌入可能在旋转域中不均匀分布。当波长很长时，这些维度上的嵌入几乎不变，可以认为它们保持了绝对位置信息，即每个位置的嵌入不因相对位置变化而变化；当波长较短时，嵌入会在较短的距离内完成多次旋转，这使得这些维度上的嵌入反映的是相对位置信息，即它们可以捕捉到标记之间的相对距离变化。
 > - 采用RoPE进行拉伸时，所有的token变得更彼此接近，因为$a \cdot b = ||a|| \space ||b|| cos(\theta)$，$\theta$减小会导致两个向量的内积变大，变得更加接近。从而损害模型处理邻近token位置时的性能。
@@ -6942,12 +7538,14 @@ $\lambda_d = \frac{2\pi}{\theta_d} = 2\pi b^{\frac{2d}{D}}, \theta_d = 10000^{-\
 
 定义$γ(r)$应该是 “是否插值” 的标识（比如$γ=1$代表 “插值”，$γ=0$代表 “不插值”）:
 
-$\gamma(r) =  
-\begin{cases}  
-1, & \text{if } r < \alpha \\  
-0, & \text{if } r > \beta \\  
-\frac{r - \alpha}{\beta - \alpha}, & \text{otherwise}  
-\end{cases}$
+$$
+\gamma(r) =
+\begin{cases}
+1, & \text{if } r < \alpha \\
+0, & \text{if } r > \beta \\
+\frac{r - \alpha}{\beta - \alpha}, & \text{otherwise}
+\end{cases}
+$$
 
 ![表格](居丽叶LLM体系知识搭建/images/sheet_W9kcs6GqahaiPStZRm1cBNgAnAb_0x7GpO.png)
 
@@ -6994,7 +7592,9 @@ PCW需要的计算复杂度正比于并行上下文数量B，但注意力矩阵�
 
 ![](居丽叶LLM体系知识搭建/images/WkWGb2nZWozMX6xs1zOcew3OnGe.png)
 
-> 🚅 **PCW的缺点：**
+> 🚅
+>
+> **PCW的缺点：**
 >
 > 1. 但是在长文本QA问题上表现比较一般，当上下文存在多段文本且无明显关系时，正确答案中会混杂很多无关的文本变短。
 > 2. PCW是在输入层就开始对超长上文进行Attention，因为不同上文的位置编码相同，一定程度上会让解码注意力变得非常分散，导致注意力的熵值变高，解码的不确定性变大，更容易出现乱码。
@@ -7044,7 +7644,9 @@ NBCE中不同Context的预测结果通过方法P聚合（或者说投票）在�
 
 ![](居丽叶LLM体系知识搭建/images/N16bb7mKFoIS9LxjpFXc6aTSnMg.png)
 
-> 🍰 NBCE**存在的问题：**
+> 🍰
+>
+> NBCE**存在的问题：**
 >
 > 与PCW类似，当上下文增加时，输出的结果不准确，具体表现为主题相关，但是作为问题的答案来说是错误的。并且由于无法识别Context输入顺序，在故事续写等场景表现欠佳。
 >
@@ -7065,7 +7667,9 @@ StreamingLLM将注意力汇聚的前4个初始token和滑动窗口的KV结合在
 
 ![](居丽叶LLM体系知识搭建/images/PY9HbaQxWoa4BsxZsCZcHz2wnJe.png)
 
-> 🚅 StreamingLLM在确定相对距离和添加位置信息时，**关注缓存中的位置而非原文**，以保障模型的效率。 例如，如果当前高速缓存具有token[0，1，2，3，6，7，8]并且正在解码第9个token的过程中，则分配的位置是[0,1,2,3,4,5,6,7]。而不是原始文本中的位置，即不是[0,1,2,3,6,7,8,9]。
+> 🚅
+>
+> StreamingLLM在确定相对距离和添加位置信息时，**关注缓存中的位置而非原文**，以保障模型的效率。 例如，如果当前高速缓存具有token[0，1，2，3，6，7，8]并且正在解码第9个token的过程中，则分配的位置是[0,1,2,3,4,5,6,7]。而不是原始文本中的位置，即不是[0,1,2,3,6,7,8,9]。
 
 为了避免模型过度关注初始的token：
 
@@ -7096,9 +7700,13 @@ prompt压缩主要可以分为以下几类：
 
 Selective Context 策略采用小型语言模型（SLM），来计算给定上下文中各个词汇单元（比如句子、短语或词语）的**自信息值（（self-information）进一步）**。然后，基于这些自信息值评估各单元的信息含量。通过仅保留自信息值较高的内容，Selective Context 为大语言模型（LLM）提供了更为简洁、高效的 context representation 。
 
-> 📍 **自信息量**：量化事件传达的信息量，设随机变量X的概率密度函数为p(X)，对于$X=x$这件事的信息量为：
+> 📍
 >
-> $I(x)=−log_2p(x)$
+> **自信息量**：量化事件传达的信息量，设随机变量X的概率密度函数为p(X)，对于$X=x$这件事的信息量为：
+>
+> $$
+> I(x)=−log_2p(x)
+> $$
 >
 > 越罕见的事件，由于包含了更多新颖的信息，传达的信息越多。
 
@@ -7108,7 +7716,9 @@ Selective Context 策略采用小型语言模型（SLM），来计算给定上�
 - 接着将token合并成句子/短语，合并后句子/短语的自信息量为每个token的和。
 - 之后将句子/短语按照信息量降序分布，只保留包含前p%信息量的句子/短语，从而达到优化的目的。
 
-> ✍️ **Selective Context存在的问题**：
+> ✍️
+>
+> **Selective Context存在的问题**：
 >
 > - 只根据自信息量选择关键信息，可能无法完全捕捉关键信息，并且忽略了压缩后上下文内容之间的连接性，可能对模型预测造成影响。
 > - 没有考虑大模型与压缩prompt的小模型的相关性。
@@ -7131,7 +7741,9 @@ LLMLingua 采用**预算控制器**为原始提示的各个组成部分（例如
 - **用户查询和系统指令**要保持较高的信息密度，用较低的压缩比率，确保核心信息的完整留存
 - **演示样例**部分可实施更高比率的压缩，剔除不必要的冗余信息。
 
-> 🥖 之所以要采用粗粒度、演示级压缩用于demonstration的压缩，是因为一方面过多冗余的demonstration会占据instruction和query的位置，后者对生成答案的影响更大。另一方面token级别的压缩可能导致prompt过于琐碎。
+> 🥖
+>
+> 之所以要采用粗粒度、演示级压缩用于demonstration的压缩，是因为一方面过多冗余的demonstration会占据instruction和query的位置，后者对生成答案的影响更大。另一方面token级别的压缩可能导致prompt过于琐碎。
 
 **训练流程**如下：
 
@@ -7144,7 +7756,9 @@ LLMLingua 采用**预算控制器**为原始提示的各个组成部分（例如
 
 ###### **ITPC迭代令牌级提示压缩**
 
-> 🎉 - **存在问题**: 上一阶段按照困惑度（perplexity）进行压缩，依赖于token之间的**独立性假设**（也就是n-gram，假设token之间是彼此独立的，其出现概率只跟其前面的n-1个token有关，而跟其他token无关）。这一假设忽略了token之间复杂的关系，这种关系对于理解上下文和保持语义的完整性至关重要。
+> 🎉
+>
+> - **存在问题**: 上一阶段按照困惑度（perplexity）进行压缩，依赖于token之间的**独立性假设**（也就是n-gram，假设token之间是彼此独立的，其出现概率只跟其前面的n-1个token有关，而跟其他token无关）。这一假设忽略了token之间复杂的关系，这种关系对于理解上下文和保持语义的完整性至关重要。
 > - **目的**：对prompt进行进一步的细颗粒度的压缩，得到最终的输出prompt。
 > - **ITPC算法**：在压缩期间更精确地评估每个标记的重要性，通过迭代处理提示中的每个片段并考虑当前上下文中每个标记的条件概率来实现这一点。这种方法有助于更好地保留令牌之间的依赖关系。
 
@@ -7227,7 +7841,9 @@ LLMLingua对所有document使用同样的压缩比。LongLLMLingua 使用粗粒�
 
 ###### LLMLingua-2
 
-> 📚 **基于困惑度的方法存在以下问题**：
+> 📚
+>
+> **基于困惑度的方法存在以下问题**：
 >
 > - (1) 用来计算困惑度的小型语言模型与提示词压缩的实际目标不一致，也就是小模型能力不足。
 > - (2) 这一方法仅依赖于单向的上下文信息，而这或许无法覆盖提示词压缩所需的所有必要信息。
@@ -7278,7 +7894,9 @@ RECOMP[10]是一个建模在RAG场景中的模型压缩方案。其主要核心�
 
 RAG为llm提供了从某些数据源检索到的信息，作为其生成答案的依据。也就是将根据上下文相关信息进行检索，基于检索到的知识指导llm进行生成。
 
-> 📍 RAG能一定程度上缓解大模型面临的问题：
+> 📍
+>
+> RAG能一定程度上缓解大模型面临的问题：
 >
 > - **幻觉**：通过检索相关的文档，减少生成内容幻觉，提供更多的可解释性。
 > - **知识实时更新**：RAG模型的非参数化记忆可以轻松更新，以反映当下世界的知识变化，无需对模型重新训练。
@@ -7301,13 +7919,15 @@ GraphRAG 基本步骤为：
 
 ![](居丽叶LLM体系知识搭建/images/FAHjbR0lNoq8YnxvK9XckdH3nzh.png)
 
-> 🎨 **GraphRAG总结**
+> 🎨
 >
-> - **基于图的检索**：传统的 RAG 方法使用向量相似性进行检索，而 GraphRAG 引入了**知识图谱**来捕捉实体、关系及其他重要元数据，从而更有效地进行推理。 
-> - **层次聚类**：GraphRAG 使用 **Leiden** 等技术进行层次聚类，将实体及其关系进行组织，提供更丰富的上下文信息来处理复杂的查询。 
-> - **多模式查询**：支持多种查询模式： 
->     - **全局搜索**：通过利用社区摘要来进行全局性推理。 
->     - **局部搜索**：通过扩展相关实体的邻居和关联概念来进行具体实体的推理。 
+> **GraphRAG总结**
+>
+> - **基于图的检索**：传统的 RAG 方法使用向量相似性进行检索，而 GraphRAG 引入了**知识图谱**来捕捉实体、关系及其他重要元数据，从而更有效地进行推理。
+> - **层次聚类**：GraphRAG 使用 **Leiden** 等技术进行层次聚类，将实体及其关系进行组织，提供更丰富的上下文信息来处理复杂的查询。
+> - **多模式查询**：支持多种查询模式：
+>     - **全局搜索**：通过利用社区摘要来进行全局性推理。
+>     - **局部搜索**：通过扩展相关实体的邻居和关联概念来进行具体实体的推理。
 >     - **DRIFT 搜索**：结合局部搜索和社区信息，提供更准确和相关的答案。
 > - **Prompt 调优**：GraphRAG通过prompt调优能显著提升性能，通过描述图拓扑结构、限制检索范围、注入结构化信息等方式，能实现精准的图语义对齐、检索效率提高和更高质量的回复。
 
@@ -7322,7 +7942,9 @@ GraphRAG 基本步骤为：
 
 1. **输入文档**：GraphRAG 将一组文本文档的chunking作为输入，这些输入一般存储在**图形数据库**中。
 
-> ⚽ **常见的图数据库**：
+> ⚽
+>
+> **常见的图数据库**：
 >
 > - **Neo4j**：最流行的属性图数据库，具有“无索引邻接”特性，每个顶点维护着指向其邻接顶点的直接引用，图导航操作代价与图大小无关，仅与图的遍历范围成正比。支持ACID事务，适用于多种应用场景，包括社交网络、推荐系统、生物信息学等。
 > - **ArangoDB**：多模型数据库，支持图、文档和键值存储。允许在单个数据库中同时使用多种数据模型，适用于各种不同的应用场景。
@@ -7365,21 +7987,21 @@ GraphRAG 基本步骤为：
 - **粒度**：将源文档的文本分割成块。
 - **权衡**：更长的块需要更少的 LLM 调用，但可能因为较长的上下文窗口而降低召回率。
 - **示例**：在 HotPotQA 数据集上，600 token的块大小提取的实体引用几乎是 2400 token块大小的两倍。
-1. **文本块 → 元素实例**
+2. **文本块 → 元素实例**
 - **目标**：从文本块中识别和提取图节点和边。使用 LLM 提示识别实体和关系，输出限定元组。
 - **定制化**：可以通过为LLM提供少量领域特定的示例来定制提示, 以适应不同的知识领域(如科学、医学、法律等)。
 - **协变量提取**: 支持二级提取提示,用于提取与提取的节点实例相关的其他协变量,如实体相关的声明、主题、对象、类型、描述、源文本范围以及开始和结束日期。
 - **多轮提取**：在不牺牲块大小的情况下检测到更多实体。
-1. **元素实例 → 元素摘要**
+3. **元素实例 → 元素摘要**
 - **摘要**：LLM 抽象并总结文本中的实体、关系和声明。
 - **处理重复**：LLM可能无法始终以统一的格式提取同一实体的引用,可能会产生重复的实体元素。但由于检测到密切相关的实体及其摘要，加上LLM可以理解多种名称变体对应的共同实体, 只要这些变体与一组密切相关的实体有足够的连接性, 整体方法就能够应对这种变体。
-1. **元素摘要 → 图社区**
+4. **元素摘要 → 图社区**
 - **图建模**：创建一个无向加权图，其中节点是实体，边是关系。
 - **社区检测**：使用 Leiden 算法将图分割成层次化社区，将具有较强内部连接的节点划分为社区,  实现高效的全局摘要。
-1. **图社区 → 社区摘要**
+5. **图社区 → 社区摘要**
 - **摘要创建**：为每个社区生成报告式摘要。
 - **实用性**：摘要有助于理解数据集的全局结构和语义，辅助回答全局查询。用户可以浏览不同层级的社区摘要, 寻找感兴趣的一般主题, 然后深入到较低层级的摘要以获取更多细节。
-1. **社区摘要 → 社区回答 → 全局回答**
+6. **社区摘要 → 社区回答 → 全局回答**
 - **查询社区摘要**：首先定位用户查询需要那一层级的社区摘要进行回复，然后在这一层级检索相关的社区摘要。
 - **社区摘要处理**：社区摘要被随机打乱并划分为预设大小的块。这确保相关信息分布在各个块中, 而不是集中(并可能丢失)在单个上下文窗口中。
 - **社区回答映射**：为每一块社区摘要并行生成社区回答，利用LLM 生成有用程度分数。
@@ -7394,7 +8016,9 @@ GraphRAG 基本步骤为：
 - 《https://arxiv.org/pdf/2404.16130》
 - 《https://microsoft.github.io/graphrag/》
 
-> ⛱️ GraphRAG 的主要优点有：
+> ⛱️
+>
+> GraphRAG 的主要优点有：
 >
 > - **结构化知识表示**: GraphRAG 使用**知识图谱**来表示信息、捕获实体、关系和层次结构，更准确的理解上下文语义
 > - **高效处理**: 在知识图谱中将数据预处理可以降低计算成本，并且与传统的 RAG 方法相比，可以更快地检索。
@@ -7538,7 +8162,9 @@ Graph RAG的特点包括：
 
 Graph RAG适用于医疗诊断、法律研究等需要对结构化关系进行推理的应用领域。更详细描述见3.6 GraphRAG。
 
-> 📚 **传统RAG面临的问题**
+> 📚
+>
+> **传统RAG面临的问题**
 >
 > - **上下文整合**：通常难以将RAG检索到的内容其无缝地融入生成的响应中，检索是静态的，缺乏上下文意识，导致输出结果零散、不一致或者过于通用。
 > - **多步推理**：复杂的查询需要多步查询和推理，传统的 RAG 系统往往无法根据中间洞察或用户反馈来优化检索，导致响应不完整或不连贯。
@@ -7603,7 +8229,9 @@ Agent通常由四部分组成：
 
 ![](居丽叶LLM体系知识搭建/images/JwsLbmw4Voly1oxP9t8ccquAnkb.png)
 
-> 🏖️ **提升Agentic性能的方法** 
+> 🏖️
+>
+> **提升Agentic性能的方法**
 >
 > - **Prompt Chaining**：将复杂任务分解为多个步骤，每个步骤都建立在前一个步骤的基础上。这种结构化方法通过在继续前进之前简化每个子任务来提高准确性。然而，由于顺序处理，它可能会增加延迟。该方法适用于逐步推理，每个子任务都对最终输出有贡献的场景，例如数学推理。
 > - **Routing**：对输入进行分类，并将其引导到适当的专门提示或处理过程。这种方法确保不同的查询或任务被单独处理，提高了效率和响应质量。适合不同类型的输入需要不同处理策略的场景，确保每个类别的最佳性能，例如智能客服。
@@ -7633,9 +8261,11 @@ Multi-Agent Agentic RAG 通过利用多个专门的代理来处理复杂的工�
 
 ![](居丽叶LLM体系知识搭建/images/TR5Lbm6f0ofoPvxG2Vicb633nrf.png)
 
-> ✨ 上图案例的回复：
+> ✨
 >
-> “您的美国仓直发羽绒服目前仍处于运输中（物流单号：US20240715-001，预计 3 天后抵达您所在城市）。根据《跨境电商退货管理办法》第三章第五条规定，未签收商品可申请物流拦截退货，国际段运费（$50）将从退款中扣除，关税部分需您在退货时提供原始报关单照片（上传入口：订单详情页> 退货申请 > 关税材料）。
+> 上图案例的回复：
+>
+> “您的美国仓直发羽绒服目前仍处于运输中（物流单号：US20240715-001，预计 3 天后抵达您所在城市）。根据《跨境电商退货管理办法》第三章第五条规定，未签收商品可申请物流拦截退货，国际段运费（\$50）将从退款中扣除，关税部分需您在退货时提供原始报关单照片（上传入口：订单详情页> 退货申请 > 关税材料）。
 >
 > 如需立即处理，可点击此处申请物流拦截 <操作链接>，拦截成功后系统将自动生成退货单（无需签收商品）。退款预计在仓库确认商品状态无误后 15 个工作日内原路返回，关税退还流程同步启动（预计额外 3 个工作日）。
 >
@@ -7643,44 +8273,45 @@ Multi-Agent Agentic RAG 通过利用多个专门的代理来处理复杂的工�
 
 这是一个电商场景的案例。
 
-**用户query**：“美国仓羽绒服未签收，退货关税怎么处理？”  
+**用户query**：“美国仓羽绒服未签收，退货关税怎么处理？”
 
-**意图识别**模块判定为“跨境未签收退货”场景。  
+**意图识别**模块判定为“跨境未签收退货”场景。
 
-**Router Agent**分配任务：  
+**Router Agent**分配任务：
 
-- 给**跨境政策Agent**：检索《跨境电商退货管理办法》第5条（关税退还条件）。  
-- 给**物流Agent**：调用DHL API获取包裹状态（运输中，可拦截）。  
-- 给**财务Agent**：查询ERP系统中“未签收退货的关税计算规则”。  
-- **不做**：不直接处理政策文本内容、物流JSON数据或财务公式计算，仅决定“谁该做什么”。  
+- 给**跨境政策Agent**：检索《跨境电商退货管理办法》第5条（关税退还条件）。
+- 给**物流Agent**：调用DHL API获取包裹状态（运输中，可拦截）。
+- 给**财务Agent**：查询ERP系统中“未签收退货的关税计算规则”。
+- **不做**：不直接处理政策文本内容、物流JSON数据或财务公式计算，仅决定“谁该做什么”。
 
-**数据集成**：三个Agent返回的数据格式不同（政策PDF段落、物流API的JSON、财务系统的SQL结果），由独立的**数据集成模块**统一为：  
-    ```
-    {  
-      "政策依据": "第三章第五条 未签收商品关税需凭报关单申请",  
-      "物流状态": "运输中，可申请拦截（链接：XXX）",  
-      "关税计算": "国际运费$50从退款扣除，关税需上传报关单"  
-    }  
-    ```
+**数据集成**：三个Agent返回的数据格式不同（政策PDF段落、物流API的JSON、财务系统的SQL结果），由独立的**数据集成模块**统一为：
 
-**LLM合成**：根据上述结构化数据，LLM生成自然语言response，Router Agent不参与内容生成，仅确保数据按正确顺序输入LLM。  
+```
+{  
+  "政策依据": "第三章第五条 未签收商品关税需凭报关单申请",  
+  "物流状态": "运输中，可申请拦截（链接：XXX）",  
+  "关税计算": "国际运费$50从退款扣除，关税需上传报关单"  
+}  
+```
+
+**LLM合成**：根据上述结构化数据，LLM生成自然语言response，Router Agent不参与内容生成，仅确保数据按正确顺序输入LLM。
 
 在本案例中，Agentic RAG的**优点**在于：用户获得的不再是 “碎片化政策条款”，而是 “包含具体操作路径的解决方案”；系统不再是 “被动响应查询”，而是 “主动诊断场景并提供最优路径”。
 
 不过Agentic RAG并非尽善尽美，依据最近阅读的论文：Why Do Multi-Agent LLM Systems Fail?  分析一下本案例可能会存在的实际**问题**：
 
 1. **不遵守任务规范**
-- **问题**：Agent未严格遵循用户查询的具体要求，导致解决方案偏离核心需求。  
-- 若用户明确要求“提供未签收商品的关税退还流程”，但跨境政策Agent错误引用“已签收商品退货政策”，导致回复中包含“需先签收再申请”的错误步骤，违反用户对“未签收场景”的任务规范。  
-1. **不遵守角色规范**
-- **问题**：Agent越权或混淆角色职责，破坏分工协作逻辑。  
-- 财务Agent本应负责运费计算，却越权调用物流API获取包裹状态，导致物流Agent的职责被架空，流程混乱（如财务Agent错误判断“包裹已签收”，错误计算关税）。  
-1. **步骤重复**
-- **问题**：Agent重复执行已完成的任务，浪费计算资源并延长响应时间。  
-- **案例映射**：物流Agent已返回“包裹运输中，可拦截”，但协调Agent未记录状态，再次触发物流Agent重复查询同一包裹状态，导致响应延迟10秒以上。  
-1. **对话历史丢失**
-- **问题**：Agent在多轮对话中丢失关键上下文，导致逻辑断裂。  
-- **案例映射**：用户补充“退货时需要保留原包装吗？”，但Agent因丢失前期“未签收拦截”的对话历史，错误引用“已签收退货需保留包装”的政策，导致回复矛盾。  
+- **问题**：Agent未严格遵循用户查询的具体要求，导致解决方案偏离核心需求。
+- 若用户明确要求“提供未签收商品的关税退还流程”，但跨境政策Agent错误引用“已签收商品退货政策”，导致回复中包含“需先签收再申请”的错误步骤，违反用户对“未签收场景”的任务规范。
+2. **不遵守角色规范**
+- **问题**：Agent越权或混淆角色职责，破坏分工协作逻辑。
+- 财务Agent本应负责运费计算，却越权调用物流API获取包裹状态，导致物流Agent的职责被架空，流程混乱（如财务Agent错误判断“包裹已签收”，错误计算关税）。
+3. **步骤重复**
+- **问题**：Agent重复执行已完成的任务，浪费计算资源并延长响应时间。
+- **案例映射**：物流Agent已返回“包裹运输中，可拦截”，但协调Agent未记录状态，再次触发物流Agent重复查询同一包裹状态，导致响应延迟10秒以上。
+4. **对话历史丢失**
+- **问题**：Agent在多轮对话中丢失关键上下文，导致逻辑断裂。
+- **案例映射**：用户补充“退货时需要保留原包装吗？”，但Agent因丢失前期“未签收拦截”的对话历史，错误引用“已签收退货需保留包装”的政策，导致回复矛盾。
 
 ……
 
@@ -7740,7 +8371,9 @@ Agentic RAG实战项目详见《https://github.com/asinghcsu/AgenticRAG-Survey?t
 
 #### 4.1 Agent 概述
 
-> 🎼 大模型存在的固有问题：**无法主动更新自己的知识，导致出现事实幻觉**。RAG可以一定程度上缓解这个问题，让大模型先在本地知识库中进行搜索，检查一下提示中的信息的真实性，如果真实，再进行输出；如果不真实，则进行修正。但如果本地知识库找不到相应的信息，就应该调用工具进行外部搜索，这就需要使用 Agent（Agent 能调用的工具不止外部搜索，还包括数学工具、编程工具等等）。
+> 🎼
+>
+> 大模型存在的固有问题：**无法主动更新自己的知识，导致出现事实幻觉**。RAG可以一定程度上缓解这个问题，让大模型先在本地知识库中进行搜索，检查一下提示中的信息的真实性，如果真实，再进行输出；如果不真实，则进行修正。但如果本地知识库找不到相应的信息，就应该调用工具进行外部搜索，这就需要使用 Agent（Agent 能调用的工具不止外部搜索，还包括数学工具、编程工具等等）。
 
 **Agent**（智能体）是一种能够自主决策、采取行动以达到某种目标的实体。在人工智能领域，Agent 是基于大模型技术构建的智能实体，能够感知和理解环境，并采取行动以完成特定任务。
 
@@ -7764,7 +8397,9 @@ Agentic RAG实战项目详见《https://github.com/asinghcsu/AgenticRAG-Survey?t
 
 ![](居丽叶LLM体系知识搭建/images/KkSJbqIgPoMWwqxGBDtcKUMrnOf.png)
 
-> 🚅 **Agent开发框架概览**
+> 🚅
+>
+> **Agent开发框架概览**
 >
 > - **低代码框架：**无需代码就能在线完成Agent开发，
 >     - 扣子coze（字节）：https://www.coze.cn
@@ -7784,7 +8419,9 @@ Agentic RAG实战项目详见《https://github.com/asinghcsu/AgenticRAG-Survey?t
 >     - Swarm：https://github.com/openai/swarm
 >     - MegaGPT：https://github.com/openai/swarm
 
-> 🏆 **开放式问题：谈谈你对Agent的理解**？
+> 🏆
+>
+> **开放式问题：谈谈你对Agent的理解**？
 >
 > > 这个问题准确来说，应该是谈谈你对基于大模型的Agent的理解（之前在介绍强化学习时，也有Agent的概念，本章中讲的Agent特指基于LLM的Agent）。
 >
@@ -7807,20 +8444,26 @@ Agentic RAG实战项目详见《https://github.com/asinghcsu/AgenticRAG-Survey?t
 
 按照工作模型可以分为单Agent、多Agent和混合Agent三种。
 
-> 👍 - **单Agent**：
+> 👍
+>
+> - **单Agent**：
 >     - **特点**：由一个独立的智能体构成，所有的决策和执行都集中在一个智能体上，没有与其他智能体的协调和通信需求，适用于单一任务或相对简单的任务。
 >     - **优点**：不需要处理多个智能体之间的协调问题，也不需要额外的资源来管理多个智能体。
 >     - **缺点**：难以处理复杂、多变的环境，并且如果Agent出现故障，整个系统都将瘫痪。
 >     - **应用场景**：比如专门用于进行市场分析调研的Agent。
 
-> 🚅 - **多Agent**：
+> 🚅
+>
+> - **多Agent**：
 >     - **定义**：多个Agent协同工作，相互交流信息，共同完成更复杂的任务或目标。多个智能体在分布式环境中独立运行，每个智能体可以自主决策，需要处理智能体之间的通信、协调和竞争等问题。
 >     - **优点**：能够处理复杂、动态和多变的环境，可以完成单个智能体难以完成的任务。多个智能体之间可以相互协作，即使部分智能体出现故障系统仍然可以正常工作，鲁棒性强。能根据环境和任务需求动态调整，具有可拓展性。
 >     - **缺点**：需要大量的通信和协调来确保智能体之间的同步和协作。
 >     - **应用场景**：比如一家公司就可以视为一个多Agent系统，由Agent来扮演产品经理、UI设计师、研发工程师、测试人员、项目经理等角色。
 >     - **例子**：斯坦福小镇
 
-> 🥖 - **混合Agent：**
+> 🥖
+>
+> - **混合Agent：**
 >     - **定义**：Agent系统和人类共同参与决策过程，交互合作完成任务，强调的是人机协作的重要性和互补性。这种系统通常包含一个或多个智能体，以及与人类用户的交互接口。
 >     - **优点**：通过人类的参与，混合Agent系统可以更好地处理复杂和多变的任务，提高任务完成的质量和效率，灵活地调整人类和智能体的角色和任务分配，提供更个性化和人性化的服务。
 >     - **缺点**：开发难度和复杂度较高。
@@ -7835,7 +8478,9 @@ Agentic RAG实战项目详见《https://github.com/asinghcsu/AgenticRAG-Survey?t
 
 举个例子，比如在电商系统中，身份信息验证不能出错，售后政策有明确规定，这些都适合人工编码。而智能客服则可以通过prompt指导LLM来进行回复。
 
-> 🌟 **什么时候用 Prompt 让 LLM 来决定或规划**
+> 🌟
+>
+> **什么时候用 Prompt 让 LLM 来决定或规划**
 >
 > 1. **需要模型自行推理或发挥创造力时**
 >     - **问题不确定、场景复杂**：例如，你需要一个解决方案，但并不清楚最佳方案是什么，需要模型自己做大量推断。
@@ -7846,7 +8491,9 @@ Agentic RAG实战项目详见《https://github.com/asinghcsu/AgenticRAG-Survey?t
 > 3. **辅助决策或自动化**
 >     - 你只需要告诉模型“目标”或“限制条件”，让模型自己“分解”并“规划”下一步操作，而非固定给出所有步骤。
 
-> 🎁 **什么时候要用人为定义/硬编码**
+> 🎁
+>
+> **什么时候要用人为定义/硬编码**
 >
 > 1. **流程固定，可控性要求高**
 >     - **强流程化/标准化**：如某些业务流程、法务流程、风控流程等，规定必须走固定的若干步骤、检查点。例如KYC（实名认证）等合规步骤，这种就适合在业务代码里“写死”或严格定义。
@@ -7857,7 +8504,9 @@ Agentic RAG实战项目详见《https://github.com/asinghcsu/AgenticRAG-Survey?t
 > 3. **需要结合大量外部系统或特定算法**
 >     - **与数据库、API 或传统程序强绑定**：如果中间步骤牵涉到很多传统逻辑（比如数据库查询、多层调用），而这些逻辑又必须严格按某个顺序走，这种更适合在编程逻辑里“定死”流程，而不是让模型自由调度。
 
-> 🦄 **将人为定义和LLM规划相结合**
+> 🦄
+>
+> **将人为定义和LLM规划相结合**
 >
 > 实际系统里常常“先在人为代码中固定主干流程”，再在需要模型能力的节点中，通过 Prompt 来让模型做局部规划或执行，从而在灵活和可控之间找到平衡。
 >
@@ -7865,7 +8514,9 @@ Agentic RAG实战项目详见《https://github.com/asinghcsu/AgenticRAG-Survey?t
 > 2. **在 Prompt 中嵌入关键信息和限制条件**：比如你可以在 Prompt 里告诉模型“这里要先检查一下输入是否合法，否则直接返回失败”，再让模型自己决定在什么条件下执行具体动作。
 > 3. **LLM 生成“初步规划”，再由人工/代码做校验或修订**：例如让模型生成一个方案，然后可以通过代码或人工来审核它，如果不符合要求，再让模型重新迭代或直接由人来修正最终执行流程。
 
-> ⛱️ **一些关键考量点**
+> ⛱️
+>
+> **一些关键考量点**
 >
 > 1. **是否允许模型发挥主观创造力或灵活应对**
 >     - 如果需要，倾向于多用 Prompt，让 LLM 自行规划。
@@ -7880,7 +8531,9 @@ Agentic RAG实战项目详见《https://github.com/asinghcsu/AgenticRAG-Survey?t
 >     - 模型生成的内容难以完全审计或解释 → 重要核心部分需人工定义
 >     - 非关键部分，可以让 LLM 去生成
 
-> 📚 **总结**
+> 📚
+>
+> **总结**
 >
 > 1. **固定 & 硬编码**：
 >     - 常见于需要**高可控性、固定逻辑**或**合规要求**的部分，或对**数据处理、权限管理**、**业务规则**等有严格要求的场景。
@@ -7977,7 +8630,9 @@ React+CoT的训练流程如下，注意之前每轮的输出会加入prompt作�
 
 ReAct 提示词结构是 Thought→ Action→ Observation, React每一轮思考都要将之前所有的响应加入prompt，会消耗大量的token。ReWoo将推理过程与外部观察分离，将 Observation 隐式地嵌入到下一步的执行单元中了，即由下一步骤的执行器自动去 observe 上一步执行器的输出，从而显著减少了token消耗。
 
-> ✍️ ReWoo包含三个部分：
+> ✍️
+>
+> ReWoo包含三个部分：
 >
 > - Planner负责将用户问题分解为子任务并确定执行顺序，每个子任务都分配给Worker；
 > - Worker利用工具检索外部知识提供证据；
@@ -7993,7 +8648,9 @@ ReAct 提示词结构是 Thought→ Action→ Observation, React每一轮思考�
 
 这个方法在零样本思维链的基础上进行优化。Zero-shot-CoT知识简单的在prompt中加入“让我们逐步思考”，面临着计算错误、缺失步骤错误和语义误解错误等三个问题。Plan and solve解决了缺失步骤错误，先制定计划将任务分解为子任务，再按照计划执行子任务。
 
-> ⚽ 这个方法整体感觉偏向提示工程。prompt应该满足以下条件：
+> ⚽
+>
+> 这个方法整体感觉偏向提示工程。prompt应该满足以下条件：
 >
 > - 引导LLMs确定子任务并完成这些子任务,
 > - 指导LLMs更加关注计算和中间结果，并尽可能确保它们的正确执行。
@@ -8008,12 +8665,14 @@ Plan-and-solve的思想的一大应用就是Plan-and-Execute。Plan-and-Execute�
 
 这个方法的主要思想是通过并行function call来提高效率，比如询问微软的市值需要增长多少才能超过苹果的市值，可以并行的查询微软市值和苹果市值。主要包含4个模块：
 
-> ⚽ - **函数调用规划器**：负责理解用户输入，拆分成可执行的子任务，并确定它们之间的依赖关系，形成任务依赖的有向无环图（DAG）。该部分需要用到大模型，最好用户为规划器提供一些上下文示例。
+> ⚽
+>
+> - **函数调用规划器**：负责理解用户输入，拆分成可执行的子任务，并确定它们之间的依赖关系，形成任务依赖的有向无环图（DAG）。该部分需要用到大模型，最好用户为规划器提供一些上下文示例。
 > - **任务获取单元**：根据**贪婪策略**，将可以执行的任务发给执行器，并用执行后的输出替换后续任务的占位符。无需LLM
 > - **执行器**：多个执行器并发执行，可以调用用户提供的工具。
 > - **动态重规划**：对于复杂的任务，可能需要根据中间结果进行重新规划，由函数调用规划器生成新的子任务和它们之间的依赖关系。
 
-函数调用规划器负责生成一个包含任务及其相互依赖关系的 DAG(有向无环图)。然后，任务获取单元根据任务的依赖关系将这些任务并行调度到执行器。在本例中，任务 $1 和 $2 被同时获取，以并行执行两个独立的搜索任务。每个任务执行完成后，结果将被转发给任务获取单元，用实际值替换其占位符变量，同时解除被依赖任务的阻塞（例如，任务 $3 中依赖 $1 和 $2）。所有任务执行完成后，最终答案将被传递给用户。
+函数调用规划器负责生成一个包含任务及其相互依赖关系的 DAG(有向无环图)。然后，任务获取单元根据任务的依赖关系将这些任务并行调度到执行器。在本例中，任务 \$1 和 \$2 被同时获取，以并行执行两个独立的搜索任务。每个任务执行完成后，结果将被转发给任务获取单元，用实际值替换其占位符变量，同时解除被依赖任务的阻塞（例如，任务 \$3 中依赖 \$1 和 \$2）。所有任务执行完成后，最终答案将被传递给用户。
 
 ![](居丽叶LLM体系知识搭建/images/R5jbbVnxioWKmMxfM7acUQEFnV9.png)
 
@@ -8033,7 +8692,9 @@ Reflexion采用了强化学习的思想，Reflexion代理在生成每一个轨�
 - **效率低下**：长时间未成功完成的轨迹。
 - **幻觉**：定义为一系列连续相同的行动，这些行动导致在环境中观察到相同的结果。
 
-> 📚 Reflexion包含三个不同的模型：
+> 📚
+>
+> Reflexion包含三个不同的模型：
 >
 > - **执行者**（Actor）用 $M_a$ 表示，它生成文本和动作。利用llm根据状态观察生成文本和动作，采用类似强化学习的设置，从策略采样行动，并从环境接受观察，生成轨迹，可以采用React框架。
 > - **评估者模型**（Evaluator），由 $M_e$ 表示，它对 $M_a$ 产生的输出进行打分，评估行动的价值，将轨迹作为输入，计算奖励分数。
@@ -8101,7 +8762,9 @@ LATS包含以下图中的6个步骤，并循环迭代，直到采样了k个轨�
 
 ![表格](居丽叶LLM体系知识搭建/images/sheet_W9kcs6GqahaiPStZRm1cBNgAnAb_MZ9jwk.png)
 
-> 🏝️ **介绍两个近期比较火的规划方法：BabyAGI和AutoGPT**
+> 🏝️
+>
+> **介绍两个近期比较火的规划方法：BabyAGI和AutoGPT**
 >
 > BabyAGI 使用一个“**Task List**”来管理所有待办任务。它有三个主要组件：
 >
@@ -8125,7 +8788,9 @@ LATS包含以下图中的6个步骤，并循环迭代，直到采样了k个轨�
 
 #### 4.4 Memory
 
-> 🎨 正文开始之前先放一个吴恩达老师对Agent的理解图，其中的很多方法已经介绍过了：
+> 🎨
+>
+> 正文开始之前先放一个吴恩达老师对Agent的理解图，其中的很多方法已经介绍过了：
 >
 > - **任务分解**是指借助LLM将任务拆解为若干个子任务，并依次对每个子任务进行规划。可以分为先分解后规划（HuggingGPT，plan and solve）和边分解边规划（COT，react，pal）两个思路
 > - **多方案选择**是指大型语言模型深入“思考”，针对特定任务提出多种可能的方案。接着，利用针对性的任务搜索机制，从中挑选一个最合适的方案来实施。例如ToT，GoT，LAT
@@ -8152,7 +8817,9 @@ LATS包含以下图中的6个步骤，并循环迭代，直到采样了k个轨�
 - **trial**：agent采取行动，并从环境获得行动的反馈，基于此反馈再采取行动，循环持续直到任务完成，这一过程被称为trial。一个长度为T的trial可以表示为$ξ_T = {a_1, o_1, ...,.a_T, o_T}$，其中$a 和 o$分别是行动和环境。每一轮agent与环境的交互被称为一个step。**每个任务可能有多个trial，即为了完成一个任务可能做很多尝试。**
 - **memory**：狭义上的memory指同一个trial中的历史信息。给定一系列任务$\{\mathcal{T}_1,...,\mathcal{T_k}\}$，对于任务$\mathcal{T_k}$在第t步时，广义的memory来自3个方面：
 
-> 📌 - 1）同一个trial之前的历史信息，记为：
+> 📌
+>
+> - 1）同一个trial之前的历史信息，记为：
 > - 2）任务k之前的任务的trial，以及任务k之前尝试的trial（记为k'）：
 > - 3）外部知识，比如通过RAG查询到的知识，表示为：
 
@@ -8160,7 +8827,9 @@ LATS包含以下图中的6个步骤，并循环迭代，直到采样了k个轨�
 
 ![](居丽叶LLM体系知识搭建/images/XZxIbGkZfoAA6Hxu1qCcssc0nEb.png)
 
-$D_t^k$
+$$
+D_t^k
+$$
 
 ##### 4.4.2 Memory-based agent
 
@@ -8182,7 +8851,9 @@ agent在与环境交互的过程可以分为3个阶段。
 
 ![](居丽叶LLM体系知识搭建/images/U8ubbsHzdoAC76xkSxXcgeY2nKe.png)
 
-> 🥖 ##### 为什么要使用Memory-based agent
+> 🥖
+>
+> ##### 为什么要使用Memory-based agent
 >
 > - **从认知心理学角度**：对于人类的认知来说，记忆重要的模块，agent想要替代人类完成一些任务，就要表现的像人类，为agent设置代理模块。
 > - **从自我进化角度**：在完成任务的过程中，agent也需要在与环境交互时自我进化。记忆能帮助agent积累经验、探索更多的环境、抽象出概括性信息以增强泛化性。
@@ -8217,7 +8888,9 @@ agent在与环境交互的过程可以分为3个阶段。
     - （1）微调方法：通过有监督微调将外部知识整合到代理的记忆中，能显著提升模型在特定领域的能力。只能应用在离线场景。面临着微调通用的问题，灾难性遗忘，过拟合，需要大量数据，计算成本高等。
     - （2）记忆编辑方法：直接修改Transformer模型的权重, 以实现对模型记忆的精确编辑。记忆编辑只针对需要修改的事实，更适合小规模的记忆调整，适合在线场景。
 
-> 👍 对比文本形式记忆和参数化形式记忆：
+> 👍
+>
+> 对比文本形式记忆和参数化形式记忆：
 >
 > - **有效性：**文本记忆存储有关agent与环境交互的原始信息，这些信息更全面、更详细。然而，它受到 prompt中token上限的限制，这使得agent难以存储大量信息。相比之下，参数记忆不受提示长度的限制，但在将文本转换为参数时可能会遭受信息丢失，复杂的记忆训练会带来额外的挑战。
 > - **效率：**对于文本记忆，每次 LLM 推理都需要将记忆整合到上下文提示中，这会导致更高的成本和更长的处理时间。相比之下，对于参数记忆，信息可以集成到 LLM 的参数中，从而消除了这些上下文的额外成本。然而，将参数记忆写入模型的需要额外的成本，但文本记忆更容易写作，尤其是对于少量数据。简而言之，文本记忆在写作方面更有效率，而参数记忆在阅读方面更有效率。
@@ -8257,14 +8930,18 @@ agent在与环境交互的过程可以分为3个阶段。
 - (A) 为Alice在2024年5月1日至5月3日期间在北京制定旅行计划，Agent需要(i) 购买往返机票，(ii) 根据Alice的偏好确定几个景点，(iii) 安排这些景点的参观顺序。
 - (B) 在2024年5月10日为Alice推荐一部电影，Agent需要(i) 确定Alice有空看电影的时间，(ii) 根据Alice的观看偏好选择一部电影。对于每个任务，在下面展示一个可能的试验：
 
-> ✏️ **对于任务(A)，试验是：** 
+> ✏️
+>
+> **对于任务(A)，试验是：**
 >
 > - [步骤 1] Agent：我需要通过在线票务办公室预订2024年5月1日从上海到北京的航班，以及5月3日从北京返回上海的航班。环境（在线票务办公室）：订单已确认。出发航班上午9:00起飞，您的票号是EK240501SX9021。返程航班下午4:30起飞，您的票号是LG240503FN6317。请准时到达机场搭乘您的航班。
-> -  [步骤 2] Agent：我已经从《北京景点》杂志获取了外部知识。它显示长城、故宫和颐和园都很有名。根据爱丽丝的偏好，我认为她更喜欢古代建筑，所以我确定故宫和颐和园作为目的地。环境（Alice）：做得好！
+> - [步骤 2] Agent：我已经从《北京景点》杂志获取了外部知识。它显示长城、故宫和颐和园都很有名。根据爱丽丝的偏好，我认为她更喜欢古代建筑，所以我确定故宫和颐和园作为目的地。环境（Alice）：做得好！
 > - [步骤 3] Agent：现在，我需要为Alice安排参观顺序。根据上面的信息，我建议她一到北京就参观颐和园，因为那里适合整个下午游玩并观看日落。然后，她第二天可以去故宫，这样会给她足够的时间。
 > - 最后，她可以在第三天返回上海休息。环境（Alice）：我喜欢这个计划。谢谢！
 
-> ✍️ **对于任务(B)，试验是：**
+> ✍️
+>
+> **对于任务(B)，试验是：**
 >
 > - [步骤 1] Agent：根据我以前为Alice推荐电影的经验，她更喜欢在晚上9:00开始看电影，因为那时她已经完成工作。我应该问问Alice那个时间她是否有空。环境（Alice）：当然，这是个好时间！
 > - [步骤 2] 智能体：现在，我需要找到一些Alice在Netflix上标记为“想看”的电影。环境（Netflix）：Alice的想看列表：《星际穿越》、《恐怖星球》和《鬼吹灯》。
@@ -8324,7 +9001,9 @@ agent_chain.run(input="How many people live in canada?")
 agent_chain.run(input="what is their national anthem called?")
 ```
 
-> 📍 langchain中为我们实现了多种记忆，常见的有：
+> 📍
+>
+> langchain中为我们实现了多种记忆，常见的有：
 >
 > - **ConversationBufferMemory**：所有聊天记录都被存入chat_history中，导致下一轮的prompt很长
 > - **ConversationBufferWindowMemory**：只保留最近几次人类与AI的互动，只适应短对话。
@@ -8388,7 +9067,9 @@ res
 
 输出结果：
 
-> ⛱️ {'results': [{'id': '77162018-663b-4dfa-88b1-4f029d6136ab',
+> ⛱️
+>
+> {'results': [{'id': '77162018-663b-4dfa-88b1-4f029d6136ab',
 >
 >    'memory': 'Working on improving tennis skills',
 >
@@ -8418,7 +9099,9 @@ m.get_all(user_id="alice")
 
 输出结果：
 
-> 🎼 {'results': [{'id': '77162018-663b-4dfa-88b1-4f029d6136ab',
+> 🎼
+>
+> {'results': [{'id': '77162018-663b-4dfa-88b1-4f029d6136ab',
 >
 >    'memory': "Working on improving my tennis skills"，
 >
@@ -8454,7 +9137,9 @@ m.search(query="What are Alice's hobbies", user_id="alice")
 
 输出结果：
 
-> ✏️ {'results': [{'id': '77162018-663b-4dfa-88b1-4f029d6136ab',
+> ✏️
+>
+> {'results': [{'id': '77162018-663b-4dfa-88b1-4f029d6136ab',
 >
 >    'memory': 'Likes to play tennis on weekends',
 >
@@ -8532,7 +9217,9 @@ HuggingGPT的这种工作方式不仅扩展了传统单一模式处理的能力�
 
 #### 4.6 多智能体为什么失败
 
-> 🎨 **谈谈我对多智能体的理解**
+> 🎨
+>
+> **谈谈我对多智能体的理解**
 >
 > - 人类受限于自身知识的和生产效率有限性，人类协作可以让每个人发挥自己的长处并且提高生产效率。
 > - 多智能体与人类协作不一样，大模型一直在往通用化方向发展，单纯按照任务类型去给多个agent分配任务（比如分别做前端、后端、算法），效果可能不如都交给一个agent做（多智能体对任务理解不同，会因为沟通彼此之间的思路、数据格式、具体代码等浪费很多时间，效率反而可能不如单agent）。
@@ -8575,11 +9262,15 @@ HuggingGPT的这种工作方式不仅扩展了传统单一模式处理的能力�
 
 ![](居丽叶LLM体系知识搭建/images/YmCfbLtRqo8twpxMWyRcStBmnxm.png)
 
-> 🍰 **Cohen's Kappa：一种衡量分类一致性的指标**
+> 🍰
+>
+> **Cohen's Kappa：一种衡量分类一致性的指标**
 >
 > 定义$p_o$：评估者之间观察到的相对一致性，$p_e$：机会一致的假设概率
 >
-> $kappa = (p_o - p_e) / (1 - p_e)$
+> $$
+> kappa = (p_o - p_e) / (1 - p_e)
+> $$
 >
 > 计算示例：
 
@@ -8588,7 +9279,9 @@ HuggingGPT的这种工作方式不仅扩展了传统单一模式处理的能力�
 | Yes | 25 | 10 |
 | No | 15 | 20 |
 
-> 🚅 - 计算$p_o$:
+> 🚅
+>
+> - 计算$p_o$:
 >
 > $p_o$ =（都说是 + 都说不是）/（总分）
 >
@@ -8605,7 +9298,9 @@ HuggingGPT的这种工作方式不仅扩展了传统单一模式处理的能力�
 > $p_e$ = 0.285714 + 0.214285 = 0.5
 >
 > - 计算Kappa, Kappa值越大说明一致性越强，一般Kappa>0.8就认为标注标准清晰可靠。
->     $kappa = (p_o - p_e) / (1 - p_e) = 0.2857$
+>     $$
+>     kappa = (p_o - p_e) / (1 - p_e) = 0.2857
+>     $$
 
 ##### 4.6.3 失败模式分析
 
@@ -8628,9 +9323,9 @@ HuggingGPT的这种工作方式不仅扩展了传统单一模式处理的能力�
 
 ###### **智能体之间的不协调**
 
-这类失败发生在智能体之间的沟通和协作环节，存在无效沟通、行为冲突、偏离初始任务、互相误解等问题。 
+这类失败发生在智能体之间的沟通和协作环节，存在无效沟通、行为冲突、偏离初始任务、互相误解等问题。
 
-- **Conversation reset（会话重置）：** 对话意外或无端的重启，可能导致上下文和交互中取得的进展丢失。 
+- **Conversation reset（会话重置）：** 对话意外或无端的重启，可能导致上下文和交互中取得的进展丢失。
     - **例子**：同Step repetition。
 - **Fail to ask for clarification（未能请求澄清）：**面对不清楚或不完整的数据时没有请求更多信息，而是基于猜测行动，可能导致错误的操作。
     - **例子**：AppWorld 中的“主管”智能体指示“电话”智能体使用电子邮箱ID作为用户名。电话智能体在阅读文档后发现正确的用户名应为电话号码，但仍继续使用错误的邮箱ID，导致出现错误。
@@ -8654,7 +9349,9 @@ HuggingGPT的这种工作方式不仅扩展了传统单一模式处理的能力�
 - **Incorrect verification（验证错误）：**存在验证步骤，但验证本身是错误的或无效的，未能发现实际存在的问题。
     - **例子**：MetaGPT 在实现棋类游戏时，单元测试可能只覆盖了最基本的情况（如兵的移动），没有覆盖非兵棋子的复杂移动规则，却错误地认为验证通过。
 
-> 👍 **MAS失败模式的一些观察**
+> 👍
+>
+> **MAS失败模式的一些观察**
 >
 > - 这些失败模式分布相对均匀，没有单一错误类别主导失败发生。
 > - 失败模式可能具有连锁效应。
@@ -8731,7 +9428,8 @@ HuggingGPT的这种工作方式不仅扩展了传统单一模式处理的能力�
 ###### 工具执行
 
 外部调度器（Orchestrator）解析模型输出的 JSON 调用请求，将其映射到实际的工具/函数实现，并传入相应参数执行。具体流程为：
-    - **输出解析**：通过正则表达式匹配所有Json串，并反序列化为Python对象。
+
+- **输出解析**：通过正则表达式匹配所有Json串，并反序列化为Python对象。
 
 - **函数运行**：根据函数名映射到对应的函数，并将`arguments`中的字段作为参数，并调用对应的函数。
 
@@ -8847,15 +9545,17 @@ def get greeting(name:str)->str:
 
 uv 是一个**Python 依赖管理工具**，类似于pip 和 conda ，但它更快、更高效，并且可以更好地管理 Python 虚拟环境和依赖项。它的核心目标是替代 pip 、 venv 和 pip-tools ，提供更好的性能和更低的管理开销。
 
-> ⛱️ uv **的特点**： 
+> ⛱️
 >
-> 1. **速度更快**：相比 pip ， uv 采用 Rust 编写，性能更优。 
+> uv **的特点**：
 >
-> 2. **支持 PEP 582**：无需 virtualenv ，可以直接使用 pypackages 进行管理。 
+> 1. **速度更快**：相比 pip ， uv 采用 Rust 编写，性能更优。
 >
-> 3. **兼容** pip ：支持 requirements.txt 和 pyproject.toml 依赖管理。 
+> 2. **支持 PEP 582**：无需 virtualenv ，可以直接使用 pypackages 进行管理。
 >
-> 4. **替代** venv ：提供 uv venv 进行虚拟环境管理，比 venv 更轻量。 
+> 3. **兼容** pip ：支持 requirements.txt 和 pyproject.toml 依赖管理。
+>
+> 4. **替代** venv ：提供 uv venv 进行虚拟环境管理，比 venv 更轻量。
 >
 > 5. **跨平台**：支持 Windows、macOS 和 Linux。
 
@@ -8889,10 +9589,10 @@ uv add mcp
 
 创建一个简单的MCP客户端，核心功能有：
 
-- 初始化 MCP 客户端 
-- 提供一个命令行交互界面 
-- 模拟 MCP 服务器连接 
-- 支持用户输入查询并返回「模拟回复」 
+- 初始化 MCP 客户端
+- 提供一个命令行交互界面
+- 模拟 MCP 服务器连接
+- 支持用户输入查询并返回「模拟回复」
 - 支持安全退出
 
 ```python
@@ -9054,8 +9754,8 @@ print(response.choices[0].message.content)
 
 Server端可以提供以下三种标准能力：
 
-- **Resources：**资源，类似于文件数据读取，可以是文件资源或是API响应返回的内容。 
-- **Tools：**工具，第三方服务、功能函数，通过此可控制LLM可调用哪些函数。 
+- **Resources：**资源，类似于文件数据读取，可以是文件资源或是API响应返回的内容。
+- **Tools：**工具，第三方服务、功能函数，通过此可控制LLM可调用哪些函数。
 - **Prompts：**提示词，为用户预先定义好的完成特定任务的模板。
 
 ###### 通信机制
@@ -9326,12 +10026,14 @@ if __name__ == "__main__":
 uv run client.py server.py
 ```
 
-> 📍 **MCPClient 的主要职责**： 
+> 📍
 >
-> - **启动 MCP 服务器**（通过 StdioServerParameters ） 
-> - **建立 MCP 会话**，列出可用工具 
-> - **处理用户输入**，将其发送给 OpenAI 模型 
-> - **如果模型想调用 MCP 工具（Function Calling）**，就执行 call_tool 
+> **MCPClient 的主要职责**：
+>
+> - **启动 MCP 服务器**（通过 StdioServerParameters ）
+> - **建立 MCP 会话**，列出可用工具
+> - **处理用户输入**，将其发送给 OpenAI 模型
+> - **如果模型想调用 MCP 工具（Function Calling）**，就执行 call_tool
 > - **将结果重新发给模型**，并返回最终回答
 
 ###### 测试服务器
@@ -9422,10 +10124,10 @@ YAML 头部下面是 SKILL.md 的正文，包含这个 Skill 的完整操作指�
 
 这是 Skills 最节省 Token 的部分，分为两类情况：
 
-- 静态资源reference： 
+- 静态资源reference：
     - 如果 Skill 包含大量的参考文档、模板或数据库 Schema，这些文件默认完全不进入上下文。
     - 只有当 SKILL.md 中的指令明确要求时，Agent 才会去读取特定文件的内容。
-- 代码脚本script： 
+- 代码脚本script：
     - Skill 文件夹中通常包含 Python 或 Bash 脚本。
     - Agent 通过命令行工具直接运行这些脚本，脚本的源代码永远不会进入上下文，Agent 只能看到脚本运行后的输出结果。这比让 LLM 自己生成代码或阅读长代码要节省大量 Token。
 
@@ -9520,13 +10222,14 @@ Gateway 是 OpenClaw 的 **协调器**，相当于整个系统的大脑中枢，
 - 采用 **基于通道（Channel）的命令队列**，默认序列化执行，每个会话都有专属执行通道，保证单个会话的操作有序进行，从根源规避传统 `async/await` 异步嵌套带来的状态冲突、调试困难等问题；
 - 支持灵活的任务运行模式，低风险、可并行的任务可显式声明并行运行，兼顾执行有序性和效率；
 - 默认 WebSocket 端点：ws://127.0.0.1:18789，是各类客户端与 Gateway 的统一通信入口。
-1. **Agent Runner：推理引擎，AI 决策与工具调度核心**
+2. **Agent Runner：推理引擎，AI 决策与工具调度核心**
 
 Agent Runner 是 OpenClaw 的**推理执行核心**，相当于 AI 的思考与行动中枢，包含三个模块：**LLM（大模型，负责思考决策）、tools（实际可调用的工具，如文件读写、网络检索、shell 命令执行）、skills（工具的使用方法，如 GitHub 检索技能）**，主要负责以下四个功能：
-    1.  **动态拼接系统提示词**：将会话历史与核心配置文件 `AGENT.md` 拼接为完整提示词，传递给 LLM，让大模型掌握上下文和行为规则；
-    2. **智能模型选择**：根据 API 配置选择适配模型，高流量场景可自动启动备用模型，保证服务稳定性；
-    3. **模型推理与工具调用**：LLM 接收提示词后，判断是否需要调用工具，工具执行结果实时返回给 LLM，再由 Agent 通过 Gateway 回传至对应channel；
-    4. **上下文窗口维护**：当上下文接近模型阈值时，自动对上下文进行压缩，或终止无效请求，避免 Token 浪费和推理失败。
+
+1. **动态拼接系统提示词**：将会话历史与核心配置文件 `AGENT.md` 拼接为完整提示词，传递给 LLM，让大模型掌握上下文和行为规则；
+2. **智能模型选择**：根据 API 配置选择适配模型，高流量场景可自动启动备用模型，保证服务稳定性；
+3. **模型推理与工具调用**：LLM 接收提示词后，判断是否需要调用工具，工具执行结果实时返回给 LLM，再由 Agent 通过 Gateway 回传至对应channel；
+4. **上下文窗口维护**：当上下文接近模型阈值时，自动对上下文进行压缩，或终止无效请求，避免 Token 浪费和推理失败。
 
 OpenClaw支持多 Agent 模式，各个 Agent 互相独立，拥有专属配置和记忆，可同时处理不同任务。
 
@@ -10075,7 +10778,7 @@ LangChain的Vivek Trivedy给了一个最干净的定义：Harness就是模型权
 
 执行环境是Agent Harness的运行载体——Agent的代码跑在哪里，受什么约束。
 
-论文把沙箱分为七类：通用托管沙箱（Daytona、E2B）、计算机操作Agent基础设施（Claude Computer Use）、代码专用沙箱（Judge0、CodeInterpreter）、框架集成运行时（OpenHands）、浏览器评估环境（WebArena）、OS级权限沙箱（bubblewrap/Seatbelt）、以及沙箱抽象层（SWE-ReX）。      
+论文把沙箱分为七类：通用托管沙箱（Daytona、E2B）、计算机操作Agent基础设施（Claude Computer Use）、代码专用沙箱（Judge0、CodeInterpreter）、框架集成运行时（OpenHands）、浏览器评估环境（WebArena）、OS级权限沙箱（bubblewrap/Seatbelt）、以及沙箱抽象层（SWE-ReX）。
 
 七个类别背后，真正的设计维度不是用了什么隔离技术（Docker、microVM、WASM），而是三个问题：安全边界画在哪里？可复现的成本是多少？以及在多大程度上让Agent自主行动？
 
@@ -10126,11 +10829,11 @@ LangChain的Vivek Trivedy给了一个最干净的定义：Harness就是模型权
 
 ![](居丽叶LLM体系知识搭建/images/WLeubz4ZMoqGNkxwftHcGughnPd.png)
 
-Hong et al. (2025) 评估了18个前沿模型，所有模型随着输入增长都出现了性能退化。关键发现：退化在窗口远未填满时就开始——一个标称200K的模型可能在50K时就出现显著性能下降。对于Agent来说，这是每天累积工具输出、中间推理和文件内容后的常见情况。    
+Hong et al. (2025) 评估了18个前沿模型，所有模型随着输入增长都出现了性能退化。关键发现：退化在窗口远未填满时就开始——一个标称200K的模型可能在50K时就出现显著性能下降。对于Agent来说，这是每天累积工具输出、中间推理和文件内容后的常见情况。
 
 1. **KV-cache是生产环境最重要的指标**
 
-Manus团队经过五轮架构迭代后得出结论：KV-cache命中率是"生产级AI Agent最重要的单一指标"。ClaudeSonnet上，缓存的token成本是$0.30/MTok，未缓存的是$3.00/MTok——差10倍。而缓存命中的前提是：SystemPrompt前缀稳定、上下文追加式构建、JSON序列化确定性。
+Manus团队经过五轮架构迭代后得出结论：KV-cache命中率是"生产级AI Agent最重要的单一指标"。ClaudeSonnet上，缓存的token成本是\$0.30/MTok，未缓存的是\$3.00/MTok——差10倍。而缓存命中的前提是：SystemPrompt前缀稳定、上下文追加式构建、JSON序列化确定性。
 
 这三条结论合在一起意味着：上下文不是可以随便堆的。 它是一个动态的、每步都需要决策的稀缺资源管理问题。**做Agent工程，你得把上下文当成一个稀缺预算来管理。**
 
@@ -10152,7 +10855,7 @@ Codex CLI坚持纯Replay——完整匹配重建执行轨迹，牺牲了效率�
 
 层级式编排（DeerFlow、AutoGen、OpenAI Agents SDK）、团队式编排（oh-my-claudecode）、图编排（LangGraph）、Fan-out（Emdash）。
 
-一个关键洞察来自Anthropic：他们展示了规划器-生成器-评估器的三Agent架构，在Opus 4.5上确实比单个Agent好——但当模型升级到Opus 4.6后，sprint contract和context resets可以直接移除，成本从$200降到$125，质量不降。
+一个关键洞察来自Anthropic：他们展示了规划器-生成器-评估器的三Agent架构，在Opus 4.5上确实比单个Agent好——但当模型升级到Opus 4.6后，sprint contract和context resets可以直接移除，成本从\$200降到\$125，质量不降。
 
 这说明：所有编排组件，本质都是用来弥补模型短板。随着大模型能力迭代，原先用来补短板的冗余调度逻辑会慢慢失去价值。
 
@@ -10268,7 +10971,7 @@ Hook 可以在工具调用前后插入校验、拦截、改写和审计，是 Ag
 - 完整的事实溯源能力
 - 内容过期标记能力
 - 依托代码、文件等持久化产物重建任务状态，而非单纯依赖压缩后的历史记录
-1. **模型升级后，Harness 怎么跟着升级**
+2. **模型升级后，Harness 怎么跟着升级**
 
 **模型越强，Harness 就越该简化**，这是一条经过实践验证的基本原则。
 
@@ -10279,7 +10982,7 @@ Hook 可以在工具调用前后插入校验、拦截、改写和审计，是 Ag
 - 在影子模式并行运行多个不同复杂度的 Harness 版本（影子模式：线上正式业务不变，同时后台静默并行跑多套 Harness 方案，不影响用户使用，用来做对比测试）
 - 在效果一致的前提下，筛选成本最优的方案
 - Harness 工程的目标是做到恰到好处的设计
-1. **如何从 Agent 的 Trace 中诊断故障**
+3. **如何从 Agent 的 Trace 中诊断故障**
 
 目前绝大多数 Agent 评估体系，都停留在 “成功 / 失败” 的二元判断层面。行业数据显示：64.7% 的团队可以实现链路观测，但仅有 52.4% 会开展系统化评估。
 
@@ -10317,11 +11020,15 @@ Hook 可以在工具调用前后插入校验、拦截、改写和审计，是 Ag
 
 常规指令是：
 
-> 🤔 帮我看看 xxx、xxx 这几个博主的公众号有没有发布新文章。
+> 🤔
+>
+> 帮我看看 xxx、xxx 这几个博主的公众号有没有发布新文章。
 
 Loop 版本是：
 
-> 🌰 每天上午 10 点检查新文章；发现更新后先去重，再按主题分类；每篇提取 3 个核心观点并附上原文链接；遇到付费墙、难以理解的论文或证据不足的结论，转交人工处理；每天晚上将新增内容写入同一个文档；连续 3 天没有更新则暂停任务。
+> 🌰
+>
+> 每天上午 10 点检查新文章；发现更新后先去重，再按主题分类；每篇提取 3 个核心观点并附上原文链接；遇到付费墙、难以理解的论文或证据不足的结论，转交人工处理；每天晚上将新增内容写入同一个文档；连续 3 天没有更新则暂停任务。
 
 前者只规定了这一次要做什么，后者同时规定了**触发时间、处理步骤、异常分支、结果存储和停止条件**。
 
@@ -10331,11 +11038,15 @@ Loop 版本是：
 
 过去你会对 Agent 说：
 
-> 🏝️ 帮我修一下这个 Bug。
+> 🏝️
+>
+> 帮我修一下这个 Bug。
 
 现在你可以设计一个 Loop：
 
-> 🎁 每天早上扫描过去 24 小时内失败的 CI，读取失败日志和相关 PR，按照“环境抖动、测试不稳定、代码回归、依赖问题”进行分类；对能够本地复现的问题运行最小测试集；对低风险问题创建 worktree 并尝试修复；交给另一个 verifier agent 审查 diff；验证通过后创建 draft PR；遇到无法确定的问题，或连续两轮修复失败，则转交人工处理。
+> 🎁
+>
+> 每天早上扫描过去 24 小时内失败的 CI，读取失败日志和相关 PR，按照“环境抖动、测试不稳定、代码回归、依赖问题”进行分类；对能够本地复现的问题运行最小测试集；对低风险问题创建 worktree 并尝试修复；交给另一个 verifier agent 审查 diff；验证通过后创建 draft PR；遇到无法确定的问题，或连续两轮修复失败，则转交人工处理。
 
 ##### 它和几个相近概念的区别
 
@@ -10405,7 +11116,7 @@ Task Discovery 和普通定时脚本的区别就在这里。定时脚本通常�
 - 是否允许访问 GitHub、数据库或内部文档；
 - 是否允许创建 PR；
 - 哪些操作必须先经过人工审批。
-1. **Verifier：怎么证明做对了？**
+2. **Verifier：怎么证明做对了？**
 
 Agent 说“完成了”，不代表任务真的完成了。
 
@@ -10567,7 +11278,9 @@ ReAct 里有“推理—行动—观察”的循环，Plan-Execute 会根据执�
 
 我比较认同下面这个定义：
 
-> 🌟 **Graph Engineering，是把模型调用、Agent Loop、确定性代码、工具和人工决策组织成一张显式执行图，并设计它们之间的状态传递、动态调度、并行汇合、结果验证、中断恢复和责任边界。**
+> 🌟
+>
+> **Graph Engineering，是把模型调用、Agent Loop、确定性代码、工具和人工决策组织成一张显式执行图，并设计它们之间的状态传递、动态调度、并行汇合、结果验证、中断恢复和责任边界。**
 
 这里的 Graph，主要指控制图。
 
@@ -10970,23 +11683,23 @@ Hermes 的 Skills 闭环拆成七步：
 
 Trace2Skill走的是离线批量归纳的路线，核心思路是：不要跑一条轨迹就改一次技能，先攒一大批带成败标记的完整执行记录，再统一从中提炼稳定通用的操作规范，逻辑和资深专家梳理标准化SOP完全对齐。
 
-就像人类也不会只靠一次excel的操作就定下永久流程，一定是看多组案例，分清偶发情况、孤立bug和反复出现的固定规律，最后整理出一套精简通用的操作手册，Trace2Skill用的就是这套思路。  
+就像人类也不会只靠一次excel的操作就定下永久流程，一定是看多组案例，分清偶发情况、孤立bug和反复出现的固定规律，最后整理出一套精简通用的操作手册，Trace2Skill用的就是这套思路。
 
 ![](居丽叶LLM体系知识搭建/images/SCVtbhPOQo4lvOx6QptczZ8gngc.jpg)
 
-先看这张对比图，左边是常规串行迭代方式，轨迹按顺序逐条流入，每跑完一条就增量更新技能，最终规则会受执行先后顺序干扰，容易把单次偶然问题固化成通用要求；右边Trace2Skill会先把所有轨迹汇总到统一轨迹池，所有执行经验平等参与归纳，不会产生时序偏见，最终只沉淀高频可复用逻辑，剔除一次性临时方案。 
+先看这张对比图，左边是常规串行迭代方式，轨迹按顺序逐条流入，每跑完一条就增量更新技能，最终规则会受执行先后顺序干扰，容易把单次偶然问题固化成通用要求；右边Trace2Skill会先把所有轨迹汇总到统一轨迹池，所有执行经验平等参与归纳，不会产生时序偏见，最终只沉淀高频可复用逻辑，剔除一次性临时方案。
 
-整套流程分完整三步，对应下面的Pipeline图： 
+整套流程分完整三步，对应下面的Pipeline图：
 
 ![](居丽叶LLM体系知识搭建/images/ZPcJbUwUBoRKj1xO1OecfAmpngf.jpg)
 
-1. 先用固定Agent搭配初始技能批量跑完所有任务，靠校验工具自动区分成功、失败两类轨迹完整存档； 
-2. 启动多组并行分析子智能体，成功轨迹交给正向分析师提炼高效复用步骤，失败轨迹交由交互式故障分析师，复现报错、验证修复逻辑后输出针对性优化补丁，每条轨迹独立分析互不干扰； 
-3. 所有补丁统一送入独立Merge算子分层合并，自动去重、消解规则冲突，按出现频次区分核心通用流程和小众边缘场景，最终输出一整套完整、无冗余的全新Skill目录。 
+1. 先用固定Agent搭配初始技能批量跑完所有任务，靠校验工具自动区分成功、失败两类轨迹完整存档；
+2. 启动多组并行分析子智能体，成功轨迹交给正向分析师提炼高效复用步骤，失败轨迹交由交互式故障分析师，复现报错、验证修复逻辑后输出针对性优化补丁，每条轨迹独立分析互不干扰；
+3. 所有补丁统一送入独立Merge算子分层合并，自动去重、消解规则冲突，按出现频次区分核心通用流程和小众边缘场景，最终输出一整套完整、无冗余的全新Skill目录。
 
 它和常见的记忆检索方案有本质取舍：记忆检索是推理阶段实时拉取相似历史案例塞进上下文，开销大、跨模型跨任务很难复用；Trace2Skill选择离线一次性压缩全部经验，推理时不用额外检索任何原始轨迹，只加载一份静态技能文件就行。
 
-论文实验也验证了这套压缩逻辑的优势，蒸馏得到的技能不受原模型限制，既能适配不同参数量底座，也能跨模型家族、分布外任务直接迁移，excel场景下小模型产出的技能给大模型使用，指标最高能提升57.65个百分点。 
+论文实验也验证了这套压缩逻辑的优势，蒸馏得到的技能不受原模型限制，既能适配不同参数量底座，也能跨模型家族、分布外任务直接迁移，excel场景下小模型产出的技能给大模型使用，指标最高能提升57.65个百分点。
 
 这套方案很适合有标准化任务、配套自动校验工具的场景，表格/PDF/PPT自动化、数学推理、文档问答、标准化代码修复这类Agent都能落地。
 
@@ -11024,11 +11737,11 @@ CoEvoSkills 最巧妙的设计是**两套独立 AI 隔离互评打磨**，这里
 
 这种隔离互评的模式，能跳出生成器固有的思维定式，揪出文件依赖、执行流程、输出规范等隐性结构性缺陷。实验结果很直观：在 SkillsBench 基准测试中，CoEvoSkills 任务通过率达到 71.1%，远高于人工手写技能（53.5%）、Anthropic 官方 Skill-Creator（34.1%）等所有对比方案，仅 5 轮迭代就能全面超越人工制作的技能。
 
-同时这套方法产出的技能通用性极强，不存在模型绑定问题：用 Claude Opus 打磨出的技能，直接给到 GPT、通义千问、DeepSeek 等 6 家不同厂商大模型使用，全部能带来 35~44 个百分点的效果提升，证明它沉淀的是通用任务处理流程，不是只适配单一模型的专属逻辑。 
+同时这套方法产出的技能通用性极强，不存在模型绑定问题：用 Claude Opus 打磨出的技能，直接给到 GPT、通义千问、DeepSeek 等 6 家不同厂商大模型使用，全部能带来 35~44 个百分点的效果提升，证明它沉淀的是通用任务处理流程，不是只适配单一模型的专属逻辑。
 
 ![](居丽叶LLM体系知识搭建/images/CJY0bifZ7oHigaxsNpHcHSgynjh.jpg)
 
-从全领域评测能看到一个问题：人工编写技能存在人机认知错位，部分领域（自然科学）人工技能甚至会降低Agent效果，而CoEvoSkills产出的技能贴合大模型真实推理、工具调用习惯，11个评测领域里9项表现优于人工技能。 
+从全领域评测能看到一个问题：人工编写技能存在人机认知错位，部分领域（自然科学）人工技能甚至会降低Agent效果，而CoEvoSkills产出的技能贴合大模型真实推理、工具调用习惯，11个评测领域里9项表现优于人工技能。
 
 ##### 路线四：SkillX，把经验组织成分层技能知识库
 
@@ -11336,7 +12049,9 @@ SFT 主要学习“给定输入后输出什么”，Agentic RL 继续学习“�
 
 Agentic RL 的目标可以写成：
 
-$J(\theta)=\mathbb{E}_{\tau\sim\pi_\theta} \left[\sum_{t=0}^{T}\gamma^t r(s_t,a_t)\right]$
+$$
+J(\theta)=\mathbb{E}_{\tau\sim\pi_\theta} \left[\sum_{t=0}^{T}\gamma^t r(s_t,a_t)\right]
+$$
 
 - $\theta$ 是模型参数，$\pi_\theta$ 是当前 Policy；
 - $\tau\sim\pi_\theta$ 表示模型按照当前策略与环境交互，采样得到一条 Trajectory；
@@ -11477,7 +12192,9 @@ Reward 设计前要先判断任务的可验证性。
 
 可以把一次轨迹的总 Reward 写成：
 
-$R(\tau)=w_oR_{\text{outcome}} +w_m\sum_tR_{\text{milestone},t} -w_c\sum_tP_{\text{constraint},t} -w_kC(\tau)$
+$$
+R(\tau)=w_oR_{\text{outcome}} +w_m\sum_tR_{\text{milestone},t} -w_c\sum_tP_{\text{constraint},t} -w_kC(\tau)
+$$
 
 其中 Outcome 决定任务是否完成；Milestone 缓解长轨迹中的稀疏信号；Constraint 对越权、泄漏、修改测试等行为扣分；Cost 控制步数、Token、工具费用和重复调用。
 
@@ -11520,27 +12237,37 @@ step 4: 完成退款                         +1.0
 
 PPO 使用 Critic 估计每个状态的价值 V(s_t)。先计算一步 Temporal Difference Error：
 
-$\delta_t=r_t+\gamma V(s_{t+1})-V(s_t)$
+$$
+\delta_t=r_t+\gamma V(s_{t+1})-V(s_t)
+$$
 
 再用 GAE 把未来若干步的误差折回当前动作：
 
-$A_t^{\text{GAE}}= \sum_{l=0}^{T-t-1}(\gamma\lambda)^l\delta_{t+l}$
+$$
+A_t^{\text{GAE}}= \sum_{l=0}^{T-t-1}(\gamma\lambda)^l\delta_{t+l}
+$$
 
 在上面的退款轨迹里，第二步拿到 Constraint Penalty，Advantage 会偏负；第三步让状态从“规则矛盾”恢复到“规则已确认”，Advantage 会偏正。PPO 随后用 Clipped Surrogate Objective 限制单次更新幅度：
 
-$L^{\text{PPO}}= \mathbb{E}_t\left[ \min\left( \rho_tA_t, \operatorname{clip}(\rho_t,1-\epsilon,1+\epsilon)A_t \right) \right]$
+$$
+L^{\text{PPO}}= \mathbb{E}_t\left[ \min\left( \rho_tA_t, \operatorname{clip}(\rho_t,1-\epsilon,1+\epsilon)A_t \right) \right]
+$$
 
 其中 $\rho_t=\pi_\theta(a_t|s_t)/\pi_{\text{old}}(a_t|s_t)$。PPO 能做更细的 Step-level 归因，代价是额外维护 Critic；长上下文下 Value Estimation 也可能漂移，Critic 训坏后会把错误 Advantage 传给 Actor。
 
 GRPO 省掉 Critic。它对同一个 Prompt 采样一组 Rollout，用组内相对奖励构造 Advantage：
 
-$A_i = \frac{R_i - \operatorname{mean}(R_1,\ldots,R_G)} {\operatorname{std}(R_1,\ldots,R_G)}$
+$$
+A_i = \frac{R_i - \operatorname{mean}(R_1,\ldots,R_G)} {\operatorname{std}(R_1,\ldots,R_G)}
+$$
 
 得分高于组内平均的轨迹获得正信号，低于平均的轨迹获得负信号。代价也很明确：如果一组 Rollout 全部成功或全部失败，组内方差接近 0，这一组几乎没有学习信号。
 
 带 KL 约束的 GRPO 目标可以写成：
 
-$J_{\text{GRPO}}(\theta)= \mathbb{E}\left[ \frac{1}{G}\sum_{i=1}^{G} \min\left( \rho_iA_i, \operatorname{clip}(\rho_i,1-\epsilon,1+\epsilon)A_i \right) -\beta D_{\text{KL}}(\pi_\theta\|\pi_{\text{ref}}) \right]$
+$$
+J_{\text{GRPO}}(\theta)= \mathbb{E}\left[ \frac{1}{G}\sum_{i=1}^{G} \min\left( \rho_iA_i, \operatorname{clip}(\rho_i,1-\epsilon,1+\epsilon)A_i \right) -\beta D_{\text{KL}}(\pi_\theta\|\pi_{\text{ref}}) \right]
+$$
 
 GRPO 通常把一条 Rollout 的相对 Advantage 广播到这条轨迹的可训练 Tokens。实现轻、显存开销低，但终局 Reward 很难指出到底是哪一步起了作用。增加 Process Reward 或按 Sub-trace 切分，可以补充粒度；这些信号若不可靠，也会把局部评分误差放大。
 
@@ -11752,15 +12479,21 @@ SkillRL 的判断可以概括为：有效的经验迁移依赖抽象。模型需
 
 SkillRL 处理的是一个标准交互式环境。时间步 $t$ 时，Agent 观察 $o_t$，选择动作 $a_t$，获得奖励 $r_t$ 和下一步观察 $o_{t+1}$。一条轨迹写成：
 
-$\tau=(o_0,a_0,r_0,\ldots,o_T,a_T,r_T)$
+$$
+\tau=(o_0,a_0,r_0,\ldots,o_T,a_T,r_T)
+$$
 
 给定自然语言任务描述 d 和额外上下文 c，策略为：
 
-$\pi_\theta(a_t\mid o_{\leq t},d,c)$
+$$
+\pi_\theta(a_t\mid o_{\leq t},d,c)
+$$
 
 这里的 $c$ 就可以放检索到的 Skills。优化目标依然是最大化期望累计回报，同时受上下文长度 $L_{\max}$ 约束：
 
-$\max_\theta\mathbb{E}_{\tau\sim\pi_\theta} \left[\sum_{t=0}^{T}\gamma^t r_t\right], \qquad |c|\leq L_{\max}$
+$$
+\max_\theta\mathbb{E}_{\tau\sim\pi_\theta} \left[\sum_{t=0}^{T}\gamma^t r_t\right], \qquad |c|\leq L_{\max}
+$$
 
 SkillRL 在普通 GRPO 管线外增加了三组机制：
 
@@ -11774,17 +12507,23 @@ SkillRL 在普通 GRPO 管线外增加了三组机制：
 
 许多经验系统偏爱成功轨迹，失败样本被直接丢弃。SkillRL 同时收集：
 
-$\mathcal{T}^{+}=\{\tau_i:r(\tau_i)=1\},\qquad \mathcal{T}^{-}=\{\tau_i:r(\tau_i)=0\}$
+$$
+\mathcal{T}^{+}=\{\tau_i:r(\tau_i)=1\},\qquad \mathcal{T}^{-}=\{\tau_i:r(\tau_i)=0\}
+$$
 
 Teacher Model $\mathcal{M}_T$ 对两类轨迹采用差异化蒸馏。
 
 对成功轨迹，它寻找正确的决策点、行动顺序以及能迁移到相似任务的规律：
 
-$s^{+}=\mathcal{M}_T(\tau^{+},d)$
+$$
+s^{+}=\mathcal{M}_T(\tau^{+},d)
+$$
 
 对失败轨迹，它进一步分析四件事：失败发生在哪一步；当时选择了什么错误动作；可行的修正动作是什么；这次失败能归纳出什么通用预防方法。
 
-$s^{-}=\mathcal{M}_T(\tau^{-},d)$
+$$
+s^{-}=\mathcal{M}_T(\tau^{-},d)
+$$
 
 失败由此转化为 Counterfactual Lesson。它告诉模型：当时走了 A，所以环境进入坏状态；如果满足同样条件，应改走 B。
 
@@ -11808,15 +12547,21 @@ SkillRL 把技能库分成两层：
 
 完整技能库写成：
 
-$\text{SkillBank}=\mathcal{S}_g\cup\bigcup_{k=1}^{K}\mathcal{S}_k$
+$$
+\text{SkillBank}=\mathcal{S}_g\cup\bigcup_{k=1}^{K}\mathcal{S}_k
+$$
 
 每条 Skill 至少包含名称、原则和适用条件。推理时，General Skills 始终注入，Task-specific Skills 按任务描述和技能文本的 Embedding 相似度检索：
 
-$\mathcal{S}_{\text{ret}}= \operatorname{TopK}\left( \{s\in\mathcal{S}_k:\operatorname{sim}(e_d,e_s)>\delta\},K \right)$
+$$
+\mathcal{S}_{\text{ret}}= \operatorname{TopK}\left( \{s\in\mathcal{S}_k:\operatorname{sim}(e_d,e_s)>\delta\},K \right)
+$$
 
 论文实验设置中使用 K=6、\delta=0.4。策略随后在通用 Skill 和检索 Skill 的共同上下文中选择动作：
 
-$a_t\sim\pi_\theta(a_t\mid o_{\leq t},d,\mathcal{S}_g,\mathcal{S}_{\text{ret}})$
+$$
+a_t\sim\pi_\theta(a_t\mid o_{\leq t},d,\mathcal{S}_g,\mathcal{S}_{\text{ret}})
+$$
 
 为什么要分两级？
 
@@ -11830,11 +12575,15 @@ $a_t\sim\pi_\theta(a_t\mid o_{\leq t},d,\mathcal{S}_g,\mathcal{S}_{\text{ret}})$
 
 Teacher 生成 Skill-augmented Trajectory：
 
-$\mathcal{D}_{\text{SFT}}= \{(d_i,\mathcal{S}_i,\tau_i^*)\}_{i=1}^{N}$
+$$
+\mathcal{D}_{\text{SFT}}= \{(d_i,\mathcal{S}_i,\tau_i^*)\}_{i=1}^{N}
+$$
 
 模型通过交叉熵训练学习怎样读取、引用和执行 Skill：
 
-$\theta_{\text{SFT}}= \arg\min_\theta\mathcal{L}_{\text{CE}} (\mathcal{D}_{\text{SFT}};\theta)$
+$$
+\theta_{\text{SFT}}= \arg\min_\theta\mathcal{L}_{\text{CE}} (\mathcal{D}_{\text{SFT}};\theta)
+$$
 
 训练后的 $\pi_{\theta_{\text{SFT}}}$ 同时作为 RL 起点和 KL 参考策略。论文消融中，去掉 Cold-start SFT 后，ALFWorld 由 89.9 降到 65.2，WebShop 由 72.7 降到 46.5。这组结果说明：经验系统既要提供 Skill，也要训练模型使用 Skill 的行为模式。
 
@@ -11842,19 +12591,27 @@ $\theta_{\text{SFT}}= \arg\min_\theta\mathcal{L}_{\text{CE}} (\mathcal{D}_{\text
 
 进入 RL 阶段后，同一个任务采样 G 条轨迹，计算组内归一化 Advantage：
 
-$A_i=\frac{R_i-\operatorname{mean}(R_1,\ldots,R_G)} {\operatorname{std}(R_1,\ldots,R_G)}$
+$$
+A_i=\frac{R_i-\operatorname{mean}(R_1,\ldots,R_G)} {\operatorname{std}(R_1,\ldots,R_G)}
+$$
 
 Skill 增强后的重要性比率在包含 $\mathcal{S}_g$ 和 $\mathcal{S}_{\text{ret}}$ 的上下文中计算：
 
-$\rho_i= \frac{\pi_\theta(\tau^{(i)}\mid d,\mathcal{S}_g,\mathcal{S}_{\text{ret}})} {\pi_{\text{old}}(\tau^{(i)}\mid d,\mathcal{S}_g,\mathcal{S}_{\text{ret}})}$
+$$
+\rho_i= \frac{\pi_\theta(\tau^{(i)}\mid d,\mathcal{S}_g,\mathcal{S}_{\text{ret}})} {\pi_{\text{old}}(\tau^{(i)}\mid d,\mathcal{S}_g,\mathcal{S}_{\text{ret}})}
+$$
 
 KL 项把策略锚定在 SFT 后的参考模型，尽量保留已经学到的 Skill 使用能力。
 
 SkillRL 的递归部分发生在 Validation Epoch 之后。系统先找到成功率低的任务类别，再从失败验证轨迹中做类别均衡采样，交给 Teacher 分析：现有 SkillBank 覆盖了哪些失败模式，漏掉了哪些，哪些规则需要补充或改写。新 Skill 随后加入技能库：
 
-$\mathcal{S}_{\text{new}}= \mathcal{M}_T(\mathcal{T}_{\text{val}}^{-},\text{SkillBank})$
+$$
+\mathcal{S}_{\text{new}}= \mathcal{M}_T(\mathcal{T}_{\text{val}}^{-},\text{SkillBank})
+$$
 
-$\text{SkillBank}\leftarrow \text{SkillBank}\cup\mathcal{S}_{\text{new}}$
+$$
+\text{SkillBank}\leftarrow \text{SkillBank}\cup\mathcal{S}_{\text{new}}
+$$
 
 下一轮 RL 又会在更新后的 SkillBank 上采样。策略变强后暴露出新的失败，新的失败再推动技能库增长，于是形成“执行—验证—蒸馏—再执行”的循环。
 
@@ -11990,11 +12747,15 @@ Evolving-RL 让同一个策略 $\pi_\theta$ 扮演两个角色：
 
 每轮训练先从数据集 $\mathcal{D}$ 采样源任务 $x^{\mathrm{src}}$。此时不注入 Skill，Solver 直接和环境交互：
 
-$\tau\sim\pi_\theta(\cdot\mid x^{\mathrm{src}})$
+$$
+\tau\sim\pi_\theta(\cdot\mid x^{\mathrm{src}})
+$$
 
 得到完整轨迹 $\tau$ 和源任务环境奖励 $r^{\mathrm{src}}$ 后，系统构造 Extraction State：
 
-$s^e=(x^{\mathrm{src}},\tau,r^{\mathrm{src}})$
+$$
+s^e=(x^{\mathrm{src}},\tau,r^{\mathrm{src}})
+$$
 
 这个状态同时包含任务、过程和结果。Extractor 因而可以区分哪些动作推动了成功，哪些尝试导致失败，以及任务最终有没有完成。
 
@@ -12002,7 +12763,9 @@ $s^e=(x^{\mathrm{src}},\tau,r^{\mathrm{src}})$
 
 Extractor 从同一个 Extraction State 采样 $N$ 条候选 Skill：
 
-$\mathcal{E}=\{e_1,\ldots,e_N\}, \qquad e_i\sim\pi_\theta(\cdot\mid s^e)$
+$$
+\mathcal{E}=\{e_1,\ldots,e_N\}, \qquad e_i\sim\pi_\theta(\cdot\mid s^e)
+$$
 
 每条 Skill 是一段结构化文字，目标是表达可复用的决策规则、工作流步骤和错误恢复方法。
 
@@ -12016,7 +12779,9 @@ $\mathcal{E}=\{e_1,\ldots,e_N\}, \qquad e_i\sim\pi_\theta(\cdot\mid s^e)$
 
 系统先用源任务描述的 Embedding 检索 $K$ 个语义相关任务：
 
-$\mathcal{X}^{\mathrm{ret}} =\mathcal{R}(x^{\mathrm{src}}) =\operatorname{TopK}_{x\in\mathcal{D}} s\bigl(\phi(x^{\mathrm{src}}),\phi(x)\bigr) \tag{1}$
+$$
+\mathcal{X}^{\mathrm{ret}} =\mathcal{R}(x^{\mathrm{src}}) =\operatorname{TopK}_{x\in\mathcal{D}} s\bigl(\phi(x^{\mathrm{src}}),\phi(x)\bigr) \tag{1}
+$$
 
 其中 $\phi(\cdot)$ 是任务描述的 Embedding，$s(\cdot,\cdot)$ 使用余弦相似度。论文还把源任务本身加入评估集合，让 Skill 同时接受原任务复用与跨任务迁移的检查。
 
@@ -12024,11 +12789,15 @@ $\mathcal{X}^{\mathrm{ret}} =\mathcal{R}(x^{\mathrm{src}}) =\operatorname{TopK}_
 
 固定同一批下游任务后，系统对每个 $(e_i,x_j)$ 组合做一次 Skill-conditioned Rollout：
 
-$t_{ij}\sim\pi_\theta(\cdot\mid x_j,e_i)$
+$$
+t_{ij}\sim\pi_\theta(\cdot\mid x_j,e_i)
+$$
 
 环境返回奖励 $r_{ij}$。候选 Skill $e_i$ 的得分取 $K$ 个相关任务上的平均表现：
 
-$R_i^e=\frac{1}{K}\sum_{j=1}^{K}r_{ij} \tag{2}$
+$$
+R_i^e=\frac{1}{K}\sum_{j=1}^{K}r_{ij} \tag{2}
+$$
 
 一条 Skill 只有在多个相关任务上稳定帮助 Solver，才能得到较高的 Extractor Reward。语言是否漂亮、是否符合某个模板，都让位于下游迁移效果。
 
@@ -12040,15 +12809,21 @@ $R_i^e=\frac{1}{K}\sum_{j=1}^{K}r_{ij} \tag{2}$
 
 同一源任务生成的 N 条候选 Skill 构成一个 GRPO 比较组。组内归一化 Advantage 为：
 
-$A_i^e= \frac{R_i^e-\operatorname{mean}(R_1^e,\ldots,R_N^e)} {\operatorname{std}(R_1^e,\ldots,R_N^e)}$
+$$
+A_i^e= \frac{R_i^e-\operatorname{mean}(R_1^e,\ldots,R_N^e)} {\operatorname{std}(R_1^e,\ldots,R_N^e)}
+$$
 
 Extractor 使用 PPO-style Clipped Objective：
 
-$\mathcal{L}_e(\theta)= -\frac{1}{N}\sum_{i=1}^{N} \min\Bigl( \rho_i^e A_i^e, \operatorname{clip}(\rho_i^e,1-\epsilon,1+\epsilon)A_i^e \Bigr) +\beta_eD_{\mathrm{KL}}(\pi_\theta\|\pi_{\mathrm{ref}}) -\eta_e\mathcal{H}(\pi_\theta) \tag{3}$
+$$
+\mathcal{L}_e(\theta)= -\frac{1}{N}\sum_{i=1}^{N} \min\Bigl( \rho_i^e A_i^e, \operatorname{clip}(\rho_i^e,1-\epsilon,1+\epsilon)A_i^e \Bigr) +\beta_eD_{\mathrm{KL}}(\pi_\theta\|\pi_{\mathrm{ref}}) -\eta_e\mathcal{H}(\pi_\theta) \tag{3}
+$$
 
 其中：
 
-$\rho_i^e= \frac{\pi_\theta(e_i\mid s^e)} {\pi_{\theta_{\mathrm{old}}}(e_i\mid s^e)}$
+$$
+\rho_i^e= \frac{\pi_\theta(e_i\mid s^e)} {\pi_{\theta_{\mathrm{old}}}(e_i\mid s^e)}
+$$
 
 论文对 Extractor 的熵做了特殊处理。Skill 天然存在大量等价写法，评估过程也带有环境噪声，提炼策略容易不断增大熵并走向训练崩溃。作者使用带负系数的熵正则来抑制熵增长，让 Extractor 的输出更确定。
 
@@ -12056,15 +12831,21 @@ $\rho_i^e= \frac{\pi_\theta(e_i\mid s^e)} {\pi_{\theta_{\mathrm{old}}}(e_i\mid s
 
 对固定下游任务 $x_j$，系统拿到 $N$ 条由不同候选 Skill 条件化的轨迹。虽然 Prompt 中的 Skill 不同，任务目标和上下文结构相同，因此仍可做组内比较：
 
-$A_{ij}^s= \frac{r_{ij}-\operatorname{mean}(r_{1j},\ldots,r_{Nj})} {\operatorname{std}(r_{1j},\ldots,r_{Nj})} \tag{4}$
+$$
+A_{ij}^s= \frac{r_{ij}-\operatorname{mean}(r_{1j},\ldots,r_{Nj})} {\operatorname{std}(r_{1j},\ldots,r_{Nj})} \tag{4}
+$$
 
 Solver Loss 复用全部 $N\times K$ 条轨迹：
 
-$\mathcal{L}_s(\theta)= -\frac{1}{NK}\sum_{j=1}^{K}\sum_{i=1}^{N} \min\Bigl( \rho_{ij}^s A_{ij}^s, \operatorname{clip}(\rho_{ij}^s,1-\epsilon,1+\epsilon)A_{ij}^s \Bigr) +\beta_sD_{\mathrm{KL}}(\pi_\theta\|\pi_{\mathrm{ref}}) \tag{5}$
+$$
+\mathcal{L}_s(\theta)= -\frac{1}{NK}\sum_{j=1}^{K}\sum_{i=1}^{N} \min\Bigl( \rho_{ij}^s A_{ij}^s, \operatorname{clip}(\rho_{ij}^s,1-\epsilon,1+\epsilon)A_{ij}^s \Bigr) +\beta_sD_{\mathrm{KL}}(\pi_\theta\|\pi_{\mathrm{ref}}) \tag{5}
+$$
 
 其中：
 
-$\rho_{ij}^s= \frac{\pi_\theta(t_{ij}\mid x_j,e_i)} {\pi_{\theta_{\mathrm{old}}}(t_{ij}\mid x_j,e_i)}$
+$$
+\rho_{ij}^s= \frac{\pi_\theta(t_{ij}\mid x_j,e_i)} {\pi_{\theta_{\mathrm{old}}}(t_{ij}\mid x_j,e_i)}
+$$
 
 当一条 Skill 提供了有效指导，Solver 因为正确利用它而超过同任务下的其他轨迹；当 Skill 含有误导信息，机械服从会拉低 Reward，偏离坏指导、回到环境证据的轨迹得到更高相对优势。
 
@@ -12074,7 +12855,9 @@ $\rho_{ij}^s= \frac{\pi_\theta(t_{ij}\mid x_j,e_i)} {\pi_{\theta_{\mathrm{old}}}
 
 最终目标是两项 Loss 的加权和：
 
-$\mathcal{L}=\lambda_e\mathcal{L}_e+ \lambda_s\mathcal{L}_s \tag{6}$
+$$
+\mathcal{L}=\lambda_e\mathcal{L}_e+ \lambda_s\mathcal{L}_s \tag{6}
+$$
 
 Extractor 与 Solver 共享 \theta。提炼能力变好，会改变下一轮 Solver 接触到的 Skill 分布；使用能力变好，又会让下游评估更准确地反映 Skill 的迁移价值。两条学习链在同一个策略里耦合起来。
 
@@ -12139,7 +12922,9 @@ Evolving-RL 再把 Skill 的提炼过程纳入强化学习，用跨任务迁移�
 
 ##### 5.1.1 技术要点总结
 
-> 🌅 - **Tokenizer：**由sentencePiece换成了Tiktoken，并且词表从llama2的32k扩展为128k 
+> 🌅
+>
+> - **Tokenizer：**由sentencePiece换成了Tiktoken，并且词表从llama2的32k扩展为128k
 > - **RoPE**：采用循环位置编码，根据token距离调整注意力强度，保持上下文完整性，能更好的推广到长文。每一层的自注意力运算前q和k都加入位置编码信息。
 > - **GQA：**Multi-Query Attention（MQA） 和 Multi-Head Attention（MHA） 的折中，相比于MHA，降低了因KV cache的带来的内存占用，通过聚合查询加速推理时间；相比MQA提升准确率。
 > - **RMSNorm：**通过计算输入张量的平方和的均值来得到RMS值，简化了标准化过程，计算效率更高。这种方法减轻了内部协变量偏移的影响（前面层的变化对后面层影响巨大），增强了训练的稳定性。
@@ -12237,7 +13022,9 @@ class SwiGLU(nn.Module):
 
 ![](居丽叶LLM体系知识搭建/images/MKTJb06P6oKAEUx6G0EcTDYMnid.png)
 
-> 🌰 ###### 预训练**的流程：**
+> 🌰
+>
+> ###### 预训练**的流程：**
 >
 > 1. **初始预训练**：采用warm up + 余弦学习率衰减，最大为8 × 10^−5，预热8000步，1200000步后衰减到8x10^-7。逐步提升训练的批量大小，以提升训练稳定性。初始batch包含4M个token，序列长度4096，batchsize1024；训练252M和2.87T后token数和序列长度加倍。
 >     在预训练期间增加了非英语数据的百分比，以提高 Llama 3 的多语言性能；对数学数据进行上采样以提高模型的数学推理性能；在预训练的后期添加了更多最新的网络数据以推进模型的知识截止日期（即避免对最近的知识不了解），对预训练数据的子集进行下采样，这些数据后来被识别为质量较低。
@@ -12264,7 +13051,9 @@ class SwiGLU(nn.Module):
 
 **拒绝采样**：对每个用户的prompt，从最新的聊天模型策略中采样K（通常在10到30之间）个输出（通常是最好的性能检查点来自上一次后训练迭代，或特定能力的最好性能检查点），利用奖励模型选择最好的一个。在后训练的后期轮次中，我们引入系统提示，以引导拒绝采样响应符合不同能力所需的期望语调、风格或格式。 每个 SFT 示例由一个上下文(即除最后一轮外的所有对话轮次）和一个最终response组成。SFT和偏好数据有重复的领域，但是按照不同方法产生的数据。
 
-> 🐵 ###### 如何控制**数据质量？**
+> 🐵
+>
+> ###### 如何控制**数据质量？**
 >
 > - **数据清洗**：实施了一系列基于规则的数据移除和修改策略，例如，为了缓解过于道歉的语气问题，我们识别出过度使用的短语（如“I’m sorry”或“I apologize”），并仔细平衡我们数据集中这类样本的比例。
 > - **主题分类**：微调8B的模型为主题分类器，进行粗粒度分类（“数学推理”）和细粒度分类（“几何和三角学”）
@@ -12280,7 +13069,9 @@ class SwiGLU(nn.Module):
 4. **DPO**：用DPO对SFT模型进行训练，与人类偏好对齐(DPO本质是二分类问题，调整模型参数鼓励模型输出Good Response，不输出Bad Response)，使用之前对齐中表现最好的模型收集的最新一批偏好数据。相比于PPO，DPO对计算量更低，且表现更好，学习率1e-5，将β超参数设置为0.1。此外去除头标记和尾标记，这些token与学习目标冲突（因为好回复和坏回复中都有）；对好回复应用额外的负对数似然 (NLL) 损失项，其缩放系数为 0.2，保持所需的生成格式并防止所选响应的对数概率降低。
 5. **模型平均**：对从不同数据和超参数训练的RM，SFT和DPO模型进行聚合。
 
-> 🎉 论文中提到了几种模型聚合方法：
+> 🎉
+>
+> 论文中提到了几种模型聚合方法：
 >
 > - **Model merging**：直接做模型加权平均，这会导致某些模型的知识被抹除掉。
 > - **Tie：**则是首先确定每个参数的偏移方向（也就是最大改变的方向），然后在该方向做单位偏移。
@@ -12294,7 +13085,9 @@ class SwiGLU(nn.Module):
 
 1. **执行反馈**：观察到小模型在更大模型生成的数据上进行训练会带来性能提升，但是405B在自己生成的数据上训练并没有帮助。为解决这个限制，我们引入执行反馈作为真实性的来源，使模型能够从错误中学习并保持在正确的轨道上，采用如下流程生成了大约一百万合成编码对话的大型数据集：
 
-> 🚅 - 问题生成：生成了一个涵盖广泛话题的编程问题描述的集合，
+> 🚅
+>
+> - 问题生成：生成了一个涵盖广泛话题的编程问题描述的集合，
 > - 代码生成：使用llama3生成代码，观察到，在提示中添加通用的良好编程规则可以提高生成的解决方案质量。此外，我们发现要求模型在注释中解释其思维过程是有帮助的。
 > - 正确性分析：将所有生成的代码通过解析器和linter运行，确保语法正确性；对于每个问题和解决方案，我们提示模型生成单元测试，在容器化环境中与解决方案一起执行，捕捉运行时执行错误和一些语义错误。
 > - 错误反馈与自我修正：当代码出错时，提示模型进行修正，提示包括原始问题描述、错误的解决方案以及语法错误和执行错误将没有问题的对话加入到SFT的数据集中。
@@ -12311,7 +13104,9 @@ class SwiGLU(nn.Module):
 
 ###### 数学和推理
 
-> ✏️ 论文将推理定义为执行多步骤计算并得出正确最终答案的能力。面临的难题：
+> ✏️
+>
+> 论文将推理定义为执行多步骤计算并得出正确最终答案的能力。面临的难题：
 >
 > 1. 缺少prompt和query。
 > 2. 缺少真实的COT。
@@ -12334,7 +13129,9 @@ class SwiGLU(nn.Module):
 - **摘要**：对于长文本采用分层摘要，首先使用Llama 3 8K上下文模型对8K输入长度的块进行摘要，然后对摘要进行二次摘要。在训练期间提供完整文档，并prompt模型在保留所有重要细节的同时摘要文档。我们还基于文档摘要生成QA对，并用需要对整个长文档有全局理解的问题prompt模型。
 - 观察到代码往往也都是很长的文本，所以通过解析Python文件以识别import语句并确定它们的依赖关系，提升模型的长文本能力。选择最经常被import的文件，并随机删除一些文件，然后prompt模型识别依赖于缺失文件的文件，并生成必要的缺失代码。
 
-> 🎁 观察到使用0.1%的合成长文本数据，就能在短文本环境和长文本环境基准测试中优化性能。此外观察到只要SFT模型的训练过程中使用了长文本数据，DPO就不需要长文本数据。
+> 🎁
+>
+> 观察到使用0.1%的合成长文本数据，就能在短文本环境和长文本环境基准测试中优化性能。此外观察到只要SFT模型的训练过程中使用了长文本数据，DPO就不需要长文本数据。
 
 ###### 工具使用
 
@@ -12376,14 +13173,18 @@ class SwiGLU(nn.Module):
 
 论文标题：DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning
 
-> ✏️ 在DeepSeek R1的技术报告中，有些内容并未详细介绍，同时在复现R1模型时也存在一些**难点**：
+> ✏️
+>
+> 在DeepSeek R1的技术报告中，有些内容并未详细介绍，同时在复现R1模型时也存在一些**难点**：
 >
 > - **训练流程细节**：虽然技术报告中提到了强化学习阶段和知识蒸馏，但省略了一些关键的实现细节。例如，超参数（如学习率、批量大小、奖励缩放因子）的具体设置，生成合成训练数据所用的数据pipeline（如如何安排80W蒸馏样本），以及用于需要与人类偏好对齐的任务的奖励模型架构（如多语言输出中的“语言一致性奖励”）。
 > - **冷启动数据生成**：报告中提到了创建“高质量冷启动数据”的过程（如人工标准、少样本提示），但没有提供具体的示例或数据集。
 > - **硬件和基础设施**：文档中没有详细说明所需的计算资源（如GPU集群、训练时间）或软件堆栈优化（如DeepSeek-V3的AMD ROCM集成）。
 > - **复现难点**：缺少一些关键组件，例如多阶段强化学习的脚本。
 
-> 🐵 **技术报告概述**
+> 🐵
+>
+> **技术报告概述**
 >
 > 1、DeepSeek-R1-Zero证明了只采用强化学习（RL），而无需SFT作为预备步骤就能展示出显著的推理能力。
 >
@@ -12413,7 +13214,9 @@ RLHF-PPO需要四个模型，即策略模型，评估模型，参照模型和奖
 
 GRPO原论文设置G=64，通过从旧策略中采样大量的输出，增大了能探索到正确答案的概率。
 
-> 🌅 对目标函数的详解：
+> 🌅
+>
+> 对目标函数的详解：
 >
 > - $\frac{\pi_\theta(o_i|q)}{\pi_{\theta_{old}}(o_i|q)}$表示新模型和旧模型在同一输入下得到同一输出的概率比，用于限制更新速度，避免原始模型能力的丧失。
 > - clip函数也是为了将更新限制在一定范围内，即将$\frac{\pi_\theta(o_i|q)}{\pi_{\theta_{old}}(o_i|q)}$限制在$[1-\epsilon, 1+\epsilon]$之间。
@@ -12421,7 +13224,9 @@ GRPO原论文设置G=64，通过从旧策略中采样大量的输出，增大了
 > - 与PPO中Advantage的计算相比，GRPO只需要奖励模型，减少了推理的内存占用和时间，但缺点是只关注当下表现，忽略了长期回报。
 > - KL散度惩罚项，强制新策略与参考策略$\pi_{ref}$接近，也是为了防止策略偏离特定约束（如安全策略或预训练模型）。
 
-> 🐵 **对比PPO、GRPO、DPO：**
+> 🐵
+>
+> **对比PPO、GRPO、DPO：**
 >
 > - **GRPO：一组prompt经过LLM生成N个结果，每个结果打分，超过平均的被接受，反之被拒绝**
 > - **PPO：一组prompt经过LLM生成结果，对结果打分，和上一个的自己比较，有优势被接受，反之被拒绝**
@@ -12431,7 +13236,9 @@ GRPO原论文设置G=64，通过从旧策略中采样大量的输出，增大了
 
 KL-散度的计算公式为：
 
-$KL(q || p) = \sum_xq(x) log \frac{q(x)}{p(x)} = E_{x \sim q} [log \frac{q(x)}{p(x)}]$
+$$
+KL(q || p) = \sum_xq(x) log \frac{q(x)}{p(x)} = E_{x \sim q} [log \frac{q(x)}{p(x)}]
+$$
 
 KL 散度非负，当且仅当$q(x) = p(x)$时，KL散度为0。实际计算中，直接计算KL散度很难，因为需要对所有的x求和或求积分，计算成本和内存效果过大。因此在实际计算中，往往使用近似方法计算KL-散度。
 
@@ -12439,13 +13246,19 @@ KL 散度非负，当且仅当$q(x) = p(x)$时，KL散度为0。实际计算中�
 
 定义$r = \frac{p(x)}{q(x)}$，K1估计为：
 
-$k1 = log \frac{q(x)}{p(x)} = -log(r)$
+$$
+k1 = log \frac{q(x)}{p(x)} = -log(r)
+$$
 
 K1是对KL-散度的无偏估计：
 
-$E[k1] = E_{x \sim q} [log \frac{q(x)}{p(x)}] = KL(q || p)$
+$$
+E[k1] = E_{x \sim q} [log \frac{q(x)}{p(x)}] = KL(q || p)
+$$
 
-> 🎼 **KL-散度和K1估计的区别**
+> 🎼
+>
+> **KL-散度和K1估计的区别**
 >
 > 第一次看到这里的你是否会感觉KL-散度和K1估计没啥区别，nonono，KL-散度的计算量比K1估计大很多。
 >
@@ -12453,29 +13266,35 @@ $E[k1] = E_{x \sim q} [log \frac{q(x)}{p(x)}] = KL(q || p)$
 >
 > 而K1估计中， q是通过策略生成事件的概率，p是目标策略生成事件概率。K1估计只需要计算单个事件的概率，计算量大减。
 
-K1估计的方差很大，若 q(x)<p(x)，k1 为负值，导致估计值波动大。
+K1估计的方差很大，若 q(x)\<p(x)，k1 为负值，导致估计值波动大。
 
 ###### K2估计（有偏低方差）
 
 K2估计定义为：
 
-$K2 = \frac{1}{2} (log \frac{p(x)}{q(x)})^2 = \frac{1}{2}(log r)^2$
+$$
+K2 = \frac{1}{2} (log \frac{p(x)}{q(x)})^2 = \frac{1}{2}(log r)^2
+$$
 
  K2确保所有事件的值都是正数，使其在计算中更加稳定。
 
 ###### K3估计（无偏低方差）
 
-$K3 = \frac{p(x)}{q(x)} - 1 - log \frac{p(x)}{q(x)} = r - 1 - log r$
+$$
+K3 = \frac{p(x)}{q(x)} - 1 - log \frac{p(x)}{q(x)} = r - 1 - log r
+$$
 
 由于$E(- logr) = KL(q || p)$，$E(r - 1) = E_{x \sim q}[\frac{p(x)}{q(x)}] = \int q(x) \frac{p(x)}{q(x)} dx = \int p(x) dx = 1$
 
 K3 估计是KL-散度的无偏估计。并且通过求导可知，K3估计的值恒大于0，因此方差也更低。**GRPO中采用了K3估计。OpenRLHF库中ppo算法采用k1估计和k3估计计算KL散度，区别是将KL约束加在奖励之中：**
 
-$R_t =   
-\begin{cases}  
--kt\_ctl * (log\frac{ \pi(a_t|s_t)}{ \pi_{ref}(a_t|s_t)}), t \neq T \\  
--kt\_ctl * (log\frac{ \pi(a_t|s_t)}{ \pi_{ref}(a_t|s_t)}) + R_t, t = T   
-\end{cases}$
+$$
+R_t = 
+\begin{cases}
+-kt\_ctl * (log\frac{ \pi(a_t|s_t)}{ \pi_{ref}(a_t|s_t)}), t \neq T \\
+-kt\_ctl * (log\frac{ \pi(a_t|s_t)}{ \pi_{ref}(a_t|s_t)}) + R_t, t = T 
+\end{cases}
+$$
 
 - 当 t≠T 时，我们更加关心Actor是否有在Ref的约束下生产token $a_t$(T表示最后一个时刻)
 - 当 t=T 时，我们不仅关心Actor是否遵从了Ref的约束，也关心真正的即时收益$R_t$
@@ -12486,22 +13305,36 @@ $R_t =
 
 也就是采用**ORM（Outcome Reward Model）**，对于问题q，从旧策略$\pi_{\theta_{old}}$采样一系列的输出 {𝑜1,𝑜2,··· ,𝑜𝐺}，然后用奖励模型对输出进行评分，得到G个奖励 ，计算$r = \{r1,r2,...,rG\}$优势后将每个token的优势值都设置为此优势值。
 
-$A_{i, t} = \frac{r_i - mean(r)}{std(r)}$
+$$
+A_{i, t} = \frac{r_i - mean(r)}{std(r)}
+$$
 
 也就是对采样出的这一组输出的奖励计算归一化奖励作为每个输出的优势函数，每个输出的优势赋值给输出中每个token作为该token的优势函数。
 
-> 🏝️ **为什么用奖励值表示优势**
+> 🏝️
+>
+> **为什么用奖励值表示优势**
 >
 > 回顾贝尔曼方程中价值动作函数的定义：
 >
-> $Q_\pi(s, a) = E_\pi[G_t|S_t=s, A_t = a] = E_\pi[R_t + \gamma R_{t+1} + ...| S_t = s, A_t = a]$
+> $$
+> Q_\pi(s, a) = E_\pi[G_t|S_t=s, A_t = a] = E_\pi[R_t + \gamma R_{t+1} + ...| S_t = s, A_t = a]
+> $$
 >
 > 将从问题q到输出o的过程视为**单步MDP**，这样状态就是q，动作就是$o_i$，对应的奖励也就是$r(q, o_i)$,价值动作函数可以表示为：
 >
-> $Q(s, a) = E_\pi [R_t | S_t = s, A_t = a] = r(q, o_i)$
+> $$
+> Q(s, a) = E_\pi [R_t | S_t = s, A_t = a] = r(q, o_i)
+> $$
 >
-> 只要采样个数足够多，就可以用$mean(r) = \frac{1}{G} \sum_{i  
-> =1}^G r(q, o_i)$可来估计$V(q)$，因此优势$A(q, o_i) = Q(q, o_i) - V(q)$,除以$std(r)$是为了进行归一化。
+> 只要采样个数足够多，就可以用
+>
+> $$
+> mean(r) = \frac{1}{G} \sum_{i
+> =1}^G r(q, o_i)
+> $$
+>
+> 可来估计$V(q)$，因此优势$A(q, o_i) = Q(q, o_i) - V(q)$,除以$std(r)$是为了进行归一化。
 >
 > 这样计算出的优势是对整个回复的，GRPO将每个token的优势值都设置为此值，表示使用当前策略去更新输出$o_i$中每一个token的条件输出概率$\pi_\theta(a_t | s_t)$的更新幅度和方向是一样的。
 
@@ -12509,11 +13342,15 @@ $A_{i, t} = \frac{r_i - mean(r)}{std(r)}$
 
 采用**PRM(Process-supervised Reward Model)**，为每个输出的每个token都计算奖励值：
 
-$r = \{\{r_1^{index(1)}, ..., r_1^{index(K_1)}\},...,  \{r_G^{index(1)}, ..., r_G^{index(K_G)}\}  \}$
+$$
+r = \{\{r_1^{index(1)}, ..., r_1^{index(K_1)}\},...,  \{r_G^{index(1)}, ..., r_G^{index(K_G)}\}  \}
+$$
 
 其中$index(j)$表示第j个步骤的end token的index，$K_i$表示第i个输出的步骤总数，第i个输出的第t个步骤的优势为：
 
-$A_{i, t} = \sum_{index(j) \ge t} \frac{r_i^{index(j)} - mean(r)}{std(r)}$
+$$
+A_{i, t} = \sum_{index(j) \ge t} \frac{r_i^{index(j)} - mean(r)}{std(r)}
+$$
 
 输出实际是由多个步骤组成的，所以当前步骤的优势应该包含后续步骤的期望，即当前步骤的优势为当前步骤和后续步骤的优势之和。这里的步骤可以理解为token，也就是每个token的优势为当前token和后续token的优势之和。
 
@@ -12556,7 +13393,7 @@ $A_{i, t} = \sum_{index(j) \ge t} \frac{r_i^{index(j)} - mean(r)}{std(r)}$
 采用了基于规则的奖励系统，包括准确性奖励和格式奖励：
 
 - **准确性奖励**：评估模型回复是否正确。
-- **格式奖励**：强制模型将思考过程放在'<think>' 和 '</think>'之间。
+- **格式奖励**：强制模型将思考过程放在'\<think>' 和 '\</think>'之间。
 
 作者提出没有考虑神经奖励模型，以降低模型训练的复杂性，避免模型迎合奖励模型偏好，而生成错误的答案。
 
@@ -12631,13 +13468,15 @@ DeepSeek-R1-Zero的训练模板如下图，要求模型先生成推理过程再�
 ##### 5.2.3 实验结果
 
 - 在通用知识任务上，DeepSeek-R1 的表现显著优于 DeepSeek-V3，尽管略低于 OpenAI-o1-1217，但仍优于其他闭源模型。
--  在创意写作、问答、编辑和摘要等任务上也表现出色，此外，在ArenaHard 和 AlpacaEval 任务上生成的摘要长度简洁，在基于GPT的评估中避免了引入长度偏差，增强了其在这些任务上的鲁棒性。
+- 在创意写作、问答、编辑和摘要等任务上也表现出色，此外，在ArenaHard 和 AlpacaEval 任务上生成的摘要长度简洁，在基于GPT的评估中避免了引入长度偏差，增强了其在这些任务上的鲁棒性。
 - 在数学和编程任务上，取得了与 OpenAI-o1-1217 相当的效果
 - 利用DeepSeek-R1蒸馏Qwen-32B取得了比o1-mini更好的结果，此外将强化学习应用到蒸馏模型能取得更好的效果。单纯使用强化学习的效果比较差。
 
 ![](居丽叶LLM体系知识搭建/images/HmvhbEj5ooKg5gxTlF5c6IDHnWh.png)
 
-> 🌟 **知识蒸馏：赋予小模型推理能力**
+> 🌟
+>
+> **知识蒸馏：赋予小模型推理能力**
 >
 > 大模型庞大的参数量和计算需求限制了其在很多场景的应用。知识蒸馏是一种将大模型能力迁移到小模型的方法，提升小模型的能力。
 >
@@ -12654,24 +13493,30 @@ DeepSeek-R1-Zero的训练模板如下图，要求模型先生成推理过程再�
 - 提示敏感性：DeepSeek-R1 对提示（prompt）较为敏感，少样本提示（few-shot prompting）会降低其性能，建议使用零样本提示（zero-shot prompting）。
 - 软件开发任务：RL在代码编写（尤其是工程级）的大规模应用还受限于评测成本高、过程长等问题。未来将通过拒绝采样软件开发数据或在RL过程中引入异步评估来改善效率，从而解决这一问题。
 
-> 📚 **一点嗅觉**：
+> 📚
+>
+> **一点嗅觉**：
 >
 > 1. **大佬们集体梭哈RL**  
->    OpenAI偷偷搞的Q-star、Anthropic憋的大招Claude-Next、DeepSeek-r1...这些最拽的实验室全在死磕强化学习。就跟当年全民All in Transformer一样，**现在谁不用RL训练模型，出门都不好意思打招呼**。
+>     OpenAI偷偷搞的Q-star、Anthropic憋的大招Claude-Next、DeepSeek-r1...这些最拽的实验室全在死磕强化学习。就跟当年全民All in Transformer一样，**现在谁不用RL训练模型，出门都不好意思打招呼**。
 > 2. **RL就是AI的“开窍按钮”**  
->    以前调教AI像填鸭式教学（SFT微调），现在RL让AI自己琢磨——好比打游戏，菜鸟需要手把手教，但高手都是自己死多了练出来的。**最新模型用RL后，真的会“灵光一闪”自己改代码bug了。**
+>     以前调教AI像填鸭式教学（SFT微调），现在RL让AI自己琢磨——好比打游戏，菜鸟需要手把手教，但高手都是自己死多了练出来的。**最新模型用RL后，真的会“灵光一闪”自己改代码bug了。**
 
 ##### 5.2.4 DeepSeek R1 20 问
 
-> 🦄 **问题1：DeepSeek-R1-Zero如何通过纯强化学习（RL）实现推理能力的突破？**
+> 🦄
+>
+> **问题1：DeepSeek-R1-Zero如何通过纯强化学习（RL）实现推理能力的突破？**
 >
 > **专业回答**：DeepSeek-R1-Zero的核心创新在于直接从基础模型（DeepSeek-V3-Base）出发，完全依赖大规模强化学习（RL）提升推理能力，跳过了传统的监督微调（SFT）步骤。其采用**GRPO（Group Relative Policy Optimization）算法**，通过组内归一化奖励信号优化策略。具体来说，GRPO通过采样一组输出（组大小G=16），计算组内奖励的均值和标准差，生成**优势函数（advantage）**，从而避免传统PPO中需要额外训练价值模型的高成本。这种纯RL训练促使模型自主探索长思维链（CoT）、自我验证和反思等复杂推理行为，最终在数学（AIME 2024 Pass@1从15.6%提升至71.0%）和代码任务中取得显著提升。
 >
 > **科普解释**：想象你教一个机器人解数学题，传统方法是先给它看很多例题（监督学习），再让它自己练习（强化学习）。而DeepSeek-R1-Zero直接让机器人通过“试错”学习，不需要例题。它用一种聪明的算法（GRPO）来评估每次尝试的得分，自动调整策略，最终学会复杂的解题步骤，比如检查自己的答案是否正确，或者换一种思路重新尝试。
 
-> 🏖️ **问题2：为何在DeepSeek-R1中引入冷启动数据（cold-start data）？其核心优势是什么？**
+> 🏖️
 >
-> **专业回答**：冷启动数据用于解决DeepSeek-R1-Zero的可读性和语言混合问题。具体来说，冷启动数据包含数千条高质量的长思维链（CoT）示例，通过人工标注和格式过滤（如使用<reasoning>和<summary>标签），强制模型生成结构清晰、语言一致的内容。其核心优势在于：
+> **问题2：为何在DeepSeek-R1中引入冷启动数据（cold-start data）？其核心优势是什么？**
+>
+> **专业回答**：冷启动数据用于解决DeepSeek-R1-Zero的可读性和语言混合问题。具体来说，冷启动数据包含数千条高质量的长思维链（CoT）示例，通过人工标注和格式过滤（如使用\<reasoning>和\<summary>标签），强制模型生成结构清晰、语言一致的内容。其核心优势在于：
 >
 > 1. **稳定性**：为RL训练提供高质量的初始策略，避免早期探索阶段的输出混乱。
 > 2. **可读性**：通过模板化输出（如总结模块）提升生成内容的用户友好性。
@@ -12679,7 +13524,9 @@ DeepSeek-R1-Zero的训练模板如下图，要求模型先生成推理过程再�
 >
 > **科普解释**：冷启动数据就像给模型一本“参考答案格式手册”。虽然纯RL能让模型学会解题，但它的答案可能写得乱七八糟。通过先教模型如何规范地写步骤和总结，再让它自由发挥，最终答案既正确又容易看懂。
 
-> 🏆 **问题3：论文提到“语言混合”（language mixing）问题，具体表现和解决思路是什么？**
+> 🏆
+>
+> **问题3：论文提到“语言混合”（language mixing）问题，具体表现和解决思路是什么？**
 >
 > **专业回答**：**表现**：模型在处理多语言提示时，可能在同一思维链中混合使用中英文（如中文问题用英文推理）。
 >
@@ -12687,11 +13534,13 @@ DeepSeek-R1-Zero的训练模板如下图，要求模型先生成推理过程再�
 >
 > 1. **语言一致性奖励**：在RL阶段增加奖励项，计算目标语言词汇占比（如中文任务中中文词比例需超过阈值）。
 > 2. **数据过滤**：冷启动阶段人工筛选单语言示例，强化模型的语言对齐能力。
-> 3. **模板约束**：强制要求推理和答案部分使用统一语言标签（如<think zh>和<answer zh>）。
+> 3. **模板约束**：强制要求推理和答案部分使用统一语言标签（如\<think zh>和\<answer zh>）。
 >
 > **科普解释**：就像一个人学双语时可能混用单词，模型也可能在解题时中英文混杂。解决方法类似“语言考试”：如果题目是中文，就要求全程用中文写答案，否则扣分。模型为了得高分，自然会遵守规则
 
-> 🏝️ **问题4：蒸馏技术的核心目标是什么？为何小模型通过蒸馏能超越直接RL训练？**
+> 🏝️
+>
+> **问题4：蒸馏技术的核心目标是什么？为何小模型通过蒸馏能超越直接RL训练？**
 >
 > **专业回答**：**目标**：将大模型（如DeepSeek-R1）的推理能力迁移到小模型（如7B参数），使其在有限计算资源下接近大模型性能。
 >
@@ -12703,7 +13552,9 @@ DeepSeek-R1-Zero的训练模板如下图，要求模型先生成推理过程再�
 >
 > **科普解释**：蒸馏就像“学霸笔记”。小模型不用自己从头学解题，而是直接背学霸（大模型）的解题步骤和技巧，这样既省时间又考得更好。
 
-> 🌅 **问题5：论文中提到的“aha moment”具体指什么？对模型训练有何启示？**
+> 🌅
+>
+> **问题5：论文中提到的“aha moment”具体指什么？对模型训练有何启示？**
 >
 > **专业回答**：**定义**：在RL训练中期，模型突然展现出类人反思行为（如“Wait, let me re-evaluate this step”），主动修正错误推理路径。**启示**：
 >
@@ -12713,7 +13564,9 @@ DeepSeek-R1-Zero的训练模板如下图，要求模型先生成推理过程再�
 >
 > **科普解释**：就像解难题时突然“灵光一闪”，模型在训练中自己学会了“回头检查步骤”，这种能力不是程序员教的，而是算法奖励正确答案后自然出现的。
 
-> 📚 **问题6：模型在生成过程中如何平衡“创造性”与“准确性”？**
+> 📚
+>
+> **问题6：模型在生成过程中如何平衡“创造性”与“准确性”？**
 >
 > **专业回答**：**奖励设计**：
 >
@@ -12727,7 +13580,9 @@ DeepSeek-R1-Zero的训练模板如下图，要求模型先生成推理过程再�
 >
 > **科普解释**：解数学题时必须严谨（“1+1只能等于2”），但写故事时可以天马行空。模型通过不同任务切换“工作模式”。
 
-> 📌 **问题7：为何在推理任务中强调“规则化奖励”而非神经奖励模型？**
+> 📌
+>
+> **问题7：为何在推理任务中强调“规则化奖励”而非神经奖励模型？**
 >
 > **专业回答**：规则化奖励（如答案正确性验证和格式检查）通过明确的数学规则或编译测试直接判断输出质量，避免了神经奖励模型的潜在问题：
 >
@@ -12737,7 +13592,9 @@ DeepSeek-R1-Zero的训练模板如下图，要求模型先生成推理过程再�
 >
 > **科普解释**：规则化奖励就像“客观考试评分”——答案对错一目了然。而神经奖励模型类似“老师主观打分”，模型可能学会讨好老师却答错题。用规则化奖励更公平、更直接。
 
-> ⚽ **问题8：GRPO（Group Relative Policy Optimization）算法的设计原理是什么？与传统RL方法有何不同？**
+> ⚽
+>
+> **问题8：GRPO（Group Relative Policy Optimization）算法的设计原理是什么？与传统RL方法有何不同？**
 >
 > **专业回答**：GRPO的核心思想是通过组内归一化（group-wise normalization）替代传统PPO中的价值模型（critic），降低计算成本。具体步骤：
 >
@@ -12749,7 +13606,9 @@ DeepSeek-R1-Zero的训练模板如下图，要求模型先生成推理过程再�
 >
 > **科普解释**：GRPO像“班级内部竞争”——老师根据全班成绩（组内平均分）调整每个学生的评分，而不是用固定分数线。这样模型只需关注自己是否比同组其他答案更好，无需额外学习“评分标准”。
 
-> ⛱️ **问题9：DeepSeek-R1-Zero的“自我进化”（self-evolution）过程如何通过RL实现？**
+> ⛱️
+>
+> **问题9：DeepSeek-R1-Zero的“自我进化”（self-evolution）过程如何通过RL实现？**
 >
 > **专业回答**：自我进化通过以下机制实现：
 >
@@ -12761,7 +13620,9 @@ DeepSeek-R1-Zero的训练模板如下图，要求模型先生成推理过程再�
 >
 > **科普解释**：模型像“自学成才的棋手”，通过不断对弈（试错）和复盘（奖励反馈），逐渐从新手成长为高手，甚至发明新策略。
 
-> 🍞 **问题10：拒绝采样（rejection sampling）在SFT阶段的作用是什么？如何筛选高质量数据？**
+> 🍞
+>
+> **问题10：拒绝采样（rejection sampling）在SFT阶段的作用是什么？如何筛选高质量数据？**
 >
 > **专业回答**：**作用**：从RL生成的候选答案中筛选高正确率、高可读性的样本，用于监督微调（SFT）。
 >
@@ -12775,7 +13636,9 @@ DeepSeek-R1-Zero的训练模板如下图，要求模型先生成推理过程再�
 >
 > **科普解释**：拒绝采样像“择优录取”——从模型生成的100个答案中，只挑出最正确、最规范的10个作为学习资料，剩下的不及格答案直接扔掉。
 
-> 🎼 **问题11：多阶段RL训练（两阶段RL+两阶段SFT）的协同效应如何提升模型性能？**
+> 🎼
+>
+> **问题11：多阶段RL训练（两阶段RL+两阶段SFT）的协同效应如何提升模型性能？**
 >
 > **专业回答**：多阶段训练通过分步优化不同目标实现协同：
 >
@@ -12788,22 +13651,26 @@ DeepSeek-R1-Zero的训练模板如下图，要求模型先生成推理过程再�
 >
 > **科普解释**：分阶段训练像“先专精再全能”——先让模型成为数学高手（第一阶段RL），再教它写文章、答常识题（SFT），最后让它既聪明又友好（第二阶段RL），避免偏科。
 
-> 🎨 **问题12：训练模板中<think>与<answer>标签的设计逻辑是什么？**
+> 🎨
+>
+> **问题12：训练模板中\<think>与\<answer>标签的设计逻辑是什么？**
 >
 > **专业回答**：**设计目标**：
 >
-> 1. **结构化输出**：强制模型分离推理过程与最终答案，便于规则化奖励计算（如仅验证<answer>内容）。
-> 2. **注意力引导**：通过位置编码约束，使模型在生成<think>时聚焦逻辑推导，<answer>时聚焦结果精度。
+> 1. **结构化输出**：强制模型分离推理过程与最终答案，便于规则化奖励计算（如仅验证\<answer>内容）。
+> 2. **注意力引导**：通过位置编码约束，使模型在生成\<think>时聚焦逻辑推导，\<answer>时聚焦结果精度。
 > 3. **可解释性**：用户可直观查看中间步骤，提升信任度。
 >
 > **技术实现**：
 >
-> - 在输入模板中硬性插入标签，如：User: {问题}  Assistant: <think>... </think> <answer>... </answer>  
+> - 在输入模板中硬性插入标签，如：User: {问题}  Assistant: \<think>... \</think> \<answer>... \</answer>
 > - 训练初期通过掩码（masking）强化标签预测准确性。
 >
-> **科普解释**：标签像“答题卡分区”——模型必须先写草稿（<think>），再填正式答案（<answer>），避免跳步或混乱。
+> **科普解释**：标签像“答题卡分区”——模型必须先写草稿（\<think>），再填正式答案（\<answer>），避免跳步或混乱。
 
-> 🥇 **问题13：模型在生成长文本时如何管理内存与计算资源？**
+> 🥇
+>
+> **问题13：模型在生成长文本时如何管理内存与计算资源？**
 >
 > **专业回答**：**优化技术**：
 >
@@ -12814,7 +13681,9 @@ DeepSeek-R1-Zero的训练模板如下图，要求模型先生成推理过程再�
 >
 > **科普解释**：内存管理像“搬家装箱”——把不常用的东西（中间结果）临时拆开（检查点），到目的地再组装，就能用更小的车（显存）运更多货。
 
-> 🐵 **问题14：多数投票（majority voting）如何进一步提升模型性能？其背后的统计学原理是什么？**
+> 🐵
+>
+> **问题14：多数投票（majority voting）如何进一步提升模型性能？其背后的统计学原理是什么？**
 >
 > **专业回答**：**原理**：假设单次正确率为( p )，采样( N )次后，多数投票正确率为：$[ P_{\text{maj}} = \sum_{k=\lceil N/2 \rceil}^N \binom{N}{k} p^k (1-p)^{N-k} ]$
 >
@@ -12824,7 +13693,9 @@ DeepSeek-R1-Zero的训练模板如下图，要求模型先生成推理过程再�
 >
 > **科普解释**：多数投票像“群众的眼睛是雪亮的”——如果模型70%的概率答对，投64次票后，正确答案大概率胜出。
 
-> 🌰 **问题15：训练数据中的噪声如何影响最终性能？**
+> 🌰
+>
+> **问题15：训练数据中的噪声如何影响最终性能？**
 >
 > **专业回答**：**噪声类型与影响**：
 >
@@ -12838,7 +13709,9 @@ DeepSeek-R1-Zero的训练模板如下图，要求模型先生成推理过程再�
 >
 > **科普解释**：噪声数据像“错误食谱”——如果菜谱里写“盐放500克”，厨师（模型）照做会毁掉整道菜。必须严格检查食谱，或教厨师识别明显错误。
 
-> 📍 **问题16：评测中是否考虑模型的计算效率（如推理延迟）？**
+> 📍
+>
+> **问题16：评测中是否考虑模型的计算效率（如推理延迟）？**
 >
 > **专业回答**：**评测指标**：
 >
@@ -12852,7 +13725,9 @@ DeepSeek-R1-Zero的训练模板如下图，要求模型先生成推理过程再�
 >
 > **科普解释**：计算效率像“外卖送餐速度”——用户不仅关心菜品质量（答案正确），还在意送达时间（响应速度）。优化模型像优化厨房流程，既要好吃又要快。
 
-> 🎉 **问题17：长上下文任务中模型的注意力机制如何优化？**
+> 🎉
+>
+> **问题17：长上下文任务中模型的注意力机制如何优化？**
 >
 > **专业回答**：**优化技术**：
 >
@@ -12864,7 +13739,9 @@ DeepSeek-R1-Zero的训练模板如下图，要求模型先生成推理过程再�
 >
 > **科普解释**：长文本处理像“快速阅读”——眼睛（注意力）只盯重点段落，大脑（模型）自动忽略废话，既省时间又抓得住要点。
 
-> 🌟 **问题18：过程奖励模型（PRM）为何在实验中失败？其局限性是什么？**
+> 🌟
+>
+> **问题18：过程奖励模型（PRM）为何在实验中失败？其局限性是什么？**
 >
 > **专业回答**：**失败原因**：
 >
@@ -12876,7 +13753,9 @@ DeepSeek-R1-Zero的训练模板如下图，要求模型先生成推理过程再�
 >
 > **科普解释**：PRM像“步步盯梢的监考老师”——每写一步都要打分，但老师自己也可能判错，学生（模型）压力大且进步慢。最终发现，只看最终答案评分（规则奖励）反而更高效。
 
-> 🏖️ **问题19：模型在实际部署中的计算资源需求如何？**
+> 🏖️
+>
+> **问题19：模型在实际部署中的计算资源需求如何？**
 >
 > **专业回答**：**资源需求**：
 >
@@ -12890,7 +13769,9 @@ DeepSeek-R1-Zero的训练模板如下图，要求模型先生成推理过程再�
 >
 > **科普解释**：大模型像“超级计算机”，需要昂贵设备才能运行；小模型像“家用电脑”，普通显卡就能带动。企业根据需求选择——追求效果用大模型，控制成本用小模型。
 
-> 🚅 **问题20：模型的可解释性（interpretability）如何提升？**
+> 🚅
+>
+> **问题20：模型的可解释性（interpretability）如何提升？**
 >
 > **专业回答**：**提升方法**：
 >
@@ -12903,7 +13784,9 @@ DeepSeek-R1-Zero的训练模板如下图，要求模型先生成推理过程再�
 
 #### 5.3 DeepSeek V3
 
-> 🎨 **技术报告概述**
+> 🎨
+>
+> **技术报告概述**
 >
 > 1、DeepSeek R1模型与DeepSeek V3模型架构一致，有671B参数，其中37B激活参数。
 >
@@ -12944,17 +13827,25 @@ MLA（Multi-Head Latent Attention）的核心思路是：通过 对 Key 和 Valu
 
 设输入序列的第 t 个 token 的嵌入向量为$h_t∈R^d$ ，其中 d 是嵌入维度。每个注意力头的维度为 $d_h$ ，总头数为$n_h$。MLA首先通过一个下投影矩阵$W^{DKV}∈R^{d_c×d}$ 将 $h_t$ 投影到一个低维潜在空间：
 
-$c_t^{KV} = W^{DKV}h_t$
+$$
+c_t^{KV} = W^{DKV}h_t
+$$
 
-其中 $c_t^{KV}∈R^{d_c}$表示压缩后的潜在向量 ，且 $d_c≪d_hn_h$。 
+其中 $c_t^{KV}∈R^{d_c}$表示压缩后的潜在向量 ，且 $d_c≪d_hn_h$。
 
 **重建key和value**
 
 随后，使用两组上投影矩阵 $W^{UK} \in R^{d_hn_h×d_c}$ 和 $W^{UV}∈R^{d_hn_h×d_c}$ ，从该潜在向量恢复出注意力所需的键和值表示：
 
-$[\mathbf{v}_{t,1}^C, \mathbf{v}_{t,2}^C, \dots, \mathbf{v}_{t,n_h}^C] = k_t^C = W^{UK} c_t^{KV}$
+$$
+[\mathbf{v}_{t,1}^C, \mathbf{v}_{t,2}^C, \dots, \mathbf{v}_{t,n_h}^C] = k_t^C = W^{UK} c_t^{KV}
+$$
 
- $[\mathbf{v}_{t,1}^C, \mathbf{v}_{t,2}^C, \dots, \mathbf{v}_{t,n_h}^C] = v_t^C = W^{UV} c_t^{KV}$
+ 
+
+$$
+[\mathbf{v}_{t,1}^C, \mathbf{v}_{t,2}^C, \dots, \mathbf{v}_{t,n_h}^C] = v_t^C = W^{UV} c_t^{KV}
+$$
 
 推理时，模型仅需缓存$c_t^{KV}$，而不必保存每层的完整$k_t,v_t$。
 
@@ -12967,13 +13858,17 @@ $[\mathbf{v}_{t,1}^C, \mathbf{v}_{t,2}^C, \dots, \mathbf{v}_{t,n_h}^C] = k_t^C =
 
 在传统注意力中，key向量会通过RoPE注入位置信息（**旋转位置编码不做用在value上**）。然而，由于$k_t^C$来自压缩后的潜在空间，直接施加RoPE会导致位置信息失真。这意味着如果仍采用原始RoPE方式，推理阶段必须重新计算所有历史token的key向量，从而抵消MLA带来的加速收益。为解决这一问题，DeepSeek-V2引入了**解耦RoPE（Decoupled RoPE）**。具体做法是为key额外引入一组独立的投影矩阵：
 
-$k_t^R = RoPE(W^{KR} h_t)，W^{KR} \in {d_h^R \times d}$
+$$
+k_t^R = RoPE(W^{KR} h_t)，W^{KR} \in {d_h^R \times d}
+$$
 
 其中$d_h^R$是解耦后的key维度。
 
 最终，每个头的键表示由两部分组成：
 
-$\mathbf{k}_{t,i} = [\mathbf{k}_{t,i}^C; \mathbf{k}_t^R], \quad \mathbf{v}_{t,i} = \mathbf{v}_{t,i}^C$
+$$
+\mathbf{k}_{t,i} = [\mathbf{k}_{t,i}^C; \mathbf{k}_t^R], \quad \mathbf{v}_{t,i} = \mathbf{v}_{t,i}^C
+$$
 
 这样既保留了低秩压缩的节省空间优势，又确保了位置编码信息的准确性。
 
@@ -12983,13 +13878,21 @@ $\mathbf{k}_{t,i} = [\mathbf{k}_{t,i}^C; \mathbf{k}_t^R], \quad \mathbf{v}_{t,i}
 
 为进一步降低训练时的激活内存占用，MLA 同样对 Query 向量进行低秩压缩（但这部分不影响 KV Cache 大小）：
 
-$\mathbf{c}_t^Q = \mathbf{W}^{DQ} h_t,$
+$$
+\mathbf{c}_t^Q = \mathbf{W}^{DQ} h_t,
+$$
 
-$\mathbf{q}_t^C = \mathbf{W}^{UQ} \mathbf{c_t^Q},$
+$$
+\mathbf{q}_t^C = \mathbf{W}^{UQ} \mathbf{c_t^Q},
+$$
 
-$\mathbf{q_t^R} = \operatorname{RoPE}(\mathbf{W}^{QR} \mathbf{c_t^Q}),$
+$$
+\mathbf{q_t^R} = \operatorname{RoPE}(\mathbf{W}^{QR} \mathbf{c_t^Q}),
+$$
 
-$\mathbf{q}_{t,i} = [\mathbf{q}_{t,i}^C; \mathbf{q}_{t,i}^R].$
+$$
+\mathbf{q}_{t,i} = [\mathbf{q}_{t,i}^C; \mathbf{q}_{t,i}^R].
+$$
 
 其中：
 
@@ -13005,7 +13908,9 @@ $\mathbf{q}_{t,i} = [\mathbf{q}_{t,i}^C; \mathbf{q}_{t,i}^R].$
 - **MLA（压缩后）**：只需缓存潜在向量 $\mathbf{c}_t^{KV}$，大小为：$d_c l.$
 - **MLA + 解耦 RoPE**：还需额外缓存 $\mathbf{k}_t^R$，最终总缓存为：$(d_c + d_h^R) l.$
 
-> 🐵 **为什么Query 的 RoPE 作用在压缩后的向量** $c_t^Q$**，而 Key 的 RoPE 却作用在原始输入** $h_t$**上？**
+> 🐵
+>
+> **为什么Query 的 RoPE 作用在压缩后的向量** $c_t^Q$**，而 Key 的 RoPE 却作用在原始输入** $h_t$**上？**
 >
 > **（1）Key 使用原始输入** $h_t$**：保证位置编码精度与缓存可复用性**
 >
@@ -13078,7 +13983,9 @@ $h_i^{k'}$作为第k个深度的transformer块的输入，T为输入序列的长
 
 ![](居丽叶LLM体系知识搭建/images/W2ZjbN5JjobNvxxDPtfcxFlAnff.png)
 
-> 🎼 如何理解MTP：
+> 🎼
+>
+> 如何理解MTP：
 >
 > 第 i+1 到第 i+k−1 个token的信息隐式存在于 $h_i^{k−1}$中。第一个公式表示TRM的输入包含了当前位置和其之后k个输入token的信息。第三个公式表示第 k 个MTP层通过transformer和输出头预测了第 i+k+1 个token的取值概率分布。
 
@@ -13094,7 +14001,9 @@ $t_i$表示第i个位置的真实token，$P_i^k⁢[t_i]$表示由第k个MTP模�
 
 ###### 内存优化
 
-> 🥇 为了减少训练期间的内存占用，论文采用了以下技术：
+> 🥇
+>
+> 为了减少训练期间的内存占用，论文采用了以下技术：
 >
 > ###### RMSNorm 和 MLA 上投影的重新计算。
 >
@@ -13102,7 +14011,7 @@ $t_i$表示第i个位置的真实token，$P_i^k⁢[t_i]$表示由第k个MTP模�
 >
 > ###### CPU 中的指数移动平均。
 >
-> 在训练期间，我们保留模型参数的指数移动平均 (EMA)，以便在学习率衰减后尽早估计模型性能。 EMA 参数存储在 CPU 内存中，并在每个训练步骤之后异步更新。 
+> 在训练期间，我们保留模型参数的指数移动平均 (EMA)，以便在学习率衰减后尽早估计模型性能。 EMA 参数存储在 CPU 内存中，并在每个训练步骤之后异步更新。
 >
 > ###### 用于多字符预测的共享嵌入和输出头。
 >
@@ -13110,7 +14019,9 @@ $t_i$表示第i个位置的真实token，$P_i^k⁢[t_i]$表示由第k个MTP模�
 
 ###### 并行训练
 
-> 📚 由于我对通信不太了解，更多细节请看原论文
+> 📚
+>
+> 由于我对通信不太了解，更多细节请看原论文
 >
 > - DeepSeek-V3应用了16路流水线并行（PP），跨越8个节点的64路专家并行（EP），以及ZeRO-1数据并行（DP）。
 > - 采用高效流水线并行的DualPipe算法以提高pipeline并行的效率，重叠了前向和后向过程中的计算和通信阶段，从而解决了跨节点专家并行引入的沉重通信开销的挑战。
@@ -13129,7 +14040,9 @@ DeepSeek-V3采用了混合精度训练框架，核心思想是在训练过程中
 
 ###### 细粒度量化
 
-> 🎁 为了进一步提高低精度训练的准确性，DeepSeek-V3引入了以下策略：
+> 🎁
+>
+> 为了进一步提高低精度训练的准确性，DeepSeek-V3引入了以下策略：
 >
 > - **细粒度量化（Tile-wise和Block-wise量化）**：为了应对FP8格式动态范围有限的问题，DeepSeek-V3采用了细粒度量化方法。具体来说：
 >     - 对于激活值，按1×128的tile进行量化。
@@ -13151,13 +14064,17 @@ DeepSeek-V3的预训练数据集经过精心设计，以确保高质量和多样
 - **数学和编程样本的增强**：为了提升模型在数学和编程任务上的表现，增加了数学和编程相关样本的比例。
 - **文档打包**：采用文档打包（Document Packing）来确保数据的完整性，避免跨样本的注意力掩码问题。
 
-> 🍞 DeepSeek-V3在预训练中采用了Fill-in-Middle（FIM）策略，通过在文档中随机插入空白区域，让模型学习预测这些空白区域的内容。FIM策略的具体实现如下：
+> 🍞
+>
+> DeepSeek-V3在预训练中采用了Fill-in-Middle（FIM）策略，通过在文档中随机插入空白区域，让模型学习预测这些空白区域的内容。FIM策略的具体实现如下：
 >
 > - **PSM框架**：使用Prefix-Suffix-Middle（PSM）框架来结构化数据，将文档分为前缀、后缀和中间部分，中间部分被标记为需要预测的内容。
 > - **数据格式**：数据格式为`<|fim_begin|> 前缀 <|fim_hole|> 后缀 <|fim_end|> 中间内容 <|eos_token|>`。
 > - **应用比例**：FIM策略在预训练中以0.1的概率应用，确保模型在学习预测下一个标记的同时，也能够学习预测中间文本。
 
-> ⚽ **DeepSeek-V3中的Tokenizer**
+> ⚽
+>
+> **DeepSeek-V3中的Tokenizer**
 >
 > DeepSeek-V3使用了基于字节对编码（Byte-level BPE）的Tokenizer，具有以下特点：
 >
@@ -13221,7 +14138,9 @@ DeepSeek-V3的预训练数据集经过精心设计，以确保高质量和多样
 
 ###### SFT
 
-> 🎁 ###### 推理数据
+> 🎁
+>
+> ###### 推理数据
 >
 > 对于推理相关数据集（如数学、编程竞赛问题和逻辑难题），DeepSeek-V3利用DeepSeek-R1模型生成数据。R1生成的数据虽然准确度高，但存在过度思考、格式不佳和长度过长等问题。为了平衡R1生成数据的高准确性和清晰简洁的格式，DeepSeek-V3采用以下方法：
 >
@@ -13241,7 +14160,9 @@ DeepSeek-V3的预训练数据集经过精心设计，以确保高质量和多样
 
 ###### 强化学习
 
-> 🏝️ DeepSeek-V3在RL过程中使用了规则化奖励模型（Rule-Based RM）和基于模型的奖励模型（Model-Based RM）。
+> 🏝️
+>
+> DeepSeek-V3在RL过程中使用了规则化奖励模型（Rule-Based RM）和基于模型的奖励模型（Model-Based RM）。
 >
 > - **规则化奖励模型：**对于可以通过特定规则验证的问题，DeepSeek-V3采用规则化奖励系统。例如，某些数学问题有确定的答案，模型需要在指定格式（如方框内）提供最终答案，以便通过规则验证。类似地，对于LeetCode问题，可以使用编译器根据测试用例生成反馈。
 > - **基于模型的奖励模型**：对于没有确定答案的问题，DeepSeek-V3依赖于奖励模型来确定回答是否符合预期答案。对于没有明确答案的问题（如创意写作），奖励模型需要根据问题和相应的回答提供反馈。奖励模型基于DeepSeek-V3 SFT检查点进行训练。为了增强其可靠性，DeepSeek-V3构建了偏好数据，这些数据不仅提供最终奖励，还包括导致奖励的思考过程。
@@ -13271,7 +14192,9 @@ DeepSeek-V3的预训练数据集经过精心设计，以确保高质量和多样
 
 - **只能在某阶段实现稀疏性**：只在**自回归解码阶段**或者**预填充阶段**引入稀疏性，但另外几个阶段仍然需要全注意力计算。
 
-> ❤️ **预填充Pre-filling**：
+> ❤️
+>
+> **预填充Pre-filling**：
 >
 > 预填充指的是在大模型运行之前，将一部分已知或可以预先计算的内容输入到模型中，换句话说，就是通过提前处理某些不变或确定的输入来降低模型在推理阶段的计算负担。其主要运用在以下方面：
 >
@@ -13283,7 +14206,9 @@ DeepSeek-V3的预训练数据集经过精心设计，以确保高质量和多样
 
 - **不兼容MQA和GQA**：Multi-Query Attention 和 Group-Query Attention 通过跨多个查询头共享 KV 来显著减少解码过程中的内存访问瓶颈，所需的 KV 缓存内存访问量对应于同一 GQA 组内所有查询头选择的并集，仍然相对较高。这意味着即使共享了 Key 和 Value，访问的内存位置仍然是离散的，因为每个 Query 头或组内的 Query 头可能选择不同的 KV 缓存位置，这导致虽然稀疏注意力减少了计算量，但离散的内存访问减慢了计算速度。
 
-> ⛱️ **离散的内存访问：**
+> ⛱️
+>
+> **离散的内存访问：**
 >
 > 这是操作系统中的概念（算法工程师一定要学好数据结构和操作系统），指在计算机系统中，程序或硬件以非连续的方式访问内存中的数据。与连续的内存访问（如顺序读取或写入）相反，这种随机和间隔性的访问缓存命中率很低，无法利用缓存的局部性原理，因而需要频繁的从内存加载数据，这会导致模型推理速度变慢。
 
@@ -13296,13 +14221,17 @@ DeepSeek-V3的预训练数据集经过精心设计，以确保高质量和多样
 
 Attention的计算定义为：
 
-$𝐨_t=Attn⁡(𝐪_t,𝐤_{:t},𝐯_{:t}) = \sum_{i=1}^t \frac{a_{t,i}v_i}{\sum_{j=1}^t a_{t,j}} （1）$
+$$
+𝐨_t=Attn⁡(𝐪_t,𝐤_{:t},𝐯_{:t}) = \sum_{i=1}^t \frac{a_{t,i}v_i}{\sum_{j=1}^t a_{t,j}} （1）
+$$
 
 其中$a_{t,i}$表示$q_t 和 k_i$之间的注意力，注意力计算量随着序列长度增加而指数级增长。
 
 **算术强度：**定义为计算操作与内存访问的比率，每个 GPU 都有一个算术强度，它由其峰值计算能力和内存带宽决定，计算公式为这两者硬件限制的比率。 对于计算任务，高于此阈值的算术强度变得计算受限（受GPU FLOPS限制），而低于此阈值则变得内存受限（受内存带宽限制）。
 
-> 🦄 - 在训练和预填充阶段，批量矩阵乘法和注意力计算导致高算术强度。因此需要减少训练和预填充期间的计算成本。
+> 🦄
+>
+> - 在训练和预填充阶段，批量矩阵乘法和注意力计算导致高算术强度。因此需要减少训练和预填充期间的计算成本。
 > - 相比之下，自回归解码受内存带宽限制，因为它每次前向传播生成一个 token，同时需要加载整个键值缓存，导致算术强度较低。因此需要减少解码期间的内存访问。
 
 接下来为了使用稀疏注意力，使用更紧凑和信息密集的$\tilde{K}_t, \tilde{V}_t$代替公式（1）中的原始$𝐤_{:t},𝐯_{:t}$，$\tilde{K}_t, \tilde{V}_t$是基于当前查询$q_t$和上下文记忆$𝐤_{:t},𝐯_{:t}$构建的：
@@ -13360,7 +14289,9 @@ NSA设计了三种映射策略$\mathcal{C}={cmp,slc,win}$，分别代表键和�
 
 将以上三种键和值应用到公式（5）中，就得到了最终的NSA。
 
-> ⛱️ **通俗解释以上三种映射策略**
+> ⛱️
+>
+> **通俗解释以上三种映射策略**
 >
 > 假设你需要跟房间中的一些人对话。
 >
@@ -13386,7 +14317,9 @@ NSA设计了三种映射策略$\mathcal{C}={cmp,slc,win}$，分别代表键和�
 
 在基准测试、长文本任务、推理任务上都取得了一定的性能提升。最显著的优点在于，在64k序列长度下，训练阶段，前向加速高达9.0×倍，反向加速高达6.0×倍；解码阶段，NSA的解码速度比Full Attention快11.6倍。
 
-> 🎨 **NSA有以下创新点**：
+> 🎨
+>
+> **NSA有以下创新点**：
 >
 > - **显著的加速效果**: 通过算法设计和现代硬件实现的优化，在处理64k长序列时，NSA在解码、前向传播和后向传播阶段相比全注意力模型实现了显著的速度提升。
 > - **端到端训练支持**: NSA支持端到端训练，减少了预训练计算量而不牺牲模型性能，使得稀疏注意力模式可以在整个模型生命周期中有效利用。
@@ -13406,7 +14339,9 @@ DSA的核心突破在于引入了一种**按需稀疏机制**。它不再让每�
 
 这是一个轻量索引模块，它会为每个Query Token $h_t \in \mathbb{R}^d$与所有在它之前的tokens计算一个“索引分数”$I_{t,s}$：
 
-$I_{t,s} = \sum_{j=1}^{H^I} w^I_{t,j} \cdot \text{ReLU}(q^I_{t,j} \cdot k^I_s)$ 
+$$
+I_{t,s} = \sum_{j=1}^{H^I} w^I_{t,j} \cdot \text{ReLU}(q^I_{t,j} \cdot k^I_s)
+$$
 
 其中：
 
@@ -13423,7 +14358,9 @@ $I_{t,s} = \sum_{j=1}^{H^I} w^I_{t,j} \cdot \text{ReLU}(q^I_{t,j} \cdot k^I_s)$
 
 有了每个 query 对于所有 token 的相关性分数 $I_{t,s}$ 后，DSA 使用 **Top-k 策略**选择出与当前 Query 最相关的 k 个 token，作为注意力计算的对象：
 
-$u_t = \text{Attn}\left(h_t, \left\{ c_s \mid I_{t,s} \in \text{Top-k}(I_{t,:}) \right\} \right)$
+$$
+u_t = \text{Attn}\left(h_t, \left\{ c_s \mid I_{t,s} \in \text{Top-k}(I_{t,:}) \right\} \right)
+$$
 
 其中 $c_s$ 是从 latent 向量中恢复得到的 key-value 表示（继承自 MLA）。
 
@@ -13451,7 +14388,9 @@ DSA的另一个精妙之处在于其架构设计充分考虑了与现有成熟�
 
 - 稠密热身阶段（Dense Warm-up Stage）：在训练初期，模型保持原有的MLA（即稠密注意力机制），但会冻结除闪电索引器之外的所有参数 。通过一个KL散度损失函数：
 
-$\mathcal{L}_I = \sum_t D_{KL}\left(p_{t,:} \parallel \text{Softmax}(I_{t,:})\right)$
+$$
+\mathcal{L}_I = \sum_t D_{KL}\left(p_{t,:} \parallel \text{Softmax}(I_{t,:})\right)
+$$
 
 其中 $p_{t,:}$ 是当前层的主注意力权重。
 
@@ -13459,7 +14398,9 @@ $\mathcal{L}_I = \sum_t D_{KL}\left(p_{t,:} \parallel \text{Softmax}(I_{t,:})\ri
 
 - 稀疏训练阶段（Sparse Training Stage）：热身之后，正式引入Top-k选择机制，解冻全模型参数，联合优化主模型与索引器,索引器的损失函数更新为仅考虑被选中的 token：
 
-$\mathcal{L}_I = \sum_t D_{KL}\left(p_{t,S_t} \parallel \text{Softmax}(I_{t,S_t})\right)$
+$$
+\mathcal{L}_I = \sum_t D_{KL}\left(p_{t,S_t} \parallel \text{Softmax}(I_{t,S_t})\right)
+$$
 
 其中 $S_t$ 是第 $t$个 query 的 Top-k token 集合。
 
@@ -13503,7 +14444,9 @@ $\mathcal{L}_I = \sum_t D_{KL}\left(p_{t,S_t} \parallel \text{Softmax}(I_{t,S_t}
 
 传统的DNN网络包含很多的层，每一层都可以理解为是一个函数：
 
-$x_{l+1} = \mathcal{F}(x_l, W_l)$
+$$
+x_{l+1} = \mathcal{F}(x_l, W_l)
+$$
 
 $x_l、x_{l+1} \in R^{1 \times C}$分别表示第$l$层的输入输出，$W_l$表示这一层的参数，$\mathcal{F}()$表示映射关系（比如卷积、注意力等）。**随着层数的堆叠，信息在传递过程中会逐渐衰减，导致深层网络难以训练。**
 
@@ -13513,9 +14456,13 @@ $x_l、x_{l+1} \in R^{1 \times C}$分别表示第$l$层的输入输出，$W_l$�
 
 为了解决这个问题，ResNet 引入了**残差连接（Residual Connection）**。它在每层的输出上直接加上输入项，如上图（a）：
 
-$x_{l+1} = x_l + \mathcal{F}(x_l, W_l)$
+$$
+x_{l+1} = x_l + \mathcal{F}(x_l, W_l)
+$$
 
-$\mathbf{x}_L = \mathbf{x}_i + \sum_{l=i}^{L-1} \mathcal{F}(\mathbf{x}_l, W_l)$
+$$
+\mathbf{x}_L = \mathbf{x}_i + \sum_{l=i}^{L-1} \mathcal{F}(\mathbf{x}_l, W_l)
+$$
 
 这种设计具有**恒等映射（Identity Mapping）**特性，使得浅层的信息能直接传递到深层，保证了模型训练过程中的稳定性。
 
@@ -13525,7 +14472,9 @@ $\mathbf{x}_L = \mathbf{x}_i + \sum_{l=i}^{L-1} \mathcal{F}(\mathbf{x}_l, W_l)$
 
 为了突破这一限制，Hyper-Connections (HC) 应运而生。**通过扩展残差流的宽度并增强连接的复杂性，HC 在不改变计算开销的前提下，显著提升了拓扑复杂性**，如上图（b）：
 
-$\mathbf{x}_{l+1} = \mathcal{H}_l^{\text{res}} \mathbf{x}_l + \mathcal{H}_l^{\text{post}^T} \mathcal{F}(\mathcal{H}_l^{\text{pre}} \mathbf{x}_l, W_l)$
+$$
+\mathbf{x}_{l+1} = \mathcal{H}_l^{\text{res}} \mathbf{x}_l + \mathcal{H}_l^{\text{post}^T} \mathcal{F}(\mathcal{H}_l^{\text{pre}} \mathbf{x}_l, W_l)
+$$
 
 其中$x_l、x_{l+1}$分别表示第$l$层的输入输出，特征维度拓展到$n \times C$，$n$表示拓展率，可以视为n路的残差，通过调整$n$的大小控制残差流的宽度，从而实现了模型扩宽。
 
@@ -13541,7 +14490,9 @@ $\mathbf{x}_{l+1} = \mathcal{H}_l^{\text{res}} \mathbf{x}_l + \mathcal{H}_l^{\te
 
 1. **网络架构多层扩展之后，会破坏残差连接的恒等映射特性**：
 
-$\mathbf{x}_L = \left( \prod_{i=1}^{L-l} \mathcal{H}_{L-i}^{\text{res}} \right) \mathbf{x}_l + \sum_{i=l}^{L-1} \left( \prod_{j=1}^{L-1-i} \mathcal{H}_{L-j}^{\text{res}} \right) \mathcal{H}_{i}^{\text{post}^\top} \mathcal{F} (\mathcal{H}_{i}^{\text{pre}} \mathbf{x}_l, W_l)$
+$$
+\mathbf{x}_L = \left( \prod_{i=1}^{L-l} \mathcal{H}_{L-i}^{\text{res}} \right) \mathbf{x}_l + \sum_{i=l}^{L-1} \left( \prod_{j=1}^{L-1-i} \mathcal{H}_{L-j}^{\text{res}} \right) \mathcal{H}_{i}^{\text{post}^\top} \mathcal{F} (\mathcal{H}_{i}^{\text{pre}} \mathbf{x}_l, W_l)
+$$
 
 从浅层$l$到深层$L$的信号被复合映射$\left( \prod_{i=1}^{L-l} \mathcal{H}_{L-i}^{\text{res}} \right)$决定，但后者由于不受约束，不能保证恒等映射，这种差异会导致前向和反向传播中信号被无限放大或者衰减，导致梯度爆炸或者消失。如下图所示，HC在训练到12k步时损失激增，这与梯度范数的不稳定性高度相关。
 
@@ -13573,7 +14524,9 @@ DeepSeek 提出的 mHC (Manifold-Constrained HC) 旨在解决上述稳定性难�
 
 这条“河道”在数学上被称为**流形（Manifold）：**
 
-> 🥇 **简要解释一下流形**
+> 🥇
+>
+> **简要解释一下流形**
 >
 > 核心是 **局部平坦，整体复杂** —— 它是一种几何对象，你凑近了看（局部），它和我们熟悉的平坦空间（比如直线、平面）没区别；但拉远了看（整体），它可能是弯曲、闭合或不规则的。本质是用局部的简单平坦，描述整体的复杂形状。
 >
@@ -13592,7 +14545,9 @@ mHC将复合残差映射$\left( \prod_{i=1}^{L-l} \mathcal{H}_{L-i}^{\text{res}}
 
 3. 元素非负
 
-$\mathcal{P}_{\mathcal{M}^{\text{res}}}\left(\mathcal{H}_l^{\text{res}}\right):=\left\{\mathcal{H}_l^{\text{res}} \in \mathbb{R}^{n \times n} \mid \mathcal{H}_l^{\text{res}} \mathbf{1}_n = \mathbf{1}_n, \mathbf{1}_n^\top \mathcal{H}_l^{\text{res}} = \mathbf{1}_n^\top, \mathcal{H}_l^{\text{res}} \geqslant 0\right\},$
+$$
+\mathcal{P}_{\mathcal{M}^{\text{res}}}\left(\mathcal{H}_l^{\text{res}}\right):=\left\{\mathcal{H}_l^{\text{res}} \in \mathbb{R}^{n \times n} \mid \mathcal{H}_l^{\text{res}} \mathbf{1}_n = \mathbf{1}_n, \mathbf{1}_n^\top \mathcal{H}_l^{\text{res}} = \mathbf{1}_n^\top, \mathcal{H}_l^{\text{res}} \geqslant 0\right\},
+$$
 
 $\mathbf{1}_n$表示$n$维的全1向量。当$n=1$时，就退化为resnet中的恒等映射。
 
@@ -13615,24 +14570,30 @@ $\mathbf{1}_n$表示$n$维的全1向量。当$n=1$时，就退化为resnet中的
 
 给定第$l$层的输入$x \in R^{n \times C}$，首先展开为$\vec{x} \in R^{1 \times nC}$，参考HC的公式，得到动态映射和静态映射：
 
-$\begin{cases}  
-\vec{x}'_l = \text{RMSNorm}(\vec{x}_l) \\  
-\tilde{\mathcal{H}}_l^{\text{pre}} = \alpha_l^{\text{pre}} \cdot (\vec{x}'_l \varphi_l^{\text{pre}}) + \mathbf{b}_l^{\text{pre}} \\  
-\tilde{\mathcal{H}}_l^{\text{post}} = \alpha_l^{\text{post}} \cdot (\vec{x}'_l \varphi_l^{\text{post}}) + \mathbf{b}_l^{\text{post}} \\  
-\tilde{\mathcal{H}}_l^{\text{res}} = \alpha_l^{\text{res}} \cdot \text{mat}(\vec{x}'_l \varphi_l^{\text{res}}) + \mathbf{b}_l^{\text{res}},  
-\end{cases}$
+$$
+\begin{cases}
+\vec{x}'_l = \text{RMSNorm}(\vec{x}_l) \\
+\tilde{\mathcal{H}}_l^{\text{pre}} = \alpha_l^{\text{pre}} \cdot (\vec{x}'_l \varphi_l^{\text{pre}}) + \mathbf{b}_l^{\text{pre}} \\
+\tilde{\mathcal{H}}_l^{\text{post}} = \alpha_l^{\text{post}} \cdot (\vec{x}'_l \varphi_l^{\text{post}}) + \mathbf{b}_l^{\text{post}} \\
+\tilde{\mathcal{H}}_l^{\text{res}} = \alpha_l^{\text{res}} \cdot \text{mat}(\vec{x}'_l \varphi_l^{\text{res}}) + \mathbf{b}_l^{\text{res}},
+\end{cases}
+$$
 
 $\varphi_l^{\text{res}} \in R^{nC \times n^2},\varphi_l^{\text{pre}}  、 \varphi_l^{\text{post}}  \in R^{1 \times nC}$是动态线性映射，$\mathbf{b}_l^{\text{res}} \in R^{n \times n}, \mathbf{b}_l^{\text{pre}}、\mathbf{b}_l^{\text{post}} \in R^{1 \times n}$是静态可学习的偏置映射。$mat(\cdot)$将$R^{1 \times n^2}$转换为$R^{n \times n}$。
 
-$\begin{cases}  
-\mathcal{H}_l^{\text{pre}} = \sigma(\tilde{\mathcal{H}}_l^{\text{pre}}) \\  
-\mathcal{H}_l^{\text{post}} = 2\sigma(\tilde{\mathcal{H}}_l^{\text{post}}) \\  
-\mathcal{H}_l^{\text{res}} = \text{Sinkhorn-Knopp}(\tilde{\mathcal{H}}_l^{\text{res}}),  
-\end{cases}$
+$$
+\begin{cases}
+\mathcal{H}_l^{\text{pre}} = \sigma(\tilde{\mathcal{H}}_l^{\text{pre}}) \\
+\mathcal{H}_l^{\text{post}} = 2\sigma(\tilde{\mathcal{H}}_l^{\text{post}}) \\
+\mathcal{H}_l^{\text{res}} = \text{Sinkhorn-Knopp}(\tilde{\mathcal{H}}_l^{\text{res}}),
+\end{cases}
+$$
 
 $\sigma(\cdot)$表示sigmoid函数**。**$Sinkhorn$**算子先将所有元素变为正数（从而保证所有元素非负），再交替对行和列进行缩放，使其和为1**。具体来说，给定一个初始正矩阵$\mathbf{M}^{0} = exp( \tilde{\mathcal{H}}_l^{\text{res}})$，迭代过程如下：
 
-$\mathbf{M}^{(t)} = \mathcal{T}_r \left( \mathcal{T}_c(\mathbf{M}^{(t-1)}) \right),$
+$$
+\mathbf{M}^{(t)} = \mathcal{T}_r \left( \mathcal{T}_c(\mathbf{M}^{(t-1)}) \right),
+$$
 
 $\mathcal{T}_r$和$\mathcal{T}_c$分别表示行归一化和列归一化，通过多次迭代（为了保证效率只迭代20次），虽然不能保证HC完美落到Birkhoff流形上，但也足够接近（上图中很多列的求和不等于1）。
 
@@ -13691,7 +14652,9 @@ DeepSeek 敏锐地察觉到了这种低效： LLM 正在消耗极其昂贵的算
 
 ###### **动机：语言的双重性与计算浪费**
 
-> 🏝️ 为了理解 Engram 的价值，我们需要先对齐几个论文中的**概念**：
+> 🏝️
+>
+> 为了理解 Engram 的价值，我们需要先对齐几个论文中的**概念**：
 >
 > 1. **稀疏性**：MoE模型虽然参数量巨大，但处理每个任务时，只激活其中很少一部分参数。
 > 2. **条件计算**：MoE模型实现稀疏性的方式，即根据输入的内容，动态的选择一部分专家参与计算。
@@ -13729,7 +14692,9 @@ DeepSeek 敏锐地察觉到了这种低效： LLM 正在消耗极其昂贵的算
 
 ###### **多头哈希**
 
-> 🎮 **哈希冲突**
+> 🎮
+>
+> **哈希冲突**
 >
 > 两个不同的输入，经过哈希函数计算后，得到了相同的哈希值。本质是因为输入空间（N-gram）大于输出空间（索引空间），导致必然会有不同的输入映射到同一个输出。在数据结构中，常见的解决方法有：
 >
@@ -13738,7 +14703,9 @@ DeepSeek 敏锐地察觉到了这种低效： LLM 正在消耗极其昂贵的算
 >
 > 但是在GPU中不可行，这两个方法会导致串行检索，检索效率极低。本文采用取模的方式，对于输入序列$t_1, t_2...t_n$，其Hash地址为：
 >
-> $H(t_1,  t_2, \dots, t_{n}) = (m_1 * t_1 \oplus m_2 * t_2 \oplus \dots \oplus m_{n} * t_{n}) \bmod M$
+> $$
+> H(t_1,  t_2, \dots, t_{n}) = (m_1 * t_1 \oplus m_2 * t_2 \oplus \dots \oplus m_{n} * t_{n}) \bmod M
+> $$
 >
 > 其中$m$是随机数，$\oplus$表示XOR操作，$M$表示取模的质数。
 
@@ -13754,11 +14721,17 @@ DeepSeek 敏锐地察觉到了这种低效： LLM 正在消耗极其昂贵的算
 
 检索到的静态嵌入$e_t$缺乏上下文信息，可能因哈希冲突或一词多义受到噪声影响。Engram引入了类似于注意力的门控机制，使用当前隐藏状态 $h_t$ 作为Query，以检索到的存储 $e_t$ 作为Key和Value，
 
-$k_t = W_ke_t, v_t = W_v e_t$
+$$
+k_t = W_ke_t, v_t = W_v e_t
+$$
 
 $W_k、W_v$是可学习的投影矩阵，标量门控 $\alpha_t$ 的计算公式为：
 
- $\alpha_t = \sigma \left( \frac{RMSNorm(h_t)^\top RMSNorm(k_t)}{\sqrt{d}} \right) \quad$ 
+ 
+
+$$
+\alpha_t = \sigma \left( \frac{RMSNorm(h_t)^\top RMSNorm(k_t)}{\sqrt{d}} \right) \quad
+$$
 
 门控输出为$\overline{v_t} = \alpha_t \cdot v_t$，这种设计确保了当检索内容与上下文矛盾时，门控会趋于零，从而抑制噪声，确保只有对当前有用的知识才能进入backbone网络。
 
@@ -13766,7 +14739,9 @@ $W_k、W_v$是可学习的投影矩阵，标量门控 $\alpha_t$ 的计算公式
 
 Engram检索到的知识是一个个孤立的“词条”，彼此之间没有交互。为了扩展感受野并增强模型的非线性，引入了一个**short, depthwise causal convolution**，将检索到的知识更好地与上下文融合，使得每个token都能与其他token的信息融合。令 $\overline{V}∈R^{T×d}$ 表示门控值的序列，采用卷积核大小 $w=4$、膨胀率 $δ = N$，以及 SiLU 激活函数，最终输出为：
 
-$\mathbf{Y} = \text{SiLU} \left( \text{Conv1D}(\text{RMSNorm}(\tilde{\mathbf{V}})) \right) + \tilde{\mathbf{V}}$
+$$
+\mathbf{Y} = \text{SiLU} \left( \text{Conv1D}(\text{RMSNorm}(\tilde{\mathbf{V}})) \right) + \tilde{\mathbf{V}}
+$$
 
 通过残差连接将记忆模块集成到backbone网络中：$H^{(ℓ)}←H^{(ℓ)}+Y$
 
@@ -13777,11 +14752,15 @@ $\mathbf{Y} = \text{SiLU} \left( \text{Conv1D}(\text{RMSNorm}(\tilde{\mathbf{V}}
 为了追求更强的建模能力，Engram 默认集成在多分支架构（如 mHC）中，而不是标准的单流残差结构。
 
 - **架构特征：** mHC将传统的残差流扩展为多个并行分支，信息流通过可学习的权重在分支间调节。
-- **参数共享策略：** 虽然Engram与拓扑结构无关，但为了在效率和表达力之间取得平衡，采用共享机制： 
+- **参数共享策略：** 虽然Engram与拓扑结构无关，但为了在效率和表达力之间取得平衡，采用共享机制：
     - **共享部分：** 所有分支共享同一个**稀疏嵌入表**和**值投影矩阵** $W_V$。
     - **独立部分：** 每个分支拥有独立的**键投影矩阵** $W_K^{(m)}$，其门控信号 $\alpha_t^{(m)}$ 计算如下：
 
- $\alpha_t^{(m)} = \sigma \left( \frac{RMSNorm(h_t^{(m)})^\top RMSNorm(W_K^{(m)} e_t)}{\sqrt{d}} \right) \quad$
+ 
+
+$$
+\alpha_t^{(m)} = \sigma \left( \frac{RMSNorm(h_t^{(m)})^\top RMSNorm(W_K^{(m)} e_t)}{\sqrt{d}} \right) \quad
+$$
 
 - **计算效率：** 门控输出为$u_{t}^{(m)} = \alpha_t^{(m)} \cdot (W_Ve_t)$，这种设计允许将所有的线性投影融合为一个**稠密 FP8 矩阵乘法**，从而最大化现代 GPU 的计算利用率。
 
@@ -13864,9 +14843,11 @@ DeepSeek 证明了：语言模型不该只有计算。既然 MoE 搞定了计算
 
 #### 5.5 Qwen 2.5
 
-论文标题：<Qwen2.5 Technical Report>
+论文标题：\<Qwen2.5 Technical Report>
 
-> 🥇 Qwen2.5 的关键特点：
+> 🥇
+>
+> Qwen2.5 的关键特点：
 >
 > - 规模更丰富：Qwen2.5 提供0.5B、1.5B、3B、7B、14B、32B和72B模型，其中Qwen2.5-72B-Instruct 在性能上与现有最先进的开源模型 Llama-3-405B-Instruct相似。此外还发布了MoE模型：Qwen2.5-Turbo 和 Qwen2.5-Plus，在准确性、延迟和成本之间取得了良好平衡，分别与GPT-4o-mini 和 GPT-4o性能相近。
 > - 数据更丰富：预训练和后训练数据量有了显著提升。预训练数据量从7T tokens增加至18T tokens，重点涵盖知识、编程和数学。预训练阶段被设计为分阶段过渡，以适应不同数据集的融合。后训练数据量达到1M示例，涵盖了SFT、DPO和GRPO等阶段。
@@ -13913,9 +14894,11 @@ Qwen2.5-Turbo将FFN层替换为**MoE层**，每层包含多个FFN 专家，并�
 
 为了最大化训练效率，Qwen2.5采用了两阶段的预训练：首先在4k token的上下文长度进行训练，接着拓展到更长的序列长度，除Qwen2.5-Turbo外，所有模型的变体都将上下文长度从4K扩展到32K token。同时，利用**ABF**技术将RoPE的基础频率从10000提升到1000000。
 
-> 🏝️ > 插播ABF技术,这篇工作针对超长上下文，进行了模型结构、训练数据、训练方法角度进行了实验和分析，输出了非常多有效的观点，可以用于借鉴。 论文链接: <Effective long-context scaling of foundation models>
+> 🏝️
 >
-> **ABF总结:** 
+> > 插播ABF技术,这篇工作针对超长上下文，进行了模型结构、训练数据、训练方法角度进行了实验和分析，输出了非常多有效的观点，可以用于借鉴。 论文链接: \<Effective long-context scaling of foundation models>
+>
+> **ABF总结:**
 >
 > - 预训练数据中的长文数据，对于长文本能力不是最关键的，最关键是 RoPE 对于长距离 Token 信息聚合能力
 > - 对于训练长文本能力，数据质量的重要性远远大于数据长度的重要性
@@ -13929,7 +14912,9 @@ Qwen2.5-Turbo将FFN层替换为**MoE层**，每层包含多个FFN 专家，并�
 
 ![](居丽叶LLM体系知识搭建/images/Ow0LbNtqNovKANxI3hMcCVfFnbd.png)
 
-> 🎨 **ABF 论文介绍**
+> 🎨
+>
+> **ABF 论文介绍**
 >
 > ###### 继续预训练
 >
@@ -13969,7 +14954,7 @@ Qwen2.5-Turbo将FFN层替换为**MoE层**，每层包含多个FFN 专家，并�
 相比Qwen2做出了以下的改进：
 
 - **扩展的监督微调数据覆盖**: SFT数据集包含了几百万高质量数据, 特别拓展了Qwen2性能不佳领域的数据, 包含长序列生成、数学、编程、指令跟随、结构化数据理解、逻辑推理、跨语言迁移和系统指令的鲁棒性。
-- **两阶段强化学习**:  
+- **两阶段强化学习**:
     - **离线强化学习**：此阶段着重于开发奖励模型难以评估的能力，例如推理、事实准确性和指令跟随。
     - **在线强化学习**：在线强化学习阶段利用奖励模型检测输出质量的细微差异，包括真实性、帮助性、简洁性、相关性、安全性以及去偏见。通过这一过程，模型能够生成精确、一致、结构清晰的回答，同时保持安全性和可读性。因此，模型的输出始终符合人类的质量标准和预期。
 
@@ -13989,7 +14974,7 @@ Qwen2.5-Turbo将FFN层替换为**MoE层**，每层包含多个FFN 专家，并�
 
 ###### 离线强化学习
 
-用SFT模型对一组查询进行重采样(也就是生成多个回复), 高质量相应作为正样本, 低质量相应作为负样本。基于预先准备好的这15万条推理数据(包含数学、编程、指令跟随和逻辑推理等), 采用DPO进行一轮训练, 学习率设置为$7×10^{−7}$ . 
+用SFT模型对一组查询进行重采样(也就是生成多个回复), 高质量相应作为正样本, 低质量相应作为负样本。基于预先准备好的这15万条推理数据(包含数学、编程、指令跟随和逻辑推理等), 采用DPO进行一轮训练, 学习率设置为$7×10^{−7}$ .
 
 ###### 在线强化学习
 
@@ -14004,7 +14989,7 @@ Qwen2.5-Turbo将FFN层替换为**MoE层**，每层包含多个FFN 专家，并�
 
 在线强化学习采用**GRPO**, 响应从Qwen模型的多个检查点生成，这些模型在不同的训练阶段经过SFT、DPO和RL方法的微调。为了增加多样性，响应在不同的温度设置下进行采样。偏好对通过人工标注和自动化标注相结合的方式生成，DPO的训练数据也被整合到其中。
 
-奖励模型训练的查询和GRPO训练阶段采用的查询一样, 训练过程中，查询的处理顺序依据它们的响应分数方差进行调整，方差较大的查询优先处理，以确保更有效的学习。每个查询的组大小为8, 训练时全局batch-size = 2048. 
+奖励模型训练的查询和GRPO训练阶段采用的查询一样, 训练过程中，查询的处理顺序依据它们的响应分数方差进行调整，方差较大的查询优先处理，以确保更有效的学习。每个查询的组大小为8, 训练时全局batch-size = 2048.
 
 ###### 长上下文微调
 
@@ -14077,7 +15062,9 @@ MiniMax-01是MiniMax最新推出的模型系列，与GPT-4o和Claude-3.5-Sonnet�
 
 MiniMax-01最牛逼的是超长上下文，推理时支持高达400万个token，训练时支持100万个token，远超现有模型。
 
-> 🎁 **MiniMax-01的核心特性**：
+> 🎁
+>
+> **MiniMax-01的核心特性**：
 >
 > - 结合**lightning attention**、**MoE**技术，参数量达到456B，每个token激活45.9B参数。其中包含80层架构，64个注意力头。
 > - 采用32个专家网络和Top-2路由，隐藏维度9216
@@ -14107,7 +15094,9 @@ MoE当拓展到更大的模型时，可能会遇到路由崩溃（也就是待�
 
 其中$a_{aux}$表示辅助损失系数，$f_i$表示分配给专家i的token比例，$m_i$表示专家i的平均路由概率。具体来说，采用专家并行（EP）组内的token分布可能出现大幅波动，不同EP组之间的token分配也可能存在巨大差异。因此实施了全局token分配策略，在跨不同EP组分配token之前，引入了一个额外的allgather通信，以同步每个专家等待处理的token数量。可以有效地降低整体token丢弃率，从而确保训练的稳定性。
 
-> 🍰 **专家并行（EP）**
+> 🍰
+>
+> **专家并行（EP）**
 >
 > 专家并行的核心思想是将多个专家分布在不同的计算设备上，从而减轻单个设备的内存压力。在MoE模型中，每个专家是一个独立的子网络，通常是一个前馈神经网络（FFN），负责处理特定类型的输入数据。通过将专家分布在不同的设备上，可以实现专家的并行计算，提高模型的计算效率，但也会面临以下问题：
 >
@@ -14122,7 +15111,9 @@ MoE当拓展到更大的模型时，可能会遇到路由崩溃（也就是待�
 
 > Linear Attention 的效果比不上 Softmax Attention，关于这个问题感兴趣的可以参考：《Transformer升级之路：3、从Performer到线性Attention》。表现在 MiniMax-text-01 实验中则为检索能力的不足，而检索能力对于上下文学习至关重要，因此不适用于大模型。
 
-> 🍞 **Linear Attention 是一种类 RNNs 的方案**
+> 🍞
+>
+> **Linear Attention 是一种类 RNNs 的方案**
 >
 > 与最近提出的Mamba、rwkv、RetNet一样，Linear注意力和softmax注意力都可以写成RNN的形式，训练阶段的复杂度是$O(N)$级的，推理时生成单个token的复杂度为常量。
 >
@@ -14162,7 +15153,9 @@ Block 2中的每一个 Token 所需要的 cumsum 操作都被划分成了两部�
 
 ![](居丽叶LLM体系知识搭建/images/VxDLbndL6o7bpExHl5JczMgwnNc.png)
 
-> ❤️ **lightning注意力总结**：
+> ❤️
+>
+> **lightning注意力总结**：
 >
 > Lightning Attention 通过对线性复杂度的妥协，将 Token-by-Token 的 cunsum 操作，转换成了 Block-by-Block 的 cumsum 操作，减少了整体的串行迭代次数；在每个 Block 内部，充分利用并行化计算能力进行平方复杂度的计算，Block 的长度远比完整的序列要短，相比全序列的平方复杂度计算还是减少了不少开销。计算复杂度降低为$O(Nd^2 + NBd), B$是Block大小。
 
@@ -14186,9 +15179,13 @@ MoE优化的目的是最小化通信开销，特别是全对全通信的MoE模�
 
 为了平衡内存使用和计算强度，作者首先引入了一种新颖的ProcessGroup，称为**ETP(专家张量并行)**，用于管理专家的权重分块。同时，提出了另一种独特的ProcessGroup，名为**EDP(专家数据并行)**，用于封装相同专家的数据并行性。参与训练的GPU总数定义为$world\_{size}$，满足两个关键条件:
 
-$world\_{size} = size_{PP} \times size_{DP} \times size_{CP} \times size_{TP}$
+$$
+world\_{size} = size_{PP} \times size_{DP} \times size_{CP} \times size_{TP}
+$$
 
-$world\_{size} = size_{PP} \times size_{EDP} \times size_{ETP} \times size_{EP}$
+$$
+world\_{size} = size_{PP} \times size_{EDP} \times size_{ETP} \times size_{EP}
+$$
 
 这种配置使MoE组件能够灵活定义专家的分布、管理专家的权重分块，并独立配置ZeRO（零冗余优化器）。基于此实现，能够将MoE组件的并行策略与非MoE组件的并行策略完全解耦。 在此修改的基础上，可以灵活配置ETP，以在内存使用和计算强度之间实现最佳平衡。此外，为了减少通信开销，设计了一种EP - ETP重叠策略，该策略旨在最大限度地利用网络资源和计算资源。下图（a）与（b）对比说明计算时间越长训练效率越高，（b）与（c）对比说明组越多训练效率越高，但在更多的分组会增加调度的复杂性。
 
@@ -14223,7 +15220,9 @@ $world\_{size} = size_{PP} \times size_{EDP} \times size_{ETP} \times size_{EP}$
 
 ![](居丽叶LLM体系知识搭建/images/X845bkvs8ovNubxLQEpcv7TTnPd.png)
 
-> 📍 **面试速记版**：
+> 📍
+>
+> **面试速记版**：
 >
 > - **三阶段预训练**
 >     1. **通用基座**：4 096 token 上下文，累积 30 万亿 token，构建语言与常识能力。
@@ -14317,10 +15316,11 @@ Qwen3 的预训练分为三个阶段，逐步增强模型的语言能力、推�
 **目标**：通过**GRPO算法**优化模型在复杂推理任务中的表现，重点提升数学、代码和STEM领域的推理能力。
 
 推理强化学习阶段收集了3995条查询-验证对，这些数据满足以下要求：
-    - 未在冷启动阶段使用过；
-    - 冷启动模型可以学习；
-    - 任务具有高挑战性；
-    - 覆盖广泛的子领域（如数学、代码、逻辑推理等）。
+
+- 未在冷启动阶段使用过；
+- 冷启动模型可以学习；
+- 任务具有高挑战性；
+- 覆盖广泛的子领域（如数学、代码、逻辑推理等）。
 
 推理强化学习阶段的细节：
 
@@ -14406,7 +15406,9 @@ solution based on the thinking directly now.\n</think>.\n\n"
 
 ##### 通义deepresearch
 
-> 📍 先从一个面试场景开始，尤其是简历上写了 DeepResearch 项目的同学，很可能被这么问：
+> 📍
+>
+> 先从一个面试场景开始，尤其是简历上写了 DeepResearch 项目的同学，很可能被这么问：
 >
 > **面试官： 通义新出的那个 DeepResearch 有了解吗**
 >
@@ -14496,7 +15498,7 @@ DeepResearch 的数据来自两个阶段：
 1. **ReAct 模式（基础版）**
 - **是什么：** 就是经典的“思考-行动-观察”循环，严格遵守这个格式。
 - **特点：** 简单、通用。DeepResearch 在这个模式下（配上128K长上下文）表现已经很强了，这证明了他们前面数据飞轮和训练流程的有效性。
-1. **深度模式 (Deep Mode)（SOTA 进阶版）**
+2. **深度模式 (Deep Mode)（SOTA 进阶版）**
 
 传统 ReAct 在长任务中容易出现「认知瓶颈」和「噪声累积」——模型的上下文会不断膨胀，前面冗余的思考记录拖慢推理节奏。为此，DeepResearch 引入了 **IterResearch** 范式，让智能体能够在多轮循环中持续聚焦核心信息、清理无效上下文。
 
@@ -14564,7 +15566,9 @@ DeepResearch 之所以不需要传统 RAG 的Chunking，是因为它从根本上
 
 #### 5.8 Gemma
 
-> 🥖 **总结：**
+> 🥖
+>
+> **总结：**
 >
 > 1. **模型简介**：**Gemma**是基于**Google Gemin**i模型技术构建的轻量级开源模型家族，包含2B和7B两种参数规模，提供预训练和指令微调版本。
 > 2. **技术基础**：训练使用6T token的英文文本、数学和代码数据，继承自Gemini的架构设计（**Transformer解码器**）和 分布式训练框架（TPUv5e芯片）和训练方法（**预训练+SFT+RLHF**）。
@@ -14665,7 +15669,9 @@ GPT-4只有16个专家，每次前向传播使用两个，如果batch-size很小
 
 技术报告：https://github.com/MoonshotAI/Kimi-K2/blob/main/tech_report.pdf
 
-> 🎁 技术报告的核心亮点：
+> 🎁
+>
+> 技术报告的核心亮点：
 >
 > - MuonClip 优化器：在万亿参数规模下实现稳定且token-efficient的预训练
 > - 2w+ 工具（含真实与模拟工具）：释放可规模化的agent数据潜力
@@ -14678,9 +15684,9 @@ GPT-4只有16个专家，每次前向传播使用两个，如果batch-size很小
 
 相比于以往被动地从数据中学习，Agentic Intelligence 可以通过与环境交互主动探索未知领域，从中习得超出训练分布的新技能，并依靠经验不断调整行为。人们相信，这种方式将帮助 AI agent 突破静态数据的天花板，获得接近甚至超越人类的能力，也因此正在成为下一代基础模型的核心特征。无论是工具使用、软件开发，还是现实世界中的自主系统，Agentic Intelligence 都将带来深远影响。
 
-不过，实现Agentic Intelligence在**预训练**和**后训练**阶段均面临挑战。  
+不过，实现Agentic Intelligence在**预训练**和**后训练**阶段均面临挑战。
 
-- **预训练**需在高质量数据有限的约束下，为模型注入广泛的通用先验知识，使「每 token 的学习信号」（token efficiency）成为关键的扩展系数。  
+- **预训练**需在高质量数据有限的约束下，为模型注入广泛的通用先验知识，使「每 token 的学习信号」（token efficiency）成为关键的扩展系数。
 - **后训练**则必须将这些先验转化为可执行的行为，但诸如多步推理、长期规划、工具使用等Agent能力在自然数据中极其稀缺，且规模化成本高昂。要弥合这一差距，必须可扩展地合成结构化、高质量的Agent轨迹，并结合融入偏好与自我批判的通用强化学习（RL）技术。
 
 ##### **5.10.1 预训练**
@@ -14701,15 +15707,21 @@ Muon 在大规模训练中易因attention logits 爆炸导致训练不稳定。�
 
 设Transformer层的输入表示为$\boldsymbol{X}$ 。对于每个注意力头$h$，其query、key和value的投影计算方式如下：
 
-$\boldsymbol{Q}^h = \boldsymbol{X}\mathbf{W}_q^h, \quad \boldsymbol{K}^h = \boldsymbol{X}\mathbf{W}_k^h, \quad \boldsymbol{V}^h = \boldsymbol{X}\mathbf{W}_v^h$  
+$$
+\boldsymbol{Q}^h = \boldsymbol{X}\mathbf{W}_q^h, \quad \boldsymbol{K}^h = \boldsymbol{X}\mathbf{W}_k^h, \quad \boldsymbol{V}^h = \boldsymbol{X}\mathbf{W}_v^h
+$$
 
 其中$\mathbf{W}_q$、$\mathbf{W}_k$、$\mathbf{W}_v$为模型参数。注意力输出为：
 
-$\boldsymbol{O}^h = \text{softmax}\left( \frac{1}{\sqrt{d}} \boldsymbol{Q}^h \boldsymbol{K}^{h\top} \right) \boldsymbol{V}^h$
+$$
+\boldsymbol{O}^h = \text{softmax}\left( \frac{1}{\sqrt{d}} \boldsymbol{Q}^h \boldsymbol{K}^{h\top} \right) \boldsymbol{V}^h
+$$
 
 我们将每个注意力头的最大对数（max logit，一种标量）定义为当前批次$B$中softmax输入的最大值，即：
 
-$S_{\text{max}}^h = \frac{1}{\sqrt{d}} \max_{\boldsymbol{X} \in B} \max_{i,j} \boldsymbol{Q}_i^h \boldsymbol{K}_j^{h\top}$
+$$
+S_{\text{max}}^h = \frac{1}{\sqrt{d}} \max_{\boldsymbol{X} \in B} \max_{i,j} \boldsymbol{Q}_i^h \boldsymbol{K}_j^{h\top}
+$$
 
 其中$i$和$j$是训练样本$\boldsymbol{X}$中不同token的索引。
 
@@ -14717,7 +15729,9 @@ $S_{\text{max}}^h = \frac{1}{\sqrt{d}} \max_{\boldsymbol{X} \in B} \max_{i,j} \b
 
 一种简单的实现方式是同时对所有注意力头进行裁剪：
 
-$\mathbf{W}_q^h \leftarrow \gamma^\alpha \mathbf{W}_q^h, \quad \mathbf{W}_k^h \leftarrow \gamma^{1 - \alpha} \mathbf{W}_k^h$
+$$
+\mathbf{W}_q^h \leftarrow \gamma^\alpha \mathbf{W}_q^h, \quad \mathbf{W}_k^h \leftarrow \gamma^{1 - \alpha} \mathbf{W}_k^h
+$$
 
 其中$\gamma = \min(1, \tau / S_{\text{max}})$ ，$S_{\text{max}} = \max_h S_{\text{max}}^h$ ，$\alpha$是一个平衡参数，通常设为0.5，用于对queries和keys进行均等缩放。
 
@@ -14725,7 +15739,7 @@ $\mathbf{W}_q^h \leftarrow \gamma^\alpha \mathbf{W}_q^h, \quad \mathbf{W}_k^h \l
 
 - $\boldsymbol{q}^C$和$\boldsymbol{k}^C$（特定于注意力头的组件）：分别按$\sqrt{\gamma_h}$进行缩放；
 - $\boldsymbol{q}^R$（特定于注意力头的旋转组件）：按$\gamma_h$进行缩放；
-- $\boldsymbol{k}^R$（共享的旋转组件）：保持不变，以避免对不同注意力头产生跨头影响 。 
+- $\boldsymbol{k}^R$（共享的旋转组件）：保持不变，以避免对不同注意力头产生跨头影响 。
 
 简单来说，QK-Clip 就是给 Query/Key 投影权重加动态限幅，从源头防止注意力值爆炸，保证训练稳定性，同时减少对其他注意力头的干扰。
 
@@ -14803,7 +15817,9 @@ Kimi K2 在强化学习（RL）阶段，目标是通过更高效的 token 使用
 
 **策略优化**遵循下列目标函数：
 
-$L_{RL}(\theta) = \mathbb{E}_{x \sim \mathcal{D}} \left[ \frac{1}{K} \sum_{i=1}^{K} \left( r(x, y_i) - \bar{r}(x) - \tau \log \frac{\pi_\theta(y_i | x)}{\pi_{\text{old}}(y_i | x)} \right)^2 \right]$
+$$
+L_{RL}(\theta) = \mathbb{E}_{x \sim \mathcal{D}} \left[ \frac{1}{K} \sum_{i=1}^{K} \left( r(x, y_i) - \bar{r}(x) - \tau \log \frac{\pi_\theta(y_i | x)}{\pi_{\text{old}}(y_i | x)} \right)^2 \right]
+$$
 
 其中 $\bar{r}(x) = \frac{1}{K} \sum_{i=1}^K r(x, y_i)$是 K 个样本响应的平均奖励，$\tau > 0$是正则化参数，用于平衡策略更新的稳定性与探索。
 
@@ -14843,7 +15859,9 @@ Kimi K2 的 RL 基础设施采用同位架构（Colocated Architecture），训�
 
 > 技术报告：https://arxiv.org/abs/2602.02276
 
-> 🦿 ###### 现有问题：为什么单一 Agent 撑不起下一代 AI？
+> 🦿
+>
+> ###### 现有问题：为什么单一 Agent 撑不起下一代 AI？
 >
 > 在 Agent 落地的实际场景中，单一智能体的设计思路，已经无法匹配复杂的现实任务需求，问题集中在以下三个方面，成为制约 Agent 规模化应用的瓶颈：
 >
@@ -14934,7 +15952,9 @@ Kimi K2.5 的所有创新，都建立在扎实的模型架构与精细化的训�
 - 支持 256k 超长上下文，为长文本 / 长视频理解奠定基础。
 - 采用token-efficient的**MuonClip**优化器替换掉AdamW优化器，后者容易在出现注意力logit爆炸，从而导致loss spike。
 
-> 🌰 **MuonClip简要介绍（详见**[居丽叶LLM体系知识搭建](https://my.feishu.cn/docx/AN61dRfiWoRUiRxhc6ucbmJwnGr)**）**  
+> 🌰
+>
+> **MuonClip简要介绍（详见**[居丽叶LLM体系知识搭建](https://my.feishu.cn/docx/AN61dRfiWoRUiRxhc6ucbmJwnGr)**）**  
 > MuonClip的核心理念是**几何感知**：
 >
 > - **正交矩阵更新**：MuonClip 利用 Newton-Schulz 迭代将梯度矩阵转换为正交矩阵，确保参数更新在所有方向上是均匀的。
@@ -15004,26 +16024,36 @@ $\lambda、m$是超参数，每个问题生成K个响应，每m次迭代就在�
 
 在现代 Transformer 架构中，**PreNorm 稀释现象**已成为深层网络的隐形杀手。随着深度 *L* 的增加，隐藏状态的幅值以 *O*(*L*) 的速度线性增长。这意味着，当信息传递到第 100 层时，第 1 层的初始特征就像一滴墨水落入了巨大的池塘，其影响力被极度稀释。这种PreNorm+标准残差连接的范式，以固定的单元权重对所有层的输出进行累加，这种统一的聚合方式会导致隐藏状态随模型深度增长而不受控，进而逐步稀释每一层的贡献。
 
-> ✏️ **残差链接**
+> ✏️
+>
+> **残差链接**
 >
 > - Notation：设输入序列形状为 $B ×T ×d$，其中 B 为批次大小，T 为序列长度，d 为隐藏维度，$h_{l} \in \mathbb{R}^{d}$ 表示进入第 $l$层的隐藏状态，其中 $l \in{1, ..., L}$ 为层索引，$L$ 为总层数。输入embedding为 $h_{1}$。函数$f_{l}$ 表示第 $l$ 层所执行的变换。将每个自注意力机和MLP视为独立的层。
 > - **残差链接：**允许梯度能绕过某个层，更新公式为：
 >
-> $h_{l}=h_{l-1}+f_{l-1}\left(h_{l-1}\right)$
+> $$
+> h_{l}=h_{l-1}+f_{l-1}\left(h_{l-1}\right)
+> $$
 >
 > 展开后为所有前序层输出的均匀累加：
 >
-> $h_{l}=h_{1}+\sum_{i=1}^{l-1} f_{i}(h_{i})$
+> $$
+> h_{l}=h_{1}+\sum_{i=1}^{l-1} f_{i}(h_{i})
+> $$
 >
 > 反向传播的梯度公式为：
 >
-> $\frac{\partial \mathcal{L}}{\partial h_{l}}=\frac{\partial \mathcal{L}}{\partial h_{L}} \cdot \prod_{j=l}^{L-1}\left(I+\frac{\partial f_{j}}{\partial h_{j}}\right)$
+> $$
+> \frac{\partial \mathcal{L}}{\partial h_{l}}=\frac{\partial \mathcal{L}}{\partial h_{L}} \cdot \prod_{j=l}^{L-1}\left(I+\frac{\partial f_{j}}{\partial h_{j}}\right)
+> $$
 >
 > 该范式虽通过恒等映射实现梯度传播，即无论深度如何，都能提供从损失函数到任意层的直接梯度路径。但固定单位权重导致隐藏状态随深度呈$O(L)$增长，逐层稀释各层贡献，浅层信息被掩埋，深层需学习更大输出以保证影响力，造成训练不稳定。
 >
 > - **残差的泛化**：Highway网络虽引入可学习门控缓解该问题，$g_l$在transformer层和恒等路径之间进行插值：
 >
-> $h_{l}=\left(1-g_{l}\right) \odot h_{l-1}+g_{l} \odot f_{l-1}\left(h_{l-1}\right)$
+> $$
+> h_{l}=\left(1-g_{l}\right) \odot h_{l-1}+g_{l} \odot f_{l-1}\left(h_{l-1}\right)
+> $$
 >
 > 但仍受限于**仅能访问前一层聚合状态**，仍然面临着以下问题：
 >
@@ -15046,7 +16076,9 @@ Kimi这篇论文基于 **序列-深度对偶性** 提出了**Attention Residuals
 
 AttnRes的核心是将标准残差的固定累加替换为深度维度的softmax注意力加权聚合，让每层可根据输入选择性聚合前序层特征：
 
-$h_{l}=\alpha_{0 \to l} \cdot h_{1}+\sum_{i=1}^{l-1} \alpha_{i \to l} \cdot f_{i}\left(h_{i}\right)$
+$$
+h_{l}=\alpha_{0 \to l} \cdot h_{1}+\sum_{i=1}^{l-1} \alpha_{i \to l} \cdot f_{i}\left(h_{i}\right)
+$$
 
 其中各层的注意力权重$\alpha_{i \to l}$满足$\sum_{i=0}^{l-1} \alpha_{i \to l}=1$。对比序列长度，网络深度往往比较小（$L<1000$），深度维度上$O(L^2)$的计算复杂度可以接受。
 
@@ -15056,11 +16088,15 @@ $h_{l}=\alpha_{0 \to l} \cdot h_{1}+\sum_{i=1}^{l-1} \alpha_{i \to l} \cdot f_{i
 
 将固定累加$h_l = \sum_{i} v_i$替换为注意力加权聚合，输入聚合公式为：
 
-$h_{l}=\sum_{i=0}^{l-1} \alpha_{i \to l} \cdot v_{i}$
+$$
+h_{l}=\sum_{i=0}^{l-1} \alpha_{i \to l} \cdot v_{i}
+$$
 
 权重由softmax计算得到：
 
-$\alpha_{i \to l}=\frac {\exp\left(w_l^{\top} \text{RMSNorm}(v_i)\right)}{\sum_{j=0}^{l-1} \exp\left(w_l^{\top} \text{RMSNorm}(v_j)\right)}$
+$$
+\alpha_{i \to l}=\frac {\exp\left(w_l^{\top} \text{RMSNorm}(v_i)\right)}{\sum_{j=0}^{l-1} \exp\left(w_l^{\top} \text{RMSNorm}(v_j)\right)}
+$$
 
 $w_l \in \mathbb{R}^d$为各层的可学习查询向量，$v_i$之前各层的输出（$v_0=h_1$为token embedding，$v_i=f_i(h_i)$为层输出）。这里的$w 和 v$可以近似理解为注意力计算中的$q 和 k$。
 
@@ -15077,11 +16113,15 @@ $w_l \in \mathbb{R}^d$为各层的可学习查询向量，$v_i$之前各层的�
 
 - **块内：** 维持高效的线性累加（标准残差）。将块$n$内的层输出累加为块表示，部分和表示块内中间状态：
 
-$b_{n}=\sum_{j \in \mathcal{B}_{n}} f_{j}\left(h_{j}\right),\quad b_{n}^{i}=\text{块}n\text{中前}i\text{层的部分和}$
+$$
+b_{n}=\sum_{j \in \mathcal{B}_{n}} f_{j}\left(h_{j}\right),\quad b_{n}^{i}=\text{块}n\text{中前}i\text{层的部分和}
+$$
 
 - **块间：** 应用注意力聚合（全注意力残差）。块$n$中第$i$层的值矩阵分两种情况，最终仍通过全注意力残差的softmax公式计算权重：
 
-$V= \begin{cases}{\left[b_{0}, b_{1}, ..., b_{n-1}\right]^{\top}} & \text{if } i=1 (\text{块}n\text{第一层}) \\ {\left[b_{0}, b_{1}, ..., b_{n-1}, b_{n}^{i-1}\right]^{\top}} & \text{if } i \geq 2 (\text{块}n\text{后续层}) \end{cases}$
+$$
+V= \begin{cases}{\left[b_{0}, b_{1}, ..., b_{n-1}\right]^{\top}} & \text{if } i=1 (\text{块}n\text{第一层}) \\ {\left[b_{0}, b_{1}, ..., b_{n-1}, b_{n}^{i-1}\right]^{\top}} & \text{if } i \geq 2 (\text{块}n\text{后续层}) \end{cases}
+$$
 
 式中$b_0=h_1$为token embedding。
 
@@ -15113,7 +16153,9 @@ $V= \begin{cases}{\left[b_{0}, b_{1}, ..., b_{n-1}\right]^{\top}} & \text{if } i
 
 拟合幂律曲线，验证模型性能随计算量的变化：
 
-$L=A ×C^{-\alpha}$
+$$
+L=A ×C^{-\alpha}
+$$
 
 式中$L$为验证损失，$C$为计算量（PFLOP/s-days），$A$和$\alpha$为拟合参数。
 
@@ -15156,9 +16198,9 @@ $L=A ×C^{-\alpha}$
 
 | 对比维度 | **标准残差 (Standard Residuals)** | **Full AttnRes（全注意力残差）** | **Block AttnRes（分块注意力残差）** |
 |---|---|---|---|
-| **核心公式** | $h_l = h_{l-1} + f_{l-1}(h_{l-1})$$h_l = \sum_{i=0}^{l-1} v_i$（固定权重均匀累加） | $h_l = \sum_{i=0}^{l-1} \alpha_{i \to l} \cdot v_i$<br>$\alpha_{i \to l} = \frac{\exp(w_l^\top \text{RMSNorm}(v_i))}{\sum_{j=0}^{l-1} \exp(w_l^\top \text{RMSNorm}(v_j))}$ | 块内累加：$b_{n}=\sum_{j \in \mathcal{B}_{n}} f_{j}\left(h_{j}\right)$<br>块间注意力：$h_l = \sum \alpha_{n \to l} \cdot b_n + \alpha_{n^i \to l} \cdot b_n^i$值矩阵：$V= \begin{cases}{\left[b_{0}, b_{1}, ..., b_{n-1}\right]^{\top}} & \text{if } i=1 \\ {\left[b_{0}, b_{1}, ..., b_{n-1}, b_{n}^{i-1}\right]^{\top}} & \text{if } i \geq 2 \end{cases}$ |
+| **核心公式** | $h_l = h_{l-1} + f_{l-1}(h_{l-1})$ $h_l = \sum_{i=0}^{l-1} v_i$（固定权重均匀累加） | $h_l = \sum_{i=0}^{l-1} \alpha_{i \to l} \cdot v_i$<br>$\alpha_{i \to l} = \frac{\exp(w_l^\top \text{RMSNorm}(v_i))}{\sum_{j=0}^{l-1} \exp(w_l^\top \text{RMSNorm}(v_j))}$ | 块内累加：$b_{n}=\sum_{j \in \mathcal{B}_{n}} f_{j}\left(h_{j}\right)$<br>块间注意力：$h_l = \sum \alpha_{n \to l} \cdot b_n + \alpha_{n^i \to l} \cdot b_n^i$值矩阵：$V= \begin{cases}{\left[b_{0}, b_{1}, ..., b_{n-1}\right]^{\top}} & \text{if } i=1 \\ {\left[b_{0}, b_{1}, ..., b_{n-1}, b_{n}^{i-1}\right]^{\top}} & \text{if } i \geq 2 \end{cases}$ |
 | **信息聚合方式** | 固定单位权重，无差别均匀累加所有前序层输出，仅能访问前一层聚合状态 | 输入依赖的softmax注意力加权，选择性聚合所有前序层输出，支持全深度维度特征调取 | 块内标准残差固定累加，块间输入依赖的softmax注意力，选择性聚合**前序块表示+当前块部分和** |
-| **计算复杂度** | $O(Ld)$（$L$为总层数，$d$为隐藏维度） | $O(L^2d)$（深度维度注意力遍历所有前序层） | $O(N \cdot L \cdot d)$（$N\ll L$为块数，通常$N≈8$） |
+| **计算复杂度** | $O(Ld)$（$L$为总层数，$d$为隐藏维度） | $O(L^2d)$（深度维度注意力遍历所有前序层） | $O(N \cdot L \cdot d)$（$N\ll L$为块数，通常\$N≈8\$） |
 | **内存/通信开销** | 无额外开销 | $O(Ld)$ | $O(Nd)$ |
 | **隐藏状态特性** | 随深度呈$O(L)$单调增长，PreNorm稀释效应显著，浅层信息易被掩埋 | 幅值呈有界周期性变化，彻底缓解PreNorm稀释，无信息掩埋 | 幅值呈有界周期性变化，与Full AttnRes一致，有效缓解PreNorm稀释 |
 
@@ -15212,7 +16254,9 @@ KDA 全称 **Kimi Delta Attention**，可以先把它理解成一种“把历史
 
 KDA 改变了这条数据路径。它维护一个固定尺寸的递归状态 $S_t$，每读入一个 token，就执行一次“遗忘旧信息 + 写入新信息”的更新：
 
-$S_t = (I-\beta_t k_tk_t^\top)\operatorname{Diag}(\alpha_t)S_{t-1}+\beta_tk_tv_t^\top$
+$$
+S_t = (I-\beta_t k_tk_t^\top)\operatorname{Diag}(\alpha_t)S_{t-1}+\beta_tk_tv_t^\top
+$$
 
 其中，$\alpha_t$ 是逐通道的保留系数，决定旧状态保留多少；$\beta_t$ 控制当前 token 写入状态的强度。输出再由 query 从这个状态中读取。
 
@@ -15244,7 +16288,9 @@ KDA 在训练和 prefill 时采用 chunkwise 计算：chunk 内并行，chunk �
 
 K3 将 log-decay 下界固定为 $g_{\min}=-5$，使单步保留系数满足：
 
-$\alpha > e^{-5}\approx 6.7\times10^{-3}$
+$$
+\alpha > e^{-5}\approx 6.7\times10^{-3}
+$$
 
 在 16-token tile 中，累计 log-decay 被约束在 $(-80, 0)$，倒数小于 $e^{80}$，仍处于 BF16 可表示范围。这个改动让对角 tile 也能使用稠密 Tensor Core 矩阵乘，不再保留特殊的 position-pair 路径。
 
@@ -15259,7 +16305,9 @@ $\alpha > e^{-5}\approx 6.7\times10^{-3}$
 
 AttnRes 的做法，是让第 l 层拥有一个可学习的 pseudo-query $w_l$，对 embedding 和此前各层的输出计算权重，再按权重组合：
 
-$h_l=\sum_{i=0}^{l-1}\alpha_{i\rightarrow l}v_i$
+$$
+h_l=\sum_{i=0}^{l-1}\alpha_{i\rightarrow l}v_i
+$$
 
 从结构上看，它像是在“层的历史记录”上做一次注意力。当前层可以提高某个早期表示的权重，也可以降低无关层的影响。
 
@@ -15306,7 +16354,9 @@ SwiGLU 的 gate 分支和 up 分支都可能无界增长。两边恰好同时出
 
 SiTU-GLU 对两条分支分别使用 $\beta\tanh(x/\beta)$ 做 soft cap：
 
-$\left[\beta_1\tanh\left(\frac{W_gx}{\beta_1}\right)\odot\sigma(W_gx)\right] \odot \left[\beta_2\tanh\left(\frac{W_ux}{\beta_2}\right)\right]$
+$$
+\left[\beta_1\tanh\left(\frac{W_gx}{\beta_1}\right)\odot\sigma(W_gx)\right] \odot \left[\beta_2\tanh\left(\frac{W_ux}{\beta_2}\right)\right]
+$$
 
 K3 取 $\beta_1=4$、$\beta_2=25$，所以单个坐标的输出上界为 $4\times25=100$。
 
@@ -15332,7 +16382,9 @@ Quantile Balancing 换了一种思路。
 
 假设一个 batch 有 m 个 token、n 个专家、每 token 选择 k 个专家，那么每个专家的目标负载为：
 
-$q=\frac{mk}{n}$
+$$
+q=\frac{mk}{n}
+$$
 
 QB 先记录每个 token 进入 Top-k 的分数门槛，再对每个专家计算“专家分数减去 token 门槛”的分位点，直接求出下一步 bias，使该专家预计恰好接收 q 个 token。
 
@@ -15486,7 +16538,9 @@ Sandbox 也要同步保存。AgentENV 基于 Firecracker microVM，支持 Pause/
 
 #### 5.13 Qwen3.5
 
-> 🏆 **总结**
+> 🏆
+>
+> **总结**
 >
 > Qwen3.5 公开了 **Qwen-3.5（Dense）** 和 **Qwen-3.5-MOE** 两类多模态模型。这篇文章重点讲解Qwen-3.5的模型创新。
 >
@@ -15500,12 +16554,22 @@ Sandbox 也要同步保存。AgentENV 基于 Firecracker microVM，支持 Pause/
 1. **混合注意力机制 (Hybrid Attention)：**每 4 层中包含 **3 层 线性注意力 和 1 层 标准注意力**。线性注意力打破了标准注意力的二次方复杂度，极大提升了处理长文本时的效率，而保留部分标准注意力层则确保了强大的推理和召回能力。
     - 标准注意力的额外设计：（1）沿用[前作 Gated attention](https://arxiv.org/abs/2505.06708)中的输出门控机制，缓解注意力中的低秩问题。（2）将单个注意力头维度从128扩展256。（3）仅对注意力头前 25% 的位置维度添加旋转位置编码，提高长度外推效果。
 
-> 📍 **Gated Attention简介**
+> 📍
 >
-> 该机制的核心是在**Scaled Product Dot-Product Attention** （即$\text{Attention}(Q, K, V) = softmax  
-> (\frac{QK^T}{\sqrt{d_k}})V$）输出之后，插入一个依赖于输入的、特定于每个注意力头（Head-specific）的门控。
+> **Gated Attention简介**
 >
-> $Y' = \text{Attention}(Q, K, V) \odot \sigma(X W_{gate})$
+> 该机制的核心是在**Scaled Product Dot-Product Attention** （即
+>
+> $$
+> \text{Attention}(Q, K, V) = softmax
+> (\frac{QK^T}{\sqrt{d_k}})V
+> $$
+>
+> ）输出之后，插入一个依赖于输入的、特定于每个注意力头（Head-specific）的门控。
+>
+> $$
+> Y' = \text{Attention}(Q, K, V) \odot \sigma(X W_{gate})
+> $$
 >
 > - 其中 $\sigma$ 是 Sigmoid 函数，$X$ 是进入注意力层前的隐藏状态，$W_{gate}$ 是可学习的门控参数。
 >
@@ -15519,7 +16583,9 @@ Sandbox 也要同步保存。AgentENV 基于 Firecracker microVM，支持 Pause/
 2. **长文本处理能力：**原生支持**256K**的上下文窗口，可以通过YARN进一步扩展至**1M**。
 3. **训练稳定性**：针对 Qwen3中使用的 [QK-Norm](https://my.feishu.cn/wiki/HxWSwlEFtiOzqWkYG9VcpsbHned#share-XwwhdS6ncolcROxw8RdcifNZnzc) 出现的部分层Norm weight值异常高的现象，进一步采用了**Zero-Centered RMSNorm + weight decay**的方法，避免权重无界增长。此外还在初始化时归一化MoE router的参数，确保每个 expert 在训练早期都能被无偏地选中，减小初始化对实验结果的扰动。
 
-> 🏆 **Zero-Centered RMSNorm + weight decay**
+> 🏆
+>
+> **Zero-Centered RMSNorm + weight decay**
 >
 > Qwen3 中使用传统的 QK-Norm时，部分Norm的权重（即可学习的缩放因子 $\gamma$）会变得**异常大**。这种权重的无限制增长会导致数值不稳定。为了解决上述问题，Qwen3-Next 对归一化层做了两项关键改进：
 >
@@ -15652,8 +16718,10 @@ if self.layer_types is None:
 - **传统注意力的问题：**每个 token 需要与所有历史 token 计算注意力分数。
 - **Gated DeltaNet 的解决方案：**使用**状态空间模型（SSM）**的思想，通过递归状态更新和门控机制实现线性复杂度。换句话说，维护一个压缩的状态表示，而不是存储所有历史信息。这种方式既保持了$O(1)$的推理速度，也保留了传统注意力计算的训练并行特点。递推公式为：
 
-$h_t = h_{t-1} * exp(g_t) + (v_t - k_t^T h_{t-1}) * \beta_t \\  
-output_t = q_t^T h_t$
+$$
+h_t = h_{t-1} * exp(g_t) + (v_t - k_t^T h_{t-1}) * \beta_t \\
+output_t = q_t^T h_t
+$$
 
 其中g是衰减门控，beta是更新步长。
 
@@ -16114,35 +17182,51 @@ mHC 是对传统残差连接的增强，核心思想是将残差映射约束到�
 
 ![](居丽叶LLM体系知识搭建/images/AgX6bia5uoYWCFx5vFacn4UYngg.jpg)
 
-> 🏕️ - **标准 Hyper-Connections (HC)** ：将残差流宽度扩展 $n_{\text{hc}}$ 倍。设第 $l$层前的残差状态为 $X_l = [x_{l,1}; \ldots; x_{l,n_{\text{hc}}}]^T \in \mathbb{R}^{n_{\text{hc}} \times d}$，HC 引入三个线性映射：
+> 🏕️
+>
+> - **标准 Hyper-Connections (HC)** ：将残差流宽度扩展 $n_{\text{hc}}$ 倍。设第 $l$层前的残差状态为 $X_l = [x_{l,1}; \ldots; x_{l,n_{\text{hc}}}]^T \in \mathbb{R}^{n_{\text{hc}} \times d}$，HC 引入三个线性映射：
 >
 > 残差状态更新公式：
 >
-> $X_{l+1} = B_l X_l + C_l \mathcal{F}_l(A_l X_l)$
+> $$
+> X_{l+1} = B_l X_l + C_l \mathcal{F}_l(A_l X_l)
+> $$
 >
 > 其中 $\mathcal{F}_l$ 是第 $l$层（如 MoE 层），输入输出维度均为 $\mathbb{R}^d$。HC 在堆叠多个层时，训练过程经常会出现数值不稳定性问题。
 >
 > - **流形约束残差映射（mHC）**：mHC 的核心创新在于将残差映射矩阵 $B_l$ 约束到双随机矩阵流形（Birkhoff 多面体）$\mathcal{M}$ 上：
 >
-> $\mathcal{M} := \{M \in \mathbb{R}^{n \times n} \mid M\mathbf{1}_n = \mathbf{1}_n,; \mathbf{1}_n^T M = \mathbf{1}_n^T,; M \geq 0\}$
+> $$
+> \mathcal{M} := \{M \in \mathbb{R}^{n \times n} \mid M\mathbf{1}_n = \mathbf{1}_n,; \mathbf{1}_n^T M = \mathbf{1}_n^T,; M \geq 0\}
+> $$
 >
 > 这一约束确保映射矩阵的谱范数 $|B_l|_2 \leq 1$，使残差变换具有非扩张性（不会随着层数深入而残差流信息爆炸），增强前向传播和反向传播的数值稳定性。同时，集合 $\mathcal{M}$ 在乘法下封闭，保证了深层 mHC 堆叠时的稳定性。
 >
 > - **动态参数化**：三个映射的参数由动态（输入相关）和静态（输入无关）两部分组成。给定输入 $X_l \in \mathbb{R}^{n_{\text{hc}} \times d}$，先展平并归一化：$\hat{X}_l = \text{RMSNorm}(\text{vec}(X_l)) \in \mathbb{R}^{1 \times n_{\text{hc}}d}$。然后生成未约束的原始参数：
 >
-> $\tilde{A}_l = \alpha_l^{\text{pre}} \cdot (\hat{X}_l W_l^{\text{pre}}) + S_l^{\text{pre}}$
+> $$
+> \tilde{A}_l = \alpha_l^{\text{pre}} \cdot (\hat{X}_l W_l^{\text{pre}}) + S_l^{\text{pre}}
+> $$
 >
-> $\tilde{B}_l = \alpha_l^{\text{res}} \cdot \text{Mat}(\hat{X}_l W_l^{\text{res}}) + S_l^{\text{res}}$
+> $$
+> \tilde{B}_l = \alpha_l^{\text{res}} \cdot \text{Mat}(\hat{X}_l W_l^{\text{res}}) + S_l^{\text{res}}
+> $$
 >
-> $\tilde{C}_l = \alpha_l^{\text{post}} \cdot (\hat{X}_l W_l^{\text{post}}) + S_l^{\text{post}}$
+> $$
+> \tilde{C}_l = \alpha_l^{\text{post}} \cdot (\hat{X}_l W_l^{\text{post}}) + S_l^{\text{post}}
+> $$
 >
 > - **应用参数约束**：对输入和输出映射使用 Sigmoid 函数保证非负有界：
 >
-> $A_l = \sigma(\tilde{A}_l), \quad C_l = 2\sigma(\tilde{C}_l)$
+> $$
+> A_l = \sigma(\tilde{A}_l), \quad C_l = 2\sigma(\tilde{C}_l)
+> $$
 >
 > 对残差映射 $\tilde{B}_l$ 使用 **Sinkhorn-Knopp 算法**投影到双随机矩阵流形。先对 $\tilde{B}_l$ 做指数变换确保正性 $M^{(0)} = \exp(\tilde{B}_l)$，然后迭代进行行列归一化：
 >
-> $M^{(t)} = \mathcal{T}_r(\mathcal{T}_c(M^{(t-1)}))$
+> $$
+> M^{(t)} = \mathcal{T}_r(\mathcal{T}_c(M^{(t-1)}))
+> $$
 >
 > 实践中选择 $t_{\max} = 20$ 次迭代，最终得到约束后的双随机矩阵 $B_l = M^{(t_{\max})}$。
 
@@ -16156,41 +17240,67 @@ CSA 的核心思路：先将 KV cache 沿序列维度压缩，再应用[Deepseek
 
 ![](居丽叶LLM体系知识搭建/images/NDHgbelwFoyXKpxJEsWcnkCtnF5.png)
 
-> ✍️ - **压缩 KV （对应上图Token-level Compressor）**：设输入隐藏状态为 $H \in \mathbb{R}^{n \times d}$。CSA 先计算两组 KV $C^a, C^b \in \mathbb{R}^{n \times c}$ 及对应的压缩权重 $Z^a, Z^b \in \mathbb{R}^{n \times c}$：
+> ✍️
 >
-> $C^a = H \cdot W^{aKV}, \quad C^b = H \cdot W^{bKV}$
+> - **压缩 KV （对应上图Token-level Compressor）**：设输入隐藏状态为 $H \in \mathbb{R}^{n \times d}$。CSA 先计算两组 KV $C^a, C^b \in \mathbb{R}^{n \times c}$ 及对应的压缩权重 $Z^a, Z^b \in \mathbb{R}^{n \times c}$：
 >
-> $Z^a = H \cdot W^{aZ}, \quad Z^b = H \cdot W^{bZ}$
+> $$
+> C^a = H \cdot W^{aKV}, \quad C^b = H \cdot W^{bKV}
+> $$
+>
+> $$
+> Z^a = H \cdot W^{aZ}, \quad Z^b = H \cdot W^{bZ}
+> $$
 >
 > 其中$n$是序列长度，$d$是hidden size，$c$是注意力头的维度。然后将每 $m$ 个 KV 项压缩为一个。每个压缩项 $C_i^{\text{Comp}} \in \mathbb{R}^c$ 的计算方式：
 >
-> $[S^a_{mi:m(i+1)-1}; S^b_{m(i-1):mi-1}] = \text{Softmax}_{\text{row}}([Z^a_{mi:m(i+1)-1} + B^a; Z^b_{m(i-1):mi-1} + B^b])$
+> $$
+> [S^a_{mi:m(i+1)-1}; S^b_{m(i-1):mi-1}] = \text{Softmax}_{\text{row}}([Z^a_{mi:m(i+1)-1} + B^a; Z^b_{m(i-1):mi-1} + B^b])
+> $$
 >
-> $C_i^{\text{Comp}} = \sum_{j=mi}^{m(i+1)-1} S^a_j \odot C^a_j + \sum_{j=m(i-1)}^{mi-1} S^b_j \odot C^b_j$
+> $$
+> C_i^{\text{Comp}} = \sum_{j=mi}^{m(i+1)-1} S^a_j \odot C^a_j + \sum_{j=m(i-1)}^{mi-1} S^b_j \odot C^b_j
+> $$
 >
 > 其中 $\odot$ 是 Hadamard 积，$\text{Softmax}_{\text{row}}$表示沿着行维度进行softmax 。每个 $C_i^{\text{Comp}} \in \mathbb{R}^{\frac{n}{m}\times c}$ 来自 $2m$ 个 KV 项。$i=0$时$Z^b_{m(i-1):mi-1}$为负无穷，$C^b_{m(i-1):mi-1}$为0。但相邻压缩项之间存在重叠索引，因此 CSA 实际将序列长度压缩为 $\frac{1}{m}$。
 
-> 🎁 - **Lightning Indexer 稀疏选择（对应上图虚线框 Lightning Indexer）**：获得压缩 KV 项 $C^{\text{Comp}}$ 后，CSA 应用 DSA 策略选择 top-k 项进行核心注意力。对查询 token $t$，单独分出一条 Indexer 轻量支路，以低秩方式生成 indexer 查询（DeepSeek V3 [MLA](https://my.feishu.cn/docx/AN61dRfiWoRUiRxhc6ucbmJwnGr#share-YgTadnYwGokzU8xp2xQcjY5Unof) 中的latent向量）：
+> 🎁
 >
-> $c_t^Q = h_t \cdot W^{DQ},   
-> [\mathbf{q}_{t,1}^I; \mathbf{q}_{t,2}^I; ...; \mathbf{q}_{t,n_h^I}^I] = \mathbf{q}_t^I = \mathbf{c}_t^Q \cdot W^{IUQ},$
+> - **Lightning Indexer 稀疏选择（对应上图虚线框 Lightning Indexer）**：获得压缩 KV 项 $C^{\text{Comp}}$ 后，CSA 应用 DSA 策略选择 top-k 项进行核心注意力。对查询 token $t$，单独分出一条 Indexer 轻量支路，以低秩方式生成 indexer 查询（DeepSeek V3 [MLA](https://my.feishu.cn/docx/AN61dRfiWoRUiRxhc6ucbmJwnGr#share-YgTadnYwGokzU8xp2xQcjY5Unof) 中的latent向量）：
+>
+> $$
+> c_t^Q = h_t \cdot W^{DQ}, 
+> [\mathbf{q}_{t,1}^I; \mathbf{q}_{t,2}^I; ...; \mathbf{q}_{t,n_h^I}^I] = \mathbf{q}_t^I = \mathbf{c}_t^Q \cdot W^{IUQ},
+> $$
 >
 > 索引分数计算为（query t 和之前的压缩块s 之间的分数（$s < Floor(\frac{t}{m})$））：
 >
-> $[w_{t,1}^I; w_{t,2}^I; ...; w_{t,n_h^I}^I] = \mathbf{w}_t^I = \mathbf{h}_t \cdot W^w,  
-> I_{t,s} = \sum_{h=1}^{n_h^I} w_{t,h}^I \cdot \text{ReLU}(q_{t,h}^I \cdot K_s^{\text{IComp}})$
+> $$
+> [w_{t,1}^I; w_{t,2}^I; ...; w_{t,n_h^I}^I] = \mathbf{w}_t^I = \mathbf{h}_t \cdot W^w,
+> I_{t,s} = \sum_{h=1}^{n_h^I} w_{t,h}^I \cdot \text{ReLU}(q_{t,h}^I \cdot K_s^{\text{IComp}})
+> $$
 >
 > $K^{\text{IComp}} \in \mathbb{R}^{\frac{n}{m} \times c^I}$是与$C^{Comp}$相同操作算出来的key 索引($c^I <<c$)，然后用 top-k 选择器保留关键注意力子集：
 >
-> $C_t^{\text{SprsComp}} = \{C_s^{\text{Comp}} \mid I_{t,s} \in \text{Top-k}(I_{t,:})\}$
+> $$
+> C_t^{\text{SprsComp}} = \{C_s^{\text{Comp}} \mid I_{t,s} \in \text{Top-k}(I_{t,:})\}
+> $$
 
-> 🥖 - **共享 KV MQA（对应上图Shared Key-Value Multi-Query Attention）**：选择稀疏 KV 项后，CSA 以 Multi-Query Attention 方式执行核心注意力，每个压缩 KV 项$C_t^{\text{SprsComp}}$同时作为 key 和 value。采用DSA的方式，基于latent向量$c_t^Q$计算出queries后，应用MQA进行注意力计算：
+> 🥖
 >
-> $c_t^Q = h_t \cdot W^{DQ}， [q_{t,1}; q_{t,2}; \ldots; q_{t,n_h}] = q_t = c_t^Q \cdot W^{UQ}$
+> - **共享 KV MQA（对应上图Shared Key-Value Multi-Query Attention）**：选择稀疏 KV 项后，CSA 以 Multi-Query Attention 方式执行核心注意力，每个压缩 KV 项$C_t^{\text{SprsComp}}$同时作为 key 和 value。采用DSA的方式，基于latent向量$c_t^Q$计算出queries后，应用MQA进行注意力计算：
 >
-> $o_{t,i} = \text{CoreAttn}(\text{query}=q_{t,i},; \text{key}=C_t^{\text{SprsComp}},; \text{value}=C_t^{\text{SprsComp}})$
+> $$
+> c_t^Q = h_t \cdot W^{DQ}， [q_{t,1}; q_{t,2}; \ldots; q_{t,n_h}] = q_t = c_t^Q \cdot W^{UQ}
+> $$
+>
+> $$
+> o_{t,i} = \text{CoreAttn}(\text{query}=q_{t,i},; \text{key}=C_t^{\text{SprsComp}},; \text{value}=C_t^{\text{SprsComp}})
+> $$
 
-> 🏝️ - **分组输出投影**：设$n_h$是注意力头数量，$c$是注意力头维度。由于 $cn_h$ 很大，直接将注意力输出投影到 $d$ 维会带来巨大计算开销。因此先将 $n_h$ 个输出分成 $g$ 组，每组投影到低维中间输出，再投影到最终注意力输出 $\hat{o}_t \in \mathbb{R}^d$。
+> 🏝️
+>
+> - **分组输出投影**：设$n_h$是注意力头数量，$c$是注意力头维度。由于 $cn_h$ 很大，直接将注意力输出投影到 $d$ 维会带来巨大计算开销。因此先将 $n_h$ 个输出分成 $g$ 组，每组投影到低维中间输出，再投影到最终注意力输出 $\hat{o}_t \in \mathbb{R}^d$。
 
 ###### Heavily Compressed Attention (HCA)
 
@@ -16200,24 +17310,36 @@ HCA 以更激进的方式压缩 KV cache，但不使用稀疏注意力。
 
 **压缩 KV 项**：与 CSA 类似但使用更大的压缩率 $m'(\gg m)$，且不进行重叠压缩（对比CSA中计算 a b 两组权重）：
 
-$C = H \cdot W^{KV}, \quad Z = H \cdot W^Z$
+$$
+C = H \cdot W^{KV}, \quad Z = H \cdot W^Z
+$$
 
-$S_{m'i:m'(i+1)-1} = \text{Softmax}_{\text{row}}(Z_{m'i:m'(i+1)-1} + B)$
+$$
+S_{m'i:m'(i+1)-1} = \text{Softmax}_{\text{row}}(Z_{m'i:m'(i+1)-1} + B)
+$$
 
-$C_i^{\text{Comp}} = \sum_{j=m'i}^{m'(i+1)-1} S_j \odot C_j$
+$$
+C_i^{\text{Comp}} = \sum_{j=m'i}^{m'(i+1)-1} S_j \odot C_j
+$$
 
 HCA 将序列长度压缩为 $\frac{1}{m'}$ 倍。同样采用共享 KV MQA 和分组输出投影策略。
 
-> 🚅 **其他训练细节**
+> 🚅
+>
+> **其他训练细节**
 >
 > - **Query 和 KV 归一化**：在核心注意力操作前，**对 query 和压缩 KV 项执行 RMSNorm**，避免注意力分数爆炸
 > - **部分 RoPE**：对 query 和 KV 项的最后 64 维应用RoPE，还对$o_{t,i}$的最后64维应用位置为$-i$的RoPE，抵消掉由于KV项同时充当 Key 和 Value，导致混入的绝对位置信息，确保最终输出**只保留Query 和 KV 之间的相对距离信息。**
 > - **滑动窗口注意力分支**：为保持因果性和局部依赖建模(近期的token与querytoken关系更强)，在 CSA 和 HCA 中额外引入滑动窗口注意力分支，**为每个 query token 额外生成** $n_{\text{win}}$ **个未压缩 KV 项**
 > - **Attention Sink**：设置可学习的 ${z'_1, z'_2, \ldots, z'{n_h}}$，使每个注意力头的总注意力分数可以不等于 1（甚至接近 0），$s_{h,i,j} 、z_{h,i,j}$分别表示第h个注意力头的注意力分数和注意力logit：
 >
-> $s_{h,i,j} = \frac{\exp(z_{h,i,j})}{\sum_k \exp(z_{h,i,k}) + \exp(z'_h)}$
+> $$
+> s_{h,i,j} = \frac{\exp(z_{h,i,j})}{\sum_k \exp(z_{h,i,k}) + \exp(z'_h)}
+> $$
 
-> 🏖️ **效率分析**
+> 🏖️
+>
+> **效率分析**
 >
 > 除了采用CSA和HCA混合注意力，DeepSeek-V4 系列还采用了如下计算和存储优化：
 >
@@ -16235,7 +17357,9 @@ DeepSeek-V4 对大多数模块使用 Muon 优化器（结合Nesterov 加速+权�
 
 **混合 Newton-Schulz 迭代**：共执行 10 次迭代，分两阶段。每次迭代：
 
-$M_k = aM_{k-1} + b(M_{k-1}M_{k-1}^T)M_{k-1} + c(M_{k-1}M_{k-1}^T)^2 M_{k-1}$
+$$
+M_k = aM_{k-1} + b(M_{k-1}M_{k-1}^T)M_{k-1} + c(M_{k-1}M_{k-1}^T)^2 M_{k-1}
+$$
 
 - 前 8 步：$(a, b, c) = (3.4445, -4.7750, 2.0315)$，快速收敛
 - 后 2 步：$(a, b, c) = (2, -1.5, 0.5)$，稳定奇异值至 1
@@ -16298,9 +17422,11 @@ $M_k = aM_{k-1} + b(M_{k-1}M_{k-1}^T)M_{k-1} + c(M_{k-1}M_{k-1}^T)^2 M_{k-1}$
 
 沿用了之前工作的数据预处理策略，包括sequence packing、token-splitting、 Fill-in-Middle等，采用样本级注意力掩码。
 
-> ⚠️ 此处原文有一个内嵌表格（sheet），位于原文中被折叠的「预训练」小节内，网页未渲染，未能截图。请在原文中展开「预训练」查看：https://my.feishu.cn/docx/AN61dRfiWoRUiRxhc6ucbmJwnGr
+![表格](居丽叶LLM体系知识搭建/images/sheet_W9kcs6GqahaiPStZRm1cBNgAnAb_n1TMrf.png)
 
-> ⚽ **提升训练稳定性的trick**
+> ⚽
+>
+> **提升训练稳定性的trick**
 >
 > 训练不稳定导致的损失峰值出现往往跟MoE层的异常值有关，路由本身也会加剧异常值的产生。为此采用了以下方法：
 >
@@ -16388,7 +17514,9 @@ DeepSeek-V4 利用 1M token 上下文窗口进一步优化了此机制：
 
 OPD 的核心逻辑是**让学生模型在自己生成的轨迹上学习教师模型的输出分布。**给定 $N$ 个专家模型 ${\pi_{E_1}, \pi_{E_2}, \ldots, \pi_{E_N}}$，OPD 目标函数为：
 
-$\mathcal{L}_{\text{OPD}}(\theta) = \sum_{i=1}^{N} w_i \cdot D_{\text{KL}}(\pi_\theta | \pi_{E_i})$
+$$
+\mathcal{L}_{\text{OPD}}(\theta) = \sum_{i=1}^{N} w_i \cdot D_{\text{KL}}(\pi_\theta | \pi_{E_i})
+$$
 
 其中 $w_i$ 是每个专家的分配权重，通常由专家的相对重要性决定。计算反向 KL 损失 $D_{\text{KL}}(\pi_\theta | \pi_{E_i})$ 时，训练轨迹从学生策略 $\pi_\theta$ 采样，确保学习保持 on-policy。统一策略 $\pi_\theta$ 会选择性地从与当前任务上下文相关的专家学习（如数学推理任务时对齐数学专家，编程任务时对齐编码专家）。
 
@@ -16398,7 +17526,9 @@ OPD 通过 logits 级别的对齐，将物理上分离的专家权重中的知�
 
 对于OPD目标函数计算，先前方法将全词表 KL 损失简化为每个 token 位置的 KL 估计，以节省训练资源。而在V4中，保留全词表对数似然蒸馏，保留完整的 logit 分布来计算反向 KL 损失，以获取更稳定的梯度估计。
 
-> 🥇 **RL和OPD的infra设置**
+> 🥇
+>
+> **RL和OPD的infra设置**
 >
 > 未来支持超长上下文 RL 和涉及 10+ 教师模型的 OPD 融合任务，又做了很多改进，同样非本文重点，只做简要介绍，感兴趣的话请阅读原论文：
 >
@@ -16441,11 +17571,15 @@ Deepseek v4在知识、推理、Agent、长上下文等领域都取得了优异�
 - **KV cache缓存**：计算得到的`K 和 V` 矩阵会被缓存下来，供后续解码阶段使用。
 - **注意力计算：**
 
-$A = softmax(\frac{Q \cdot K^T}{\sqrt d})$
+$$
+A = softmax(\frac{Q \cdot K^T}{\sqrt d})
+$$
 
 其中$A$的形状为`(batch_size, num_heads, seq_len，seq_len)`，计算复杂度为$O(batch\_{size} * num\_{heads} * seq\_{len}^2 * head\_{dim}) = O(batch\_{size} * seq\_{len}^2 * hidden\_dim)$。
 
-$O = A \cdot V$
+$$
+O = A \cdot V
+$$
 
 其中$O$形状为`(batch_size, num_heads, seq_len, head_dim)`，随后会被重塑为`(batch_size, seq_len, hidden_dim)`并传递到下一层，计算复杂度同上。
 
@@ -16453,7 +17587,9 @@ $O = A \cdot V$
 
 - **生成第一个token**：在工程实践中，为减少一次显存读写和前向传播开销，通常会直接利用 prompt 最后一个位置的 hidden state来生成第一个token。
 
-> ⛱️ **为什么要做prefill？**
+> ⛱️
+>
+> **为什么要做prefill？**
 >
 > - **避免重复计算**：每一步解码都依赖于之前所有生成的中间结果，如果不在prefill阶段缓存 KV，每生成一个新 token，都需要对整个历史序列（prompt + 已生成的 tokens）重新跑一次完整的自注意力计算，计算复杂度为 O($seq\_len^2$)，效率很低。
 > - **提高GPU 利用率**：Prefill阶段是典型的**计算密集型任务**，需要进行大规模的矩阵乘法运算。由于输入prompt是完整的，可以通过高度并行来最大化发挥 GPU 的算力优势。
@@ -16549,7 +17685,9 @@ print("Decode 2步后，cache shapes:", mha.k_cache.shape, mha.v_cache.shape)
 # Decode 2步后，cache shapes: torch.Size([2, 4, 102, 4]) torch.Size([2, 4, 102, 4]) 
 ```
 
-> 🦄 **Prefill和Decode阶段的一些优化方法**：
+> 🦄
+>
+> **Prefill和Decode阶段的一些优化方法**：
 >
 > 1. **DistServe：**将预填充（prefill）和解码（decode）阶段解耦，分配到不同的GPU上，避免两阶段在同一设备上的互相争抢资源，从而提升整体性能。
 > 2. **SARATHI** ：针对不同长度的Prompt 导致的 Padding 冗余，采用Chunked Prefill技术， 将较长的输入拆分为等长的chunk，每个chunk都能充分利用算力。同时，将Decode阶段的请求则“捎带”到空闲时段并行处理。
@@ -16619,7 +17757,9 @@ llm = LLM(model=model_name, quantization="int8")
 - **KV cache卸载**：若GPU显存不足以存储完整的KV cache，可以将部分写在到CPU中。
 - **KV cache共享**：对具有相同前缀的多条请求，缓存并重用对应的 KV block，无需对前缀部分重复计算，几乎零成本复用。
 
-> ✍️ **KV cache的优点**
+> ✍️
+>
+> **KV cache的优点**
 >
 > 通过缓存 Key 和 Value，解码器在生成新 token 时只需要计算当前 token 的 Query 并与缓存的 KV 交互，计算复杂度从 O(N²) 降到 O(N)，显著加速推理。
 >
@@ -16637,7 +17777,7 @@ llm = LLM(model=model_name, quantization="int8")
 
 #### 6.3 vllm
 
-推荐视频：【[怎么加快大模型推理？10分钟学懂VLLM内部原理，KV Cache，PageAttention](https://www.bilibili.com/video/BV1kx4y1x7bu/?share_source=copy_web&vd_source=d0e4387a6f3f6598aa698f580507ec88)】 
+推荐视频：【[怎么加快大模型推理？10分钟学懂VLLM内部原理，KV Cache，PageAttention](https://www.bilibili.com/video/BV1kx4y1x7bu/?share_source=copy_web&vd_source=d0e4387a6f3f6598aa698f580507ec88)】
 
 VLLM 是一个用于LLM**推理**的高性能库，适用于需要快速响应和高吞吐量的大规模应用场景。可以比直接调用模型的推理速度快24倍。
 
@@ -16790,7 +17930,9 @@ PagedAttention 允许**在非连续的内存空间**中**存储连续的键和�
 
 对 KV 缓存的请求会被表示成一系列逻辑 KV 块，在生成新 token 和它们的 KV 缓存时从左向右填充。最后一个 KV 块中未填充的位置留给未来填充。通过pagedattention的优化，kv cache的显存利用率从20%-40%提升到了96%，因为浪费只会发生在最后一个块中。采用vLLM能将更多序列进行批处理，提高 GPU 使用率，显著提升吞吐量。
 
-> 📌 **PagedAttention的优点**
+> 📌
+>
+> **PagedAttention的优点**
 >
 > 1. **页按需分配：**PagedAttention 将每个请求的 KV Cache 拆分为若干固定大小的页，并仅在生成新 tokens 时按需分配物理页，无需提前为最大序列长度预留内存，从而大幅降低 KV Cache 内存占用。
 > 2. **跨请求 KV Cache 共享：**相同前缀的多个请求可共用 KV pages，大幅降低内存占用，适用于beam search、A/B test等场景。
@@ -16834,19 +17976,23 @@ for output in outputs:
     print(f"Prompt:{prompt!r}, Generated text:{generated_text!r}")
 ```
 
-> ✏️ **总结VLLM的优点：**
+> ✏️
+>
+> **总结VLLM的优点：**
 >
 > - **吞吐量 (Throughput) 提升**：vLLM 宣称可以实现 **24 倍** 的吞吐量提升，实际应用中取决于工作负载，在需要处理大量并发请求、且请求的提示（prompt）长度和生成长度变化较大的场景，vLLM 的优势尤为明显。
 > - **加速比 (Speedup) / 延迟 (Latency) 改善:** 在高负载下，由于 vLLM 能够更快地处理等待队列中的请求（更高的吞吐量），**平均请求延迟**会显著降低。此外Sharing KV Blocks也可以减少冗余计算和内存拷贝，从而在特定场景下降低单个请求的计算延迟。
 > - **显存效率提升**：kv cache的显存利用率从20%-40%提升到了96%，因为浪费只会发生在最后一个块中。
 
-> 🎁 **推理框架介绍**
+> 🎁
+>
+> **推理框架介绍**
 >
 > - [**vLLM**](https://github.com/vllm-project/vllm)：使用**PagedAttention**技术，将 KV cache 按固定大小 page 存储与调度，大幅减少了内存碎片和提升了内存使用效率。此外还融入了**Continuous batching**、跨请求 KV cache共享等技术，能实现大幅的吞吐量提升，与**OpenAI API**兼容，在Huggingface Transformers生态系统集成良好。
 > - [**SGLang**](https://github.com/sgl-project/sglang)：集成了**RadixAttention**、**PD分离**、**speculative decoding**、**continuous batching**、**paged attention**等技术，适用于低算力场景。
 > - [**LMDeploy**](https://github.com/InternLM/lmdeploy)：支持**Continuous batching**、**blocked KV cache**、**dynamic split&fuse**等技术，支持 **权重量化** 与 **KV 量化**，实现了高效推理，适用于实时性要求极高的场景。
 > - [**TGI**](https://github.com/huggingface/text-generation-inference)：专注于企业场景的推理框架，考虑了 多租户 (Multi-tenancy) 和 安全 等关键的企业级需求。支持**张量并行**、**动态批次**、**Flash Attention**、**Paged Attention**、**量化压缩**等功能。
-> - [**Ollama**](https://github.com/ollama/ollama/tree/main)：轻量级本地推理框架，适合对延迟和安全性有高要求的场景。 
+> - [**Ollama**](https://github.com/ollama/ollama/tree/main)：轻量级本地推理框架，适合对延迟和安全性有高要求的场景。
 > - [**LLama.cpp**](https://github.com/ggml-org/llama.cpp)：轻量级本地推理框架，基于 C++ 编写，专注于 CPU 优化，支持多种量化和优化技术，可以在 CPU 上高效运行 Llama 等模型。
 
 #### 6.4 推理评估
@@ -16882,7 +18028,9 @@ attention 计算需要读取当前 token 及前面上下文中所有 tokens 对�
 
 以NVIDIA `RTX 4090`（1008 GB/s）举例，14.2GB的参数需要约14.1ms读取。这是理论下限，代表了生成每个 token 的最小可能时间。
 
-> 🏆 **分析理论下限有什么用**
+> 🏆
+>
+> **分析理论下限有什么用**
 >
 > - 如果实际推理时延与理论推理时延存在较大差异，往往是需要检查代码和硬件了。
 > - 推理过程并未充分利用ALU算力，可以通过数据并行，异步通信与计算重叠等方式。
@@ -16890,13 +18038,17 @@ attention 计算需要读取当前 token 及前面上下文中所有 tokens 对�
 
 ##### 6.4.3 压测
 
-> 🌟 **大模型压测是什么？**
+> 🌟
+>
+> **大模型压测是什么？**
 >
 > **大模型压测指是针对LLM及其服务系统进行的压力测试。**它的核心目的是**评估和验证大模型服务在接近或超过其设计负载极限情况下的性能、稳定性和资源利用情况**。压力测试通过在超出正常使用条件下模拟高并发、大负载场景，能够全面评估系统在极端情况下的表现和稳定性，为保障服务质量、发现性能瓶颈、进行容量规划、优化成本以及验证系统架构和优化效果提供科学依据。
 >
 > 可以把它简单理解为：**模拟大量用户同时向大模型服务发起请求，看看这个系统会不会“崩”、反应有多快、能撑住多少并发量**。
 
-> ⚽ **为什么要做压力测试？**
+> ⚽
+>
+> **为什么要做压力测试？**
 >
 > - **确保服务质量 ：**在用户量激增或突发流量冲击时，如果缺乏压力测试，就无法保证系统依然能快速、稳定响应，从而导致用户体验急剧下降或服务中断。压力测试能够模拟高并发请求，对系统的响应时间、吞吐量和错误率进行监控，确保即使在最糟场景下也能维持可接受的服务质量水平。此外，通过在测试阶段提前暴露潜在崩溃风险，可以避免线上环境出现的严重故障。
 > - **发现性能瓶颈** ：压力测试将系统推向极限，能够精准定位系统性能的“最弱一环”，例如模型推理延迟、数据库查询慢、CPU/GPU 资源耗尽或内存泄漏等问题。通过对各项性能指标（如响应时间、吞吐量、资源利用率）的实时监控和日志分析，开发团队能够快速识别并优化关键路径，显著提升系统的整体性能和稳定性。
@@ -16912,15 +18064,15 @@ attention 计算需要读取当前 token 及前面上下文中所有 tokens 对�
     - **尾部延迟（P90/P95/P99）**：分别表示 90%、95%、99% 的请求响应时间低于该值，用于评估极端情况下的响应性能。
 - **吞吐量**：QPS/TPS，系统在单位时间内处理的请求数或事务数。
 - **并发用户数**：模型服务能够同时承载的活动会话或并发请求数，直接关联架构的并行处理能力。
-1. **系统稳定性与可靠性** 
+2. **系统稳定性与可靠性**
 - **错误率**：在高负载下产生的超时、异常或错误码的比例，反映服务的鲁棒性与容错设计。
 - **崩溃/宕机检测**：验证在极限压力条件下服务是否发生进程崩溃或自动重启，评估故障恢复能力。
 - **长时间稳定性**：持续在高压环境下运行数小时至数天，观察性能指标是否漂移或出现内存泄漏等问题。
-1. **资源利用率** 
+3. **资源利用率**
 - **CPU/GPU 使用率**：监控计算资源的占用率，识别是否存在计算瓶颈或资源闲置。
 - **内存/显存使用率**：防止因超出内存上限导致的 OOM（Out Of Memory）错误，同时为动态批处理或缓存机制提供决策依据。
 - **网络带宽与磁盘 I/O**：评估数据传输与模型加载过程对网络和存储的压力，尤其在分布式部署或远程模型拉取场景下。
-1. **可扩展性**
+4. **可扩展性**
 - **水平扩展性能**：在增加服务实例或 GPU 卡数后，吞吐量与延迟指标的提升比例，用于验证部署架构的横向扩展效率 。
 - **动态伸缩能力**：结合自动伸缩策略测试系统对突增流量的响应速度与资源调整准确性 。
 
@@ -16957,7 +18109,9 @@ LLM 推理分为两阶段：
 1. **Prefill 阶段**：在这个阶段，模型并行处理用户输入的Prompt，并生成第一个输出 token。这个过程的延迟一般用 **TTFT** 来衡量。Prefill阶段是计算密集型任务，对计算资源的消耗很大。即使batch-size不大，但如果用户的输入很长，依然可能使得GPU的计算能力达到极限。
 2. **Decoding 阶段**：进入这个阶段后，模型会基于已生成的 token ，逐步生成接下来的每一个 token。这个阶段的延迟通常用 **TPOT** 来衡量。Decoding计算是通信密集型任务，每步只处理一个新token，只有更大的batch-size才能充分利用GPU算力，但受到GPU内存带宽的制约（因为KV-Cache的读取与存储）。
 
-> 🍞 首先介绍一下Distserve这篇论文中评价LLM服务系统性能的几个指标：
+> 🍞
+>
+> 首先介绍一下Distserve这篇论文中评价LLM服务系统性能的几个指标：
 >
 > - **时延（Latency）：** 时延是指用户从发起请求到收到响应所等待的时间，包括：
 >     - **首词元输出时间（TTFT**， time-to-first-token**）**：生成第一个 token 的等待时间。
@@ -16993,19 +18147,27 @@ prefill阶段是计算密集型任务，一旦待处理请求的输入长度超�
 
 ![](居丽叶LLM体系知识搭建/images/AekfbIHxDoxQudxZZydczpS8n9d.png)
 
-> 📌 **论文中对不同并行策略平均TTFT的计算**：
+> 📌
+>
+> **论文中对不同并行策略平均TTFT的计算**：
 >
 > 假设预填充采用 M/D/1 排队系统，当请求到达率为 R、单请求执行时间为 D 时，$RD < 1$，TTFT的平均值为：
 >
-> $Avg\_TTFT = D + \frac{RD^2}{2(1 - RD)}$
+> $$
+> Avg\_TTFT = D + \frac{RD^2}{2(1 - RD)}
+> $$
 >
 > 引入2路张量并行后，设加速系数为$K(1 < K < 2)$，因为通信开销会浪费一定的时间，TTFT的平均值为：
 >
-> $Avg\_TTFT = \frac{D}{K} + \frac{RD^2}{2K(K - RD)}$
+> $$
+> Avg\_TTFT = \frac{D}{K} + \frac{RD^2}{2K(K - RD)}
+> $$
 >
 > 引入2路流水线并行后，忽略跨层通信的开销，设整体请求延迟为 Dₛ，最慢阶段耗时为 Dₘ，$D ≈ Dₛ ≈ 2 × Dₘ$，TTFT的平均值为：
 >
-> $Avg\_TTFT ≈  D + \frac{RD^2}{4(2 - RD)}$
+> $$
+> Avg\_TTFT ≈  D + \frac{RD^2}{4(2 - RD)}
+> $$
 
 结合以上分析可知：
 
@@ -17038,7 +18200,9 @@ decode阶段是通信密集型任务，每步只生成一个新的token，需要
 
 ![](居丽叶LLM体系知识搭建/images/RZSvbg7X8o883NxZlJ1cs0X5n5e.png)
 
-> 🎨 **论文中提出的优化算法**
+> 🎨
+>
+> **论文中提出的优化算法**
 >
 > 对于**高带宽集群**，跨节点 KV 缓存开销几乎可以忽略：
 >
@@ -17113,7 +18277,9 @@ LLM推理低效的两个原因：
 
 ###### 流水线气泡
 
-> 🥛 - **请求级调度**（request-level scheduling）：如 FasterTransformer 中，将一批请求打包后一次性执行 Prefill 和 Decode，导致短序列请求被pad到最长长度，浪费计算资源。
+> 🥛
+>
+> - **请求级调度**（request-level scheduling）：如 FasterTransformer 中，将一批请求打包后一次性执行 Prefill 和 Decode，导致短序列请求被pad到最长长度，浪费计算资源。
 > - **迭代级调度**（iteration-level scheduling）：如 Orca、vLLM、HuggingFace TGI 等，一组请求每次生成一个新token，允许请求在每次迭代开始／结束时动态进出批次，仅保证批大小恒定。
 
 OCRA(即最早提出continuous batching的论文)中的iteration-level scheduling，仍会导致推理阶段出现流水线气泡，主要有三种原因（前两种之前讨论过了）：
@@ -17126,7 +18292,7 @@ OCRA(即最早提出continuous batching的论文)中的iteration-level schedulin
 
 ###### SARATHI：Prefill多趟车+Decode搭便车
 
-SARATHI的核心思想为：将大 Prefill 切分为等算力的小块（**chunked-prefills**），每块都能饱和GPU算力的同时，与尽可能多的 Decode 请求混合成同一微批次（**decode-maximal batching**）。这样既能保持高GPU利用率，又能将Decode的高KV cache压力摊薄到多块中，同时消除各micro-batch之间的时长差异，从根本上减少流水线气泡，提高整体吞吐。 
+SARATHI的核心思想为：将大 Prefill 切分为等算力的小块（**chunked-prefills**），每块都能饱和GPU算力的同时，与尽可能多的 Decode 请求混合成同一微批次（**decode-maximal batching**）。这样既能保持高GPU利用率，又能将Decode的高KV cache压力摊薄到多块中，同时消除各micro-batch之间的时长差异，从根本上减少流水线气泡，提高整体吞吐。
 
 ###### Chunked-Prefill
 
@@ -17163,7 +18329,9 @@ Chunked-Prefill的注意力mask 矩阵设置如下图所示，当前chunk中的�
 
 对于注意力运算，Decode和Prefilled-Chunk分别计算（因为输入形状不统一），线性计算对输入形状没要求，为了提升解码效率就把所有Decode和Prefilled-Chunk拼一起高效计算。线性计算中，Decode和Prefill阶段使用相同的权重张量，将Prefill-chunk和Decode的线性计算合并成一次矩阵-矩阵乘运算，只需要加载一次模型权重。如表2所示，纯 Decode 阶段每token平均耗时约12.49 ms；而在Decode-Maximal Batching 中，每token耗时仅1.2 ms，约 10× 加速。
 
-> 🌰 **如何确定Prefilled-chunk大小**
+> 🌰
+>
+> **如何确定Prefilled-chunk大小**
 >
 > 定义**P : D比**为**某个混合批次中 Prefill token 数 P 与 Decode token 数 D 的比值**。
 >
@@ -17294,7 +18462,9 @@ drafted token使用验证准则$VERIFY(\tilde{x}_i, p_i, q_i)$验证是否与目
 
 相比硬性匹配，投机采样引入概率接受机制。第i个预测token的验证标准为：
 
-$r < \min\left(1, \frac{q_i(\tilde{x}_i)}{p_i(\tilde{x}_i)}\right), \quad r \sim U[0,1]$
+$$
+r < \min\left(1, \frac{q_i(\tilde{x}_i)}{p_i(\tilde{x}_i)}\right), \quad r \sim U[0,1]
+$$
 
 其中$q_i(\tilde{x}_i)$和$p_i(\tilde{x}_i)$分别表示目标模型和 drafter 对该 token 的预测概率。
 
@@ -17347,7 +18517,9 @@ Medusa遵循和投机解码相同的框架，可以分为三个步骤：(1) 生�
 
 ![](居丽叶LLM体系知识搭建/images/TH3pbaj4ToWO1IxEA7fcf9UNnJd.png)
 
-> 🌰 **稀疏树**
+> 🌰
+>
+> **稀疏树**
 >
 > 每个Medusa 头都取top-k，然后做笛卡尔积构建树是一种最简单的实现（稠密树），但某些Token准确率很低，计算这些Token会浪费算力，特别是在节点数受限的场景。
 >
@@ -17365,16 +18537,20 @@ Medusa遵循和投机解码相同的框架，可以分为三个步骤：(1) 生�
 
 假设有与原始模型输出分布一致的数据集（一般为SFT用的同源数据，没有分布一致的数据集可以通过以下介绍的自蒸馏方法获取），为了提升MEDUSA头预测未来token的能力，有两种方案：MEDUSA-1（**只训练解码头**）和MEDUSA-2（**主干与解码头一起训练**）。
 
--  **MEDUSA-1：**利用MEDUSA头和真实值之间的交叉熵损失，设在第$t+k+1$处的真实token为$y_{t+k+1}$，$p_t^{(k)}(y)$为第k个头预测为y的概率，第k个头预测的损失为$L_{k} =  -\log p^{(k)}_t(y_{t+k+1})$。k越大预测越不稳定，因此预测的损失越大，因此在损失中添加权重$\lambda_k$以平衡各个头（实际中用 0.8 的k次幂）：
+- **MEDUSA-1：**利用MEDUSA头和真实值之间的交叉熵损失，设在第$t+k+1$处的真实token为$y_{t+k+1}$，$p_t^{(k)}(y)$为第k个头预测为y的概率，第k个头预测的损失为$L_{k} =  -\log p^{(k)}_t(y_{t+k+1})$。k越大预测越不稳定，因此预测的损失越大，因此在损失中添加权重$\lambda_k$以平衡各个头（实际中用 0.8 的k次幂）：
 
-$L_{MEDUSA-1} = \sum_{k=1}^{K} -\lambda_k \log p^{(k)}_t(y_{t+k+1})$
+$$
+L_{MEDUSA-1} = \sum_{k=1}^{K} -\lambda_k \log p^{(k)}_t(y_{t+k+1})
+$$
 
 为了进一步加速训练效率和节省显存空间，还可以对主干模型进行QLoRA量化。
 
 - **MEDUSA-2：**为了进一步提升MEDUSA头的预测精度，可以将主干与MEDUSA头一同训练，为了保留主干模型预测下一个token的能力和预测精度，采用了以下策略：
     - **组合损失**：将主干模型的交叉熵损失加到MEDUSA损失中：
 
-    $L_{MEDUSA-2} = L_{LM} + \lambda_0 L_{MEDUSA-1}$
+    $$
+    L_{MEDUSA-2} = L_{LM} + \lambda_0 L_{MEDUSA-1}
+    $$
 
     - **不同的学习率**：主干模型学习率低而MEDUSA头学习率高，促使MEDUSA 头更快收敛且主干保持原有能力。
     - **Medusa头预热**：由于MEDUSA头中$W_1$初始化为0，训练初期$L_{MEDUSA-1}$比较大，导致较大的梯度并可能破坏主干模型。因此采用两阶段训练，第一阶段只训练MEDUSA头，第二阶段使用warmup策略一起训练。
@@ -17390,11 +18566,15 @@ MEDUSA头数：最多5个头。
 - 传统的投机解码论文采用**拒绝采样**，即先生成一批候选token，然后用原始模型“验收”每个候选序列，只有通过验收的才被采纳，从而保障输出不会偏离原始模型本来的分布。拒绝采样的问题在于，一方面引入了额外的开销，尤其是drafter模型和原始模型分布差异大时，另一方面为了保障多样化的输出，不应该要求完全匹配原始模型的分布。
 - **典型接受（Typical acceptance）**不要求输出分布与原模型一模一样，而是在保证多样性和高效性的前提下，优先接受“原始模型也认为合理”（生成概率不是极低）的典型序列。具体而言，给定上下文 $x_1, \dots, x_t$，对于候选token序列$x_{n+1},...,x_{n+K+1}$，依次计算每个token在原始模型下的概率，满足以下条件即可被接受：
 
-$p_{\text{original}}(x_{n+k}|x_1, ..., x_{n+k-1}) > \min\big(\epsilon, \delta \exp(-H(p_{\text{original}}(\cdot|x_1, ..., x_{n+k-1})))\big)$
+$$
+p_{\text{original}}(x_{n+k}|x_1, ..., x_{n+k-1}) > \min\big(\epsilon, \delta \exp(-H(p_{\text{original}}(\cdot|x_1, ..., x_{n+k-1})))\big)
+$$
 
 $H(\cdot)$是原始模型的熵函数，$\epsilon、\delta$是阈值参数，这就保证了概率高的token和熵比较高的序列都会被接受。并且为了保证每一步至少生成一个 token，我们对第一个 token 使用贪婪解码并无条件接受它，而在后续 tokens 的处理中采用典型接受。如果某个token不满足条件，则后续序列都被拒绝，继续验证下一个候选，每一步最终的预测由所有候选中接受的最长前缀决定。
 
-> 🦄 **典型接受总结**
+> 🦄
+>
+> **典型接受总结**
 >
 > 相较严格的拒绝采样，**Typical Acceptance更宽容，速度更快，同时输出质量相似**。只要序列在原始模型下“不是很奇怪”，即可被快速采纳，不会引入无意义/低质量token。并且无需严格复现原始模型分布，能适应分布波动，容忍一定偏差，利于工程部署和推理加速。
 
@@ -17405,7 +18585,9 @@ $H(\cdot)$是原始模型的熵函数，$\epsilon、\delta$是阈值参数，这
 - 对于**MEDUSA-1**来说，直接用该数据集训练MEDUSA 头即可。
 - 对于**MEDUSA-2**，**仅用自蒸馏数据会降低模型生成质量**，为了避免主干模型能力退化，用原始模型的概率分布作为label，而不是one-hot真实token作为label，主干模型的损失函数为：
 
-$L_{\text{LM-distill}} = KL(p^{(0)}_{\text{original}, t} \| p^{(0)}_{t})$
+$$
+L_{\text{LM-distill}} = KL(p^{(0)}_{\text{original}, t} \| p^{(0)}_{t})
+$$
 
 其中$p^{(0)}_{\text{original},t}$表示原始模型在位置t的预测概率分布。为了缓解内存压力，采用LoRA微调来训练主干模型，原始模型则是关闭LoRA的主干模型，而无需采用量化。
 
@@ -17426,12 +18608,14 @@ $L_{\text{LM-distill}} = KL(p^{(0)}_{\text{original}, t} \| p^{(0)}_{t})$
 
 #### 6.7 推理链压缩
 
-> 🚅 **思维链是什么？**
+> 🚅
+>
+> **思维链是什么？**
 >
 > - 用户问题：小红有10块钱，她坐地铁花了5块，妈妈又给了她十块，问现在她有多少钱？
-> - 模型回复：<think>小红有10块钱，她花了5块钱做地铁，现在还剩5块，妈妈又给了她10块，她有15块现在，所以答案是15。</think>\n<answer>15</answer>
+> - 模型回复：\<think>小红有10块钱，她花了5块钱做地铁，现在还剩5块，妈妈又给了她10块，她有15块现在，所以答案是15。\</think>\n\<answer>15\</answer>
 >
-> <think></think>之间的内容就是推理链。
+> \<think>\</think>之间的内容就是推理链。
 >
 > - **为什么需要推理链？**
 >
@@ -17647,11 +18831,11 @@ Think step by step, but only keep a minimum draft for each thinking step, with a
 
 1. **模型内置模式切换**
 - **Claude 3.7 Sonnet**：业内早期的混合推理形态，支持快速答复与分步思考两种模式，复杂题留更多思考预算，简单题快速返回。
-1. **训练一个“路由器”**
+2. **训练一个“路由器”**
 - **RouteLLM**：用 Chatbot Arena 偏好数据训练路由器，简单题→轻量模型，复杂题→强模型，在不牺牲准确率的前提下显著降时延与成本。
 - **Sketch-of-Thought（SoT）**：用轻量编码器（如 DistilBERT）先判题型，再在三种“思维风格”中选一种：  
-   Conceptual Chaining（口头链式） / Chunked Symbolism（紧凑数学记号） / Expert Lexicons（领域速记），以最短表达覆盖核心推理。
-1. **不确定性驱动的自路由**（不一定要外部分类器）
+    Conceptual Chaining（口头链式） / Chunked Symbolism（紧凑数学记号） / Expert Lexicons（领域速记），以最短表达覆盖核心推理。
+3. **不确定性驱动的自路由**（不一定要外部分类器）
 - **Self-Ref**：在 LLM 内部微调专用置信度 token，让模型自己估计是否不确定，仅对**高不确定**样本触发“更强/更长链”的路径。
 - **Confident or Seek Stronger**：构造**校准数据**，让模型在**不读取用户输入内容**的前提下，预测自身对即将产生输出的信心，用作路由信号（自信则直答，不自信则求助更强）。
 
@@ -17683,7 +18867,9 @@ Think step by step, but only keep a minimum draft for each thinking step, with a
 
 ##### 6.7.2 LightThinker
 
-> 🛬 **论文简介**
+> 🛬
+>
+> **论文简介**
 >
 > 提出一种在推理过程中动态压缩中间思维链的方法LightThinker ，将冗长的思维步骤压缩成紧凑的表示。为了实现这一目标，通过**数据构建**、**将隐藏状态映射到紧凑的token**以及**创建专门的注意力掩码**来训练模型何时以及如何执行压缩实现。为了量化压缩程度，引入了**Dependency（Dep）**来测量生成过程中对历史token的依赖程度。
 
@@ -17721,7 +18907,9 @@ LightThinker主要解决了两个关键问题：
 
 1. 给定输入X和输出Y，使用分割函数$Seg(\cdot)$将Y划分为$k$个子序列$S$，$Y = \{S_i\}_{i=1}^k$，可以进行token级和thought级的分割。
 
-> 🥖 Seg的实现
+> 🥖
+>
+> Seg的实现
 >
 > - token级：每6个token压缩为两个token，即$|C| = 2$.
 > - thought级：使用"\n\n"作为分隔符，将思考压缩为几个token(Qwen $|C| = 9$, Llama $|C| = 7$)。
@@ -17730,7 +18918,7 @@ LightThinker主要解决了两个关键问题：
 - $<w>$表示可选的压缩触发token，表示要压缩前面的thought，如果$Seg(\cdot)$是token级别的或者$<w> \in S_i$，可以被忽略。
 - $C = \{ [c_i]\}_{i=1}^{|C|}$包含$|C|$个特殊token，即gist token，用于保存压缩内容，这里称$C$为cache token。
 - $[o]$是一个强制输出token，基于压缩的内容持续生成
-1. 最终增强后的数据$\hat{D} = \{(X,\hat{Y})_i \}_{i=1}^{|D|}$为：
+2. 最终增强后的数据$\hat{D} = \{(X,\hat{Y})_i \}_{i=1}^{|D|}$为：
 
 ![](居丽叶LLM体系知识搭建/images/FqNibiZzjoyB2gxjFa5csHBnnjc.png)
 
@@ -17778,7 +18966,9 @@ LightThinker的cache token不追求无损压缩，而是只保留对后续推理
 
 ![](居丽叶LLM体系知识搭建/images/IcifbX5nJoMWAtxozZcc0z8FnYe.png)
 
-> 🥖 - **为什么要设计Dep？**
+> 🥖
+>
+> - **为什么要设计Dep？**
 >
 > LightThinker和An-LLM这种动态压缩方法，推理过程中的压缩次数和压缩比都由LLM决定，而H2O和SepLLM这些无需训练的方法，可以通过设置超参数控制推理过程中保留的最大token量，这导致无法用峰值KV cache缓存来衡量。如下图所示，尽管LightThinker的峰值KV cache高于H2O，但峰值只在瞬间出现，而H2O则长时间保持较高token数目。
 >
@@ -17787,9 +18977,10 @@ LightThinker的cache token不追求无损压缩，而是只保留对后续推理
 > - **Dep的定义**
 >
 > Dep衡量生成过程中对历史token的依赖总量，在确保有效压缩比相似的情况下进行评估，即对应下图中曲线的面积。Dep值越低表示压缩越有效。
->     - Vanilla：面积为直角梯形，即随着生成依赖越来越大
->     - H2O：面积为梯形+矩形，即生成依赖先增大到阈值（达到最大token数）后不变。
->     - LightThinker：在生成过程中实时计算，没有显式解。
+>
+> - Vanilla：面积为直角梯形，即随着生成依赖越来越大
+> - H2O：面积为梯形+矩形，即生成依赖先增大到阈值（达到最大token数）后不变。
+> - LightThinker：在生成过程中实时计算，没有显式解。
 
 ![](居丽叶LLM体系知识搭建/images/IuQEbeMURopHyTxpjF0ckCkjnse.png)
 
@@ -17799,7 +18990,7 @@ LightThinker的cache token不追求无损压缩，而是只保留对后续推理
 2. 对比Vanilla，实验结果表明，Lightthinker实现了有效性和推理效率之间的平衡：
 - 在Qwen上，牺牲1%的准确性，就节省了26%推理时间，减少了70%峰值token使用量和78的Dep。
 - 在Llama上，牺牲6%的准确性，就节省了1%推理时间，减少了70%峰值token使用量和74%的Dep。
-1. Seg的实现中，thought级显著优于token级，因为token级的分割会导致语义边界的丢失。
+3. Seg的实现中，thought级显著优于token级，因为token级的分割会导致语义边界的丢失。
 
 ![](居丽叶LLM体系知识搭建/images/CjRCb57fNo45HnxTQdjcKEmAnrc.png)
 
@@ -17818,7 +19009,9 @@ LightThinker的cache token不追求无损压缩，而是只保留对后续推理
 
 原论文：[TokenSkip: Controllable Chain-of-Thought Compression in LLMs](https://arxiv.org/pdf/2502.12067)
 
-> 🐵 **论文总结**
+> 🐵
+>
+> **论文总结**
 >
 > 尽管CoT能增强LLM解决复杂问题的能力，但LLM自回归解码会导致随着CoT长度的增加，计算量和KV cache缓存大幅增长。那么如何寻找CoT效率和推理准确性的平衡呢？TokenSkip**分析CoT中token的语义重要性，选择性跳过不重要token**，从而实现可控的 CoT 压缩。
 
@@ -17878,7 +19071,9 @@ TokenSkip 的推理过程遵循**自回归解码**，给定问题$x$和压缩比
 
 ###### 实验结果
 
-> 👍 ###### 实验设置
+> 👍
+>
+> ###### 实验设置
 >
 > - 模型：LLaMA-3.1-8B-Instruct和Qwen2.5-Instruct
 > - BenchMark：Math-500和GSM8K
@@ -17910,7 +19105,9 @@ TokenSkip 的推理过程遵循**自回归解码**，给定问题$x$和压缩比
 
 ##### 6.7.4 Chain of Draft
 
-> 🎉 **论文总结**
+> 🎉
+>
+> **论文总结**
 >
 > 想象你在做数学题时，只会记录简洁而高信息量的草稿，而不会为每一步写下的详细说明。Chain of Draft模仿人类解决问题时的思维，通过prompt**鼓励LLM只生成简洁和高信息量的输出**，只需要7.6%的token的情况下，准确率就能跟CoT相匹配甚至超越，显著了降低推理的延迟和成本。
 
@@ -17928,7 +19125,9 @@ TokenSkip 的推理过程遵循**自回归解码**，给定问题$x$和压缩比
 
 ![](居丽叶LLM体系知识搭建/images/EGvCboPqOoWfICx4op2cI7g2nXb.png)
 
-> 🎉 作者论文中提到，CoD中没有强制大模型推理步骤只能生成5个token，只是通过prompt以及样例引导模型这样做。
+> 🎉
+>
+> 作者论文中提到，CoD中没有强制大模型推理步骤只能生成5个token，只是通过prompt以及样例引导模型这样做。
 
 - **实验结果**：
     - **是否使用few-shot**
@@ -17945,7 +19144,9 @@ TokenSkip 的推理过程遵循**自回归解码**，给定问题$x$和压缩比
 
 ![](居丽叶LLM体系知识搭建/images/DcGRbiwExoJqCExPqL4cPAoxn5g.png)
 
-> 🏖️ - **关于这篇论文的一些思考**：
+> 🏖️
+>
+> - **关于这篇论文的一些思考**：
 >
 > 第一次关注到这篇论文，是之前参加蚂蚁比赛的时候，目标是压缩推理链，它提供的baseline方法就是CoD，实测这种方法在比较简单的任务上（比如GSM8K），效果还是不错的，因为推理本身很简单，即使每一步都压缩到几个token，也能实现较好的推理效果。但一旦任务难度提升，特别是深入到一些具体领域时，几个token连一些关键概念的意义都解释不清楚，更遑论推理出正确的结果了。特别是在使用小模型时，不做专门的训练而是只寄希望于调prompt，很难实现简短而高质量的推理。
 >
@@ -17960,7 +19161,9 @@ TokenSkip 的推理过程遵循**自回归解码**，给定问题$x$和压缩比
 
 ### 7 预训练篇
 
-> 👍 之前介绍的比较重要技术报告中，预训练章节的链接：
+> 👍
+>
+> 之前介绍的比较重要技术报告中，预训练章节的链接：
 >
 > - Deepseek v3：[居丽叶LLM体系知识搭建](https://my.feishu.cn/docx/AN61dRfiWoRUiRxhc6ucbmJwnGr)
 > - Deepseek V4：[居丽叶LLM体系知识搭建](https://my.feishu.cn/docx/AN61dRfiWoRUiRxhc6ucbmJwnGr)
@@ -17977,12 +19180,16 @@ TokenSkip 的推理过程遵循**自回归解码**，给定问题$x$和压缩比
 
 预训练采用自监督的方式训练，训练目标为**预测下一个token的对数似然损失**：
 
-$L = \sum_{n=1}^N logp(x_n | x_1,...,x_n-1;  
-\theta )$
+$$
+L = \sum_{n=1}^N logp(x_n | x_1,...,x_n-1;
+\theta )
+$$
 
 在计算loss的时候会计算prompt和response两部分的loss值。
 
-> 🍞 **在开源大模型数量爆炸的时代，预训练模型的意义在何处？**
+> 🍞
+>
+> **在开源大模型数量爆炸的时代，预训练模型的意义在何处？**
 >
 > - 许多大模型没有开源**训练框架、训练数据**等核心要素，仅通过评估无法确定大模型对知识的掌握程度，导致在模型对齐阶段无法对症下药。例如我要微调一个写诗的大模型，采用的大模型在预训练阶段可能根本没在诗歌数据集上训练过，仅通过微调训练出的大模型写出来诗肯定难以直视。
 > - 通用模型在特定领域的表现远不如domain模型，而要训练出好的domain模型，仅靠微调是不够的，需要做继续预训练，而继续预训练与预训练的技术栈基本一致。
@@ -17992,7 +19199,9 @@ $L = \sum_{n=1}^N logp(x_n | x_1,...,x_n-1;
 
 预训练数据集是决定大模型性能的关键因素，大量的高质量数据能提高模型的泛化能力和应用效果。
 
-> 🎉 **构建预训练数据集需要考虑的因素**
+> 🎉
+>
+> **构建预训练数据集需要考虑的因素**
 >
 > - **数据规模**：预训练数据集的规模对模型的性能具有直接影响，一般总体数据量需要达到10Ttoken的级别。
 > - **数据多样性**：预训练阶段需要接触到多种文本内容，包括文档、网页、代码、数学、多语言等。
@@ -18001,24 +19210,30 @@ $L = \sum_{n=1}^N logp(x_n | x_1,...,x_n-1;
 ##### **7.2.1 数据来源**
 
 数据集的质量和多样性主要取决于数据来源的选择。常见的数据来源包括：
-    - **公开数据集**：如维基百科、Common Crawl等大型通用文本数据集。这类数据资源庞大且容易获取。
-    - **领域特定数据**：从技术文献库、领域文献、研究论文或行业报告中收集数据，适用于特定领域（如医学、法律、金融等）模型的预训练。
-    - **网络抓取**：通过网络爬虫工具从特定网站抓取数据，尤其适合于需要最新或领域特定信息的场景。参考：https://github.com/NanmiCoder/MediaCrawler
-    - **自有数据**：如企业内部的技术文档、客户服务记录等，这些数据能够使模型专门针对企业应用场景进行优化。
+
+- **公开数据集**：如维基百科、Common Crawl等大型通用文本数据集。这类数据资源庞大且容易获取。
+- **领域特定数据**：从技术文献库、领域文献、研究论文或行业报告中收集数据，适用于特定领域（如医学、法律、金融等）模型的预训练。
+- **网络抓取**：通过网络爬虫工具从特定网站抓取数据，尤其适合于需要最新或领域特定信息的场景。参考：https://github.com/NanmiCoder/MediaCrawler
+- **自有数据**：如企业内部的技术文档、客户服务记录等，这些数据能够使模型专门针对企业应用场景进行优化。
 
 ##### **7.2.2 数据清洗**
 
 收集到的原始数据往往包含很多噪声和冗余信息，需要通过数据清洗保障数据质量，主要包括：
-    - **模型打分**：llama3和qwen2的技术报告都提到，可以用打分模型对预训练质量打分。业界的普遍认知是，同等 size 下，BERT 结构的模型的表征能力是强于 transformer-decoder 模型的。训练打分模型的数据可以由GPT标注得到，需要注意的是，**code、markdown、latex**等格式的数据会被打低分，应该提前摘出来。
 
-    > 🦄 打分模型训练不需要特别多的数据和很高的准确性，可以结合规则进行判断（例如**数据长度**，**某个 token 的比例是否超过阈值**，**是否包含敏感词**等）。
+- **模型打分**：llama3和qwen2的技术报告都提到，可以用打分模型对预训练质量打分。业界的普遍认知是，同等 size 下，BERT 结构的模型的表征能力是强于 transformer-decoder 模型的。训练打分模型的数据可以由GPT标注得到，需要注意的是，**code、markdown、latex**等格式的数据会被打低分，应该提前摘出来。
 
-    - **去重处理**：消除重复的文本片段，以避免模型过度学习某些特定模式。需要去除训练集内部重复、训练集与测试集之间重复的n-grams、句子和段落。常见算法：文本去重**MinHash+LSH**，语义去重**BGE+分片聚类。**
+> 🦄
+>
+> 打分模型训练不需要特别多的数据和很高的准确性，可以结合规则进行判断（例如**数据长度**，**某个 token 的比例是否超过阈值**，**是否包含敏感词**等）。
 
-    > 🏕️ 数据清洗要先确定需要多少训练数据，再确定去重的粒度。例如需要10T的训练数据，就卡80%的相似度阈值。需要5T的训练数据，就卡90%的相似度阈值。
+- **去重处理**：消除重复的文本片段，以避免模型过度学习某些特定模式。需要去除训练集内部重复、训练集与测试集之间重复的n-grams、句子和段落。常见算法：文本去重**MinHash+LSH**，语义去重**BGE+分片聚类。**
 
-    - **去除噪声**：如HTML标签、广告、目录、标点符号过度堆积、低质量url等。这些信息会干扰模型的训练，降低训练效果。常用工具：**DataTrove、Trafilatura**
-    - **文本规范化**：标准化文本格式，如统一的编码格式、消除特殊符号、处理数字或单位等。常用工具：**Normalise、CN-Text-Normalizer**
+> 🏕️
+>
+> 数据清洗要先确定需要多少训练数据，再确定去重的粒度。例如需要10T的训练数据，就卡80%的相似度阈值。需要5T的训练数据，就卡90%的相似度阈值。
+
+- **去除噪声**：如HTML标签、广告、目录、标点符号过度堆积、低质量url等。这些信息会干扰模型的训练，降低训练效果。常用工具：**DataTrove、Trafilatura**
+- **文本规范化**：标准化文本格式，如统一的编码格式、消除特殊符号、处理数字或单位等。常用工具：**Normalise、CN-Text-Normalizer**
 
 ##### **7.2.3 数据多样性**
 
@@ -18029,9 +19244,10 @@ $L = \sum_{n=1}^N logp(x_n | x_1,...,x_n-1;
 ##### **7.2.4 数据增强**
 
 在某些情况下，数据增强技术可以进一步提高数据集的多样性和丰富性，尤其是在数据规模不足的情况下。常见的数据增强技术包括：
-    - **同义词替换**：在不改变语义的前提下，用同义词替换句子中的部分词汇。
-    - **句子顺序打乱**：对文本中的句子顺序进行随机调整，增加训练数据的复杂性。
-    - **生成式增强**：利用已有模型生成新的语料，通过多种生成方式扩展训练数据的规模。
+
+- **同义词替换**：在不改变语义的前提下，用同义词替换句子中的部分词汇。
+- **句子顺序打乱**：对文本中的句子顺序进行随机调整，增加训练数据的复杂性。
+- **生成式增强**：利用已有模型生成新的语料，通过多种生成方式扩展训练数据的规模。
 
 ##### 7.2.5 数据配比
 
@@ -18055,7 +19271,9 @@ $L = \sum_{n=1}^N logp(x_n | x_1,...,x_n-1;
 
  **BEYOND DOCUMENT BOUNDARIES**》中的观点，利用语义相似度，优先将最相似的 document 进行拼接，从而构成语义更加连贯流畅的上下文。
 
-> 🏆 **预训练数据的一些其他经验总结：**
+> 🏆
+>
+> **预训练数据的一些其他经验总结：**
 >
 > - 预训练需要大量的数据，如果有企业内自有数据，可以与大量的公开数据集混合进行训练。为了避免大模型遗忘自有数据，可以通过后续在自有数据上微调和对比学习的方式增强记忆。
 > - 数据配比和数据顺序一般先在小模型上实验，然后利用**scaling law**估计在大模型上的效果。
@@ -18071,7 +19289,9 @@ $L = \sum_{n=1}^N logp(x_n | x_1,...,x_n-1;
 
 分词器常用算法：**BPE、BBPE、WordPiece**。
 
-> 🎉 **好的分词器的重要性**：
+> 🎉
+>
+> **好的分词器的重要性**：
 >
 > 1. 减少词表大小，降低模型复杂性，提高模型计算效率。
 > 2. 提升模型泛化能力，遇到未见过的词时，能通过学习到的子词来理解其含义。（**OOV问题**）
@@ -18109,7 +19329,9 @@ tokenizer.train(files, trainer)
 tokenizer.save("./tokenizer-wiki.json")
 ```
 
-> 📚 **tokenizer训练的细节**
+> 📚
+>
+> **tokenizer训练的细节**
 >
 > - **不要随意扩词表：**例如加入了“中华人民”这个新 token，并且引入相对应的 merge token 的逻辑，就可能导致“中华人民共和国”这个旧 token 永远不会被 encode 出来，那“中华人民共和国”这个 token 对应的知识也就丢失了。
 > - **什么时候考虑扩充词表**：
@@ -18148,7 +19370,9 @@ megatron适合大量数据训练，预训练的数据一般是以T为单位的�
 
 **训练数据的训练速度**：卡内通迅 > 卡间通讯 > 机间通讯。为了加速训练效率和降低通讯量，应避免机间通讯，尽量不引入**张量并行**、**流水线并行**、**序列并行**，只有**数据并行**不会牺牲算法里。在显存充足的情况下，不要开启数据offload和梯度激活点。
 
-> 🍞 **Megatron vs Deepspeed** 
+> 🍞
+>
+> **Megatron vs Deepspeed**
 >
 > 具体介绍详见**2.4.5** **deepspeed** 和 **2.4.6 Megatron-LM**
 >
@@ -18171,7 +19395,9 @@ megatron适合大量数据训练，预训练的数据一般是以T为单位的�
 
 ![](居丽叶LLM体系知识搭建/images/BgjKboQU7ouBG9xBioqcdWTCngh.png)
 
-> 🐵 **Scaling law的用途**
+> 🐵
+>
+> **Scaling law的用途**
 >
 > - **优化资源分配**： Scaling Law揭示了**参数规模、数据规模与算力之间的最佳配比**。OpenAI的研究发现，在给定计算预算下，与其训练一个小模型用海量数据，不如训练一个**更大的模型**但**适度早停**更为高效。更大的模型对数据的**样本效率**更高——达到同等性能所需的训练步骤和数据更少。
 > - **预测和规划模型训练**： 在小规模模型上实验并拟合Scaling Law，可以**预测更大模型的性能**，从而决定训练多大的模型、用多少数据，以高效利用有限的计算预算，并且根据实验结果调整训练参数、数据配比等。
@@ -18185,7 +19411,9 @@ megatron适合大量数据训练，预训练的数据一般是以T为单位的�
 
 1. $L(N,D) = \frac{A}{N^{\alpha}} + \frac{B}{D^{\beta}} + L_{0}$，其中$L_{0}$是理论上的不可减损失下界（数据和模型无限大时的极限误差）,根据《**Training Compute-Optimal Large Language Models**》中的计算，$\alpha \approx 0.34, \beta  \approx 0.28$，模型参数量对损失的影响略强于数据量。通过固定总算力$C$，就可以推导出最优$N$和$D$的关系。
 
-> 🎹 **模型和数据放大比例存在不同的策略**：
+> 🎹
+>
+> **模型和数据放大比例存在不同的策略**：
 >
 > - **OpenAI**：若将训练计算量提高10倍，OpenAI推算**模型参数应增加约5.5倍，训练token数量增加约1.8倍，**反应在公式上就是**最优参数量**$N_{\text{opt}} \propto C^{0.73},$**最优数据量**$D_{\text{opt}} \propto C^{0.27}$.
 > - **DeepMind**：**模型大小和数据量应按相等比例扩展**，提出**Chinchilla定律，**即**训练语料的token数量约为模型参数量的20倍。**
@@ -18230,7 +19458,9 @@ megatron适合大量数据训练，预训练的数据一般是以T为单位的�
 - **HHH**：评估模型在交互场景中的道德反应
 - **HumanEval**： 测试根据给定需求生成正确有效的代码
 
-> 🥖 **推荐一些BenchMark相关链接**
+> 🥖
+>
+> **推荐一些BenchMark相关链接**
 >
 > - **CLiB中文大模型能力评测榜单**：https://github.com/jeinlee1991/chinese-llm-benchmark
 > - **大模型评估平台**：https://github.com/open-compass/opencompass
@@ -18260,7 +19490,9 @@ megatron适合大量数据训练，预训练的数据一般是以T为单位的�
 2. **插入“针”**：在文本的随机位置插入与文本内容目标关键信息（例如“π的小数点后第1000位是9”）。
 3. **提问与检索**：提问跟针相关的问题，例如“π的小数点后第1000位是什么？”
 
-> 🌰 **大海捞针实验的各种形式：**
+> 🌰
+>
+> **大海捞针实验的各种形式：**
 >
 > - **单一信息检索任务**：评估LLM在长文本中**提取单一关键信息的能力**，也就是只插入一个针，测试其对广泛叙述中特定细节的精确回忆能力。这对应于原始的大海捞针测试任务设定。
 > - **多信息检索任务**：探讨LLM从长文本中**检索多个相关信息的能力**，模拟实际场景中对综合文档的复杂查询。
@@ -18302,14 +19534,18 @@ megatron适合大量数据训练，预训练的数据一般是以T为单位的�
 
 总体而言，**领域数据量应控制在15%以内**，避免过度干扰模型的泛化能力。
 
-> 🥛 **继续预训练vs微调**
+> 🥛
+>
+> **继续预训练vs微调**
 >
 > - **训练数据**：继续预训练在预训练数据的基础上，加入**特定领域的无标注数据集**（例如法律、医疗（~~不是董小姐~~），覆盖一个领域，比较困难），沿用预训练的训练目标，微调使用**特定任务的标注数据集**（例如分类、问答，相对比较简单），训练目标与任务相关。
 > - **训练规模**：继续预训练需要的数据量更大，训练时间长，微调数据量少，训练时间短。
 > - **训练参数**：继续预训练更新模型的全部参数，微调可以只更新部分参数（例如PEFT）。
 > - **训练结果**：继续预训练出将通用模型适配到垂直领域，例如将通用模型在医疗数据上训练，得到医学领域的大模型。微调做特定任务的优化，例如将大模型在标注的癌症分类数据上训练，得到癌症分类模型。
 
-> 👍 继续预训练的经验：
+> 👍
+>
+> 继续预训练的经验：
 >
 > - 数据集需要足够大，至少几B的token，指令数据占比高效果更好。
 > - 训练开始阶段可能出现loss上升，然后慢慢收敛。

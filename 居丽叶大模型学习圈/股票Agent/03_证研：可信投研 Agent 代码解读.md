@@ -78,9 +78,9 @@ docker compose --profile test run --rm test      # 全部测试：虚构数据 +
 
 **验证**：启动成功后登录网页`http://localhost:8000`，在配置文件中配置账户密码即可进入开始研究。
 
-![](03_证研：可信投研 Agent 代码解读/images/BmDRbHmkKoV6naxa3f8cuN4XnTS.png)
+![](03_证研：可信投研%20Agent%20代码解读/images/BmDRbHmkKoV6naxa3f8cuN4XnTS.png)
 
-![](03_证研：可信投研 Agent 代码解读/images/VxPUbrNdMonMMAxNGwvcKbyPnph.png)
+![](03_证研：可信投研%20Agent%20代码解读/images/VxPUbrNdMonMMAxNGwvcKbyPnph.png)
 
 #### 2.2 宿主机直接运行（开发用）
 
@@ -165,7 +165,7 @@ stock_investment/
 
 #### 3.2 七层架构 + 两个横切面
 
-![画板](03_证研：可信投研 Agent 代码解读/images/whiteboard_SFFowr1UfhJwNlbLOBZcbrxHnIb.png)
+![画板](03_证研：可信投研%20Agent%20代码解读/images/whiteboard_SFFowr1UfhJwNlbLOBZcbrxHnIb.png)
 
 | 层 | 代码 | 一句话 |
 |---|---|---|
@@ -195,7 +195,7 @@ stock_investment/
 
 #### 4.1 主链路
 
-![画板](03_证研：可信投研 Agent 代码解读/images/whiteboard_Ck06w1UM1hHRkvbsQV8cwtJZnhe.png)
+![画板](03_证研：可信投研%20Agent%20代码解读/images/whiteboard_Ck06w1UM1hHRkvbsQV8cwtJZnhe.png)
 
 `builder.py` 里每个节点都包了一层 `_guard`：**先检查撤销，再在 OpenTelemetry span 内执行**。所以用户随时取消，下一个节点开头就会抛 `TaskCancelled` 停下。
 
@@ -552,7 +552,7 @@ POST {DECISION_BASE_URL}/v1/systemone
 
 #### 8.1 子图流程
 
-![画板](03_证研：可信投研 Agent 代码解读/images/whiteboard_W9CkwHYzLhmxhcbTJnlctHGxnjg.png)
+![画板](03_证研：可信投研%20Agent%20代码解读/images/whiteboard_W9CkwHYzLhmxhcbTJnlctHGxnjg.png)
 
 #### 8.2 编排：按缺口召集，而不是全员上场
 
@@ -639,7 +639,7 @@ score = 0.30 * 主张核验通过率 + 0.30 * 关键项覆盖率 + 0.25 * 数字
 
 代码：`watch/scanner.py`、`memory/diff.py`。
 
-![画板](03_证研：可信投研 Agent 代码解读/images/whiteboard_RxbBwIZXVhViz4bydRYc7NVvn6b.png)
+![画板](03_证研：可信投研%20Agent%20代码解读/images/whiteboard_RxbBwIZXVhViz4bydRYc7NVvn6b.png)
 
 `memory/diff.py` 的 `diff_dossiers()` 输出两版之间的指标变化、主张保留/新增/移除（`SequenceMatcher` 相似度 ≥ 0.6 视为同一条）、依赖旧报告期的待复核主张、新增证据。`advisor eval update`（`evals/update.py`）评测"受影响的结论有没有被正确修正、没受影响的有没有被保留"。演示数据里宁德时代 300750 走通了"提醒 → 重新研究 → v2"。
 
@@ -673,7 +673,7 @@ score = 0.30 * 主张核验通过率 + 0.30 * 关键项覆盖率 + 0.25 * 数字
 
 #### 10.2 闭环五步
 
-![画板](03_证研：可信投研 Agent 代码解读/images/whiteboard_XhJUwaoTVhVeYMbDE1ocjr2Zn6J.png)
+![画板](03_证研：可信投研%20Agent%20代码解读/images/whiteboard_XhJUwaoTVhVeYMbDE1ocjr2Zn6J.png)
 
 命令行（`cli.py`）一一对应：`advisor rsi collect / propose S1 / evaluate <run_id> / approve / release / rollback lessons --reason ...`；Web「自进化」页展示同样的闭环。
 
