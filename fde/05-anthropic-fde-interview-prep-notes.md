@@ -1929,57 +1929,284 @@ record(61, "a", 30)        -> True         # request at t=0 left the window (0 >
 - **Level 4**：规则本身被改写。因为 level 1 已存时间戳、level 3 只有 `used` 知道怎么计数，修改只需：构造器加可选 `window` 参数 + `used` 里 3 行过滤窗口外请求。全部 15 个测试通过。
 - 复杂度：`usage`/`used` 为 O(k)（k = 该客户请求数），`top_clients` 为 O(C log C · k)。若面试追问性能，可为每个客户维护运行总和 (running sum) 与 deque 滑动窗口 (sliding window)，把 `used` 降为摊还 (amortized) O(1)——但先写朴素正确版本。
 
+下面每一级都给完整代码（包含前面几级），新加或改动的行在注释里标 `Level N`。
+
+#### Level 1：注册客户、记录请求、查总用量
+
+**要实现**：
+- `add_client(client_id) -> bool`：注册一个客户（client）；已存在返回 `False`。
+- `record(timestamp, client_id, tokens) -> bool`：记一次请求；客户不存在或 `tokens < 1` 返回 `False`。
+- `usage(client_id) -> int | None`：客户的 token 总量；客户不存在返回 `None`。
+
+**需要的类和 field**：
+
+| 类 | field | 存什么 |
+|---|---|---|
+| `TokenLimiter` | `requests` | 客户 ID → 该客户每次请求的 `(timestamp, tokens)` 列表 |
+
+**为什么存每次请求，不只存一个总数**：Level 3 的预算和 Level 4 的滚动窗口（rolling window）都要知道每次请求的时间和大小。Level 1 就把 `(timestamp, tokens)` 存下来，后面不用改写入路径。
+
 ```python
 class TokenLimiter:
     """Tracks how many tokens each client sends to a model."""
 
-    def __init__(self, window=None):
-        self.window = window  # Level 4: budget window in seconds, or None for no window
-        self.requests = {}    # client ID -> list of (timestamp, tokens)
-        self.budgets = {}     # Level 3: client ID -> maximum tokens
+    def __init__(self):
+        self.requests = {}  # client ID -> list of (timestamp, tokens)
 
     def add_client(self, client_id):
         """Register a client. Return False if it already exists."""
         if client_id in self.requests:
-            return False
-        self.requests[client_id] = []
+            return False  # duplicate client
+        self.requests[client_id] = []  # no requests yet
         return True
 
     def record(self, timestamp, client_id, tokens):
-        """Record one request. Return False for an unknown client, tokens below 1, or over budget."""
+        """Record one request. Return False for an unknown client or tokens below 1."""
         if client_id not in self.requests or tokens < 1:
-            return False
-        if self.used(timestamp, client_id) + tokens > self.budgets.get(client_id, float("inf")):
-            return False  # Level 3: the request would go over budget
-        self.requests[client_id].append((timestamp, tokens))
+            return False  # invalid input
+        self.requests[client_id].append((timestamp, tokens))  # keep the timestamp for later levels
         return True
 
     def usage(self, client_id):
         """Return a client's total tokens, or None for an unknown client."""
         if client_id not in self.requests:
-            return None
-        return sum(tokens for _, tokens in self.requests[client_id])
+            return None  # unknown client
+        return sum(tokens for _, tokens in self.requests[client_id])  # add up every request
+
+
+def check(name, actual, expected):
+    print(f"{'PASS' if actual == expected else 'FAIL'} {name}")
+
+
+if __name__ == "__main__":
+    limiter = TokenLimiter()
+    check("add a client", limiter.add_client("a"), True)
+    check("reject a duplicate client", limiter.add_client("a"), False)
+    check("reject an unknown client", limiter.record(1, "z", 50), False)
+    check("record two requests", [limiter.record(1, "a", 100), limiter.record(2, "a", 200)], [True, True])
+    check("total usage", limiter.usage("a"), 300)
+```
+
+#### Level 2：按用量排前 N 名
+
+**要实现**：
+- `top_clients(n) -> list[str]`：用量最大的 `n` 个客户，格式 `"id(tokens)"`，从高到低；用量一样按客户 ID 升序。
+
+**新加的 field**：无。排行只需要每个客户的总量，直接复用 Level 1 的 `usage`。
+
+**新加的方法**：`top_clients`。Level 1 的方法都不改。
+
+```python
+class TokenLimiter:
+    """Tracks how many tokens each client sends to a model."""
+
+    def __init__(self):
+        self.requests = {}  # client ID -> list of (timestamp, tokens)
+
+    def add_client(self, client_id):
+        """Register a client. Return False if it already exists."""
+        if client_id in self.requests:
+            return False  # duplicate client
+        self.requests[client_id] = []  # no requests yet
+        return True
+
+    def record(self, timestamp, client_id, tokens):
+        """Record one request. Return False for an unknown client or tokens below 1."""
+        if client_id not in self.requests or tokens < 1:
+            return False  # invalid input
+        self.requests[client_id].append((timestamp, tokens))  # keep the timestamp for later levels
+        return True
+
+    def usage(self, client_id):
+        """Return a client's total tokens, or None for an unknown client."""
+        if client_id not in self.requests:
+            return None  # unknown client
+        return sum(tokens for _, tokens in self.requests[client_id])  # add up every request
 
     # Level 2
     def top_clients(self, n):
         """Return the n heaviest clients as "id(tokens)", highest first, ties broken by ID."""
-        ranked = sorted(self.requests, key=lambda client_id: (-self.usage(client_id), client_id))
-        return [f"{client_id}({self.usage(client_id)})" for client_id in ranked[:n]]
+        ranked = sorted(self.requests, key=lambda client_id: (-self.usage(client_id), client_id))  # Level 2: most tokens first, then ID
+        return [f"{client_id}({self.usage(client_id)})" for client_id in ranked[:n]]  # Level 2: exact "id(tokens)" format
+
+
+def check(name, actual, expected):
+    print(f"{'PASS' if actual == expected else 'FAIL'} {name}")
+
+
+if __name__ == "__main__":
+    limiter = TokenLimiter()
+    check("add a client", limiter.add_client("a"), True)
+    check("reject a duplicate client", limiter.add_client("a"), False)
+    check("reject an unknown client", limiter.record(1, "z", 50), False)
+    check("record two requests", [limiter.record(1, "a", 100), limiter.record(2, "a", 200)], [True, True])
+    check("total usage", limiter.usage("a"), 300)
+    limiter.add_client("b")  # Level 2
+    limiter.add_client("c")  # Level 2
+    limiter.record(3, "b", 500)  # Level 2
+    limiter.record(4, "c", 300)  # Level 2
+    check("top two clients", limiter.top_clients(2), ["b(500)", "a(300)"])  # Level 2
+    check("tie broken by ID", limiter.top_clients(3), ["b(500)", "a(300)", "c(300)"])  # Level 2
+```
+
+#### Level 3：每个客户的预算
+
+**要实现**：
+- `set_budget(client_id, max_tokens) -> bool`：给客户设预算（budget）；客户不存在返回 `False`。
+- 会让客户超预算的请求被拒绝：`record` 返回 `False`，而且这次请求不存。
+
+**新加的 field**：
+
+| 类 | field | 存什么 | 为什么要加 |
+|---|---|---|---|
+| `TokenLimiter` | `budgets` | 客户 ID → 最多能用的 token 数 | `record` 存之前要和预算比；没设预算的客户当作无穷大 |
+
+**改动的已有方法**：
+- `record`：存之前先算 `used(...) + tokens`，不超过预算才存并返回 `True`，否则返回 `False`。
+
+**新加的方法**：`set_budget`，以及 helper `used(timestamp, client_id)`：返回计入预算的 token 数。这一级它就等于 `usage`，但计数规则只放在这一处。
+
+```python
+class TokenLimiter:
+    """Tracks how many tokens each client sends to a model."""
+
+    def __init__(self):
+        self.requests = {}  # client ID -> list of (timestamp, tokens)
+        self.budgets = {}   # Level 3: client ID -> maximum tokens
+
+    def add_client(self, client_id):
+        """Register a client. Return False if it already exists."""
+        if client_id in self.requests:
+            return False  # duplicate client
+        self.requests[client_id] = []  # no requests yet
+        return True
+
+    def record(self, timestamp, client_id, tokens):
+        """Record one request. Return False for an unknown client, tokens below 1, or over budget."""
+        if client_id not in self.requests or tokens < 1:
+            return False  # invalid input
+        budget = self.budgets.get(client_id, float("inf"))  # Level 3: no budget means no limit
+        if self.used(timestamp, client_id) + tokens <= budget:  # Level 3: the request fits the budget
+            self.requests[client_id].append((timestamp, tokens))  # keep the timestamp for later levels
+            return True
+        return False  # Level 3: over budget, so the request is not stored
+
+    def usage(self, client_id):
+        """Return a client's total tokens, or None for an unknown client."""
+        if client_id not in self.requests:
+            return None  # unknown client
+        return sum(tokens for _, tokens in self.requests[client_id])  # add up every request
+
+    # Level 2
+    def top_clients(self, n):
+        """Return the n heaviest clients as "id(tokens)", highest first, ties broken by ID."""
+        ranked = sorted(self.requests, key=lambda client_id: (-self.usage(client_id), client_id))  # most tokens first, then ID
+        return [f"{client_id}({self.usage(client_id)})" for client_id in ranked[:n]]  # exact "id(tokens)" format
 
     # Level 3
     def set_budget(self, client_id, max_tokens):
         """Set a client's token budget. Return False for an unknown client."""
         if client_id not in self.requests:
-            return False
-        self.budgets[client_id] = max_tokens
+            return False  # unknown client
+        self.budgets[client_id] = max_tokens  # replaces any earlier budget
+        return True
+
+    # Level 3
+    def used(self, timestamp, client_id):
+        """Return the tokens that count against a client's budget (the single home of the counting rule)."""
+        return self.usage(client_id)  # every request counts at this level
+
+
+def check(name, actual, expected):
+    print(f"{'PASS' if actual == expected else 'FAIL'} {name}")
+
+
+if __name__ == "__main__":
+    limiter = TokenLimiter()
+    check("add a client", limiter.add_client("a"), True)
+    check("reject a duplicate client", limiter.add_client("a"), False)
+    check("reject an unknown client", limiter.record(1, "z", 50), False)
+    check("record two requests", [limiter.record(1, "a", 100), limiter.record(2, "a", 200)], [True, True])
+    check("total usage", limiter.usage("a"), 300)
+    limiter.add_client("b")
+    limiter.add_client("c")
+    limiter.record(3, "b", 500)
+    limiter.record(4, "c", 300)
+    check("top two clients", limiter.top_clients(2), ["b(500)", "a(300)"])
+    check("tie broken by ID", limiter.top_clients(3), ["b(500)", "a(300)", "c(300)"])
+    check("set a budget", limiter.set_budget("a", 400), True)  # Level 3
+    check("allow a request that fits", limiter.record(5, "a", 100), True)  # Level 3
+    check("reject a request over budget", limiter.record(6, "a", 1), False)  # Level 3
+    check("rejected request not counted", limiter.usage("a"), 400)  # Level 3
+```
+
+#### Level 4：滚动窗口预算
+
+**要实现**：
+- `TokenLimiter(window=None)`：构造器多一个可选参数 `window`（秒）。设了窗口后，只有 `timestamp > now - window` 的请求计入预算；`window=None` 保持 Level 3 的行为。
+
+**新加的 field**：
+
+| 类 | field | 存什么 | 为什么要加 |
+|---|---|---|---|
+| `TokenLimiter` | `window` | 预算窗口的秒数；`None` = 不设窗口 | `used` 要知道哪些请求已经滑出窗口 |
+
+**改动的已有方法**：
+- `__init__`：多一个参数 `window=None`。
+- `used`：有窗口时只加 `request_time > timestamp - window` 的请求。`record` 不用改，因为它只通过 `used` 计数。
+
+**新加的方法**：无。
+
+```python
+class TokenLimiter:
+    """Tracks how many tokens each client sends to a model."""
+
+    def __init__(self, window=None):  # Level 4: optional window argument
+        self.window = window  # Level 4: budget window in seconds, or None for no window
+        self.requests = {}    # client ID -> list of (timestamp, tokens)
+        self.budgets = {}     # client ID -> maximum tokens
+
+    def add_client(self, client_id):
+        """Register a client. Return False if it already exists."""
+        if client_id in self.requests:
+            return False  # duplicate client
+        self.requests[client_id] = []  # no requests yet
+        return True
+
+    def record(self, timestamp, client_id, tokens):
+        """Record one request. Return False for an unknown client, tokens below 1, or over budget."""
+        if client_id not in self.requests or tokens < 1:
+            return False  # invalid input
+        budget = self.budgets.get(client_id, float("inf"))  # no budget means no limit
+        if self.used(timestamp, client_id) + tokens <= budget:  # the request fits the budget
+            self.requests[client_id].append((timestamp, tokens))  # store it with its timestamp
+            return True
+        return False  # over budget, so the request is not stored
+
+    def usage(self, client_id):
+        """Return a client's total tokens, or None for an unknown client."""
+        if client_id not in self.requests:
+            return None  # unknown client
+        return sum(tokens for _, tokens in self.requests[client_id])  # add up every request
+
+    def top_clients(self, n):
+        """Return the n heaviest clients as "id(tokens)", highest first, ties broken by ID."""
+        ranked = sorted(self.requests, key=lambda client_id: (-self.usage(client_id), client_id))  # most tokens first, then ID
+        return [f"{client_id}({self.usage(client_id)})" for client_id in ranked[:n]]  # exact "id(tokens)" format
+
+    def set_budget(self, client_id, max_tokens):
+        """Set a client's token budget. Return False for an unknown client."""
+        if client_id not in self.requests:
+            return False  # unknown client
+        self.budgets[client_id] = max_tokens  # replaces any earlier budget
         return True
 
     def used(self, timestamp, client_id):
         """Return the tokens that count against a client's budget (the single home of the counting rule)."""
         if self.window is None:
-            return self.usage(client_id)
-        # Level 4: only requests inside the window count
-        return sum(tokens for ts, tokens in self.requests[client_id] if ts > timestamp - self.window)
+            return self.usage(client_id)  # no window: every request counts
+        window_start = timestamp - self.window  # Level 4: requests at or before this time have left the window
+        return sum(tokens for request_time, tokens in self.requests[client_id] if request_time > window_start)  # Level 4: only requests inside the window count
 
 
 def check(name, actual, expected):
@@ -2003,15 +2230,16 @@ if __name__ == "__main__":
     check("allow a request that fits", limiter.record(5, "a", 100), True)
     check("reject a request over budget", limiter.record(6, "a", 1), False)
     check("rejected request not counted", limiter.usage("a"), 400)
-    windowed = TokenLimiter(window=60)
-    windowed.add_client("a")
-    windowed.set_budget("a", 100)
-    check("allow within budget", windowed.record(0, "a", 80), True)
-    check("reject inside the window", windowed.record(30, "a", 30), False)
-    check("allow once old tokens leave", windowed.record(61, "a", 30), True)
-    check("earlier levels unchanged", limiter.top_clients(1), ["b(500)"])
+    windowed = TokenLimiter(window=60)  # Level 4
+    windowed.add_client("a")  # Level 4
+    windowed.set_budget("a", 100)  # Level 4
+    check("allow within budget", windowed.record(0, "a", 80), True)  # Level 4
+    check("reject inside the window", windowed.record(30, "a", 30), False)  # Level 4
+    check("allow once old tokens leave", windowed.record(61, "a", 30), True)  # Level 4
+    check("earlier levels unchanged", limiter.top_clients(1), ["b(500)"])  # Level 4
 ```
 
+#### 小结：四级怎么叠起来
 <svg viewBox="0 0 760 200" xmlns="http://www.w3.org/2000/svg">
 <rect width="760" height="200" fill="#fff"/>
 <text x="380" y="22" font-size="15" text-anchor="middle" font-family="sans-serif" font-weight="bold">Token limiter grows across 4 levels｜四级成长</text>
