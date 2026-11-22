@@ -1894,44 +1894,35 @@ Source: https://www.educative.io/courses/forward-deployed-engineer/multi-level-c
 
 ### 练习题：Token Limiter（English problem statement + I/O）
 
-> **Level 1.** Implement `TokenLimiter` with `add_client(client_id) -> bool` (False if the client already exists), `record(timestamp, client_id, tokens) -> bool` (False for an unknown client or tokens < 1), and `usage(client_id) -> int | None` (total tokens, None for an unknown client).
-> **Level 2.** Add `top_clients(n) -> list[str]`: the n heaviest clients formatted as `"id(tokens)"`, highest first, ties broken by client ID ascending.
-> **Level 3.** Add `set_budget(client_id, max_tokens) -> bool` (False for unknown client). A request that would push a client over its budget is rejected (`record` returns False) and is not stored.
-> **Level 4.** Budgets now apply to a rolling window (e.g., 60 seconds): only requests with `timestamp > now - window` count against the budget. `TokenLimiter(window=None)` keeps the old behavior.
+**系统是什么**：一个 `TokenLimiter` 类，记录每个客户（client）发给模型的 token 数量，后面几级在这个计数上加排行、预算（budget）和滚动窗口（rolling window）。
 
-```text
-Input / Output (levels 1-3, one limiter):
-add_client("a")            -> True
-add_client("a")            -> False
-record(1, "z", 50)         -> False        # unknown client
-record(1, "a", 100)        -> True
-record(2, "a", 200)        -> True
-usage("a")                 -> 300
-add_client("b"); add_client("c"); record(3, "b", 500); record(4, "c", 300)
-top_clients(2)             -> ["b(500)", "a(300)"]
-top_clients(3)             -> ["b(500)", "a(300)", "c(300)"]   # tie a/c broken by ID
-set_budget("a", 400)       -> True
-record(5, "a", 100)        -> True         # 300 + 100 = 400 fits
-record(6, "a", 1)          -> False        # would be 401
-usage("a")                 -> 400          # rejected request not counted
-
-Input / Output (level 4, TokenLimiter(window=60), budget 100):
-record(0, "a", 80)         -> True
-record(30, "a", 30)        -> False        # 80 still inside window, 110 > 100
-record(61, "a", 30)        -> True         # request at t=0 left the window (0 > 61-60 is false)
-```
-
-**解法思路 (Approach)**
-
-- **Level 1**：一个字典 `client_id -> 运行总和（running total）`。Level 1 只问总量，用不到时间戳和单次请求，所以不存请求列表——不为后面的级别预先存数据，等第一个需要它的级别再加。
-- **Level 2**：一个新方法；排序键 `(-usage, id)` 一次处理“降序 + 按 ID 破平 (tie-breaking)”。复用 `usage` 而不重新计数，客户总量只有一处定义（读 `totals`）。格式与破平规则会被逐字符检查。
-- **Level 3**：快速做法是把预算计算直接写进 `record`；更好的做法是加 `set_budget` 和一个小方法 `used(client_id)`，返回**计入预算的 token**——此级它就等于运行总和，但它给“计数规则”一个**唯一的家 (single home)**，`record` 在计入前问它。未设预算的客户预算为无穷大。预算只和总量比，不需要时间戳，所以仍然不存每次请求。
-- **Level 4**：规则本身被改写，而且这是**第一个需要每次请求时间**的级别：只有窗口内的请求计入预算，一个总数分不出哪些 token 已经滑出窗口。所以这一级才加 `requests`（客户 → `(timestamp, tokens)` 列表）：`record` 接受请求时同时更新总和和列表；`used` 改成接 `timestamp`，有窗口时只加窗口内的请求。题面只让预算按窗口算，`usage` / `top_clients` 继续读运行总和。因为 level 3 只有 `used` 知道怎么计数，改动集中在构造器、`record` 的写入和 `used`。全部 15 个测试通过。
-- 复杂度：`usage` 为 O(1)，`top_clients` 为 O(C log C)；有窗口时 `used` 为 O(k)（k = 该客户请求数）。若面试追问性能，可为每个客户维护窗口内运行和 (running sum) 与 deque 滑动窗口 (sliding window)，把 `used` 降为摊还 (amortized) O(1)——但先写朴素正确版本。
-
-下面每一级都给完整代码（包含前面几级），新加或改动的行在注释里标 `Level N`。
+**所有级别通用的约定**：
+- 只用 Python 标准库（standard library）。
+- `record` 每次调用都带 `timestamp`，调用按时间递增。
+- 每一级的题目和例子都在该级标题下面；例子只用这一级已经有的方法。
+- 例子的来源：标 "from the original I/O" 的行来自这份笔记原来合在一起的 I/O 例子（题目出处见本节开头的 Educative 链接）；标 "constructed" 的行是为覆盖这一级边界另加的。每个例子都在这一级的代码上跑过，结果一致。
+- 下面每一级都给完整代码（包含前面几级），新加或改动的行在注释里标 `Level N`。
 
 #### Level 1：注册客户、记录请求、查总用量
+
+**题目（Level 1）**：
+
+> Implement `TokenLimiter` with `add_client(client_id) -> bool` (False if the client already exists), `record(timestamp, client_id, tokens) -> bool` (False for an unknown client or tokens < 1), and `usage(client_id) -> int | None` (total tokens, None for an unknown client).
+
+**例子**：
+
+```text
+add_client("a")            -> True         # from the original I/O
+add_client("a")            -> False        # from the original I/O
+record(1, "z", 50)         -> False        # from the original I/O; unknown client
+record(1, "a", 100)        -> True         # from the original I/O
+record(2, "a", 200)        -> True         # from the original I/O
+usage("a")                 -> 300          # from the original I/O
+record(3, "a", 0)          -> False        # constructed; tokens < 1
+usage("z")                 -> None         # constructed; unknown client
+```
+
+**思路**：一个字典 `client_id -> 运行总和（running total）`。Level 1 只问总量，用不到时间戳和单次请求，所以不存请求列表——不为后面的级别预先存数据，等第一个需要它的级别再加。
 
 **要实现**：
 - `add_client(client_id) -> bool`：注册一个客户（client）；已存在返回 `False`。
@@ -1940,9 +1931,11 @@ record(61, "a", 30)        -> True         # request at t=0 left the window (0 >
 
 **需要的类和 field**：
 
-| 类 | field | 存什么 |
-|---|---|---|
-| `TokenLimiter` | `totals` | 客户 ID → 该客户 token 的运行总和（running total） |
+```python
+class TokenLimiter:
+    def __init__(self):
+        self.totals = {}  # client ID -> running total of tokens
+```
 
 **为什么只存一个总数**：Level 1 只问 `usage`（总量），用不到每次请求的时间和大小；`record` 把 tokens 加到总和上，`usage` 直接返回它。
 
@@ -1988,6 +1981,25 @@ if __name__ == "__main__":
 ```
 
 #### Level 2：按用量排前 N 名
+
+**题目（Level 2）**：
+
+> Add `top_clients(n) -> list[str]`: the n heaviest clients formatted as `"id(tokens)"`, highest first, ties broken by client ID ascending.
+
+**例子**：
+
+```text
+add_client("a"); record(1, "a", 100); record(2, "a", 200)                      # from the original I/O (setup)
+add_client("b"); add_client("c"); record(3, "b", 500); record(4, "c", 300)     # from the original I/O
+top_clients(2)             -> ["b(500)", "a(300)"]                              # from the original I/O
+top_clients(3)             -> ["b(500)", "a(300)", "c(300)"]                    # from the original I/O; tie a/c broken by ID
+top_clients(10)            -> ["b(500)", "a(300)", "c(300)"]                    # constructed; n larger than the client count
+top_clients(0)             -> []                                                # constructed
+```
+
+**这一级的边界**：输出格式 `"id(tokens)"` 和破平规则（tie-breaking）会被逐字符检查。
+
+**思路**：一个新方法；排序键 `(-usage, id)` 一次处理“降序 + 按 ID 破平 (tie-breaking)”。复用 `usage` 而不重新计数，客户总量只有一处定义（读 `totals`）。
 
 **要实现**：
 - `top_clients(n) -> list[str]`：用量最大的 `n` 个客户，格式 `"id(tokens)"`，从高到低；用量一样按客户 ID 升序。
@@ -2051,15 +2063,41 @@ if __name__ == "__main__":
 
 #### Level 3：每个客户的预算
 
+**题目（Level 3）**：
+
+> Add `set_budget(client_id, max_tokens) -> bool` (False for unknown client). A request that would push a client over its budget is rejected (`record` returns False) and is not stored.
+
+**例子**：
+
+```text
+add_client("a"); record(1, "a", 100); record(2, "a", 200)    # from the original I/O (setup, usage 300)
+set_budget("a", 400)       -> True         # from the original I/O
+record(5, "a", 100)        -> True         # from the original I/O; 300 + 100 = 400 fits
+record(6, "a", 1)          -> False        # from the original I/O; would be 401
+usage("a")                 -> 400          # from the original I/O; rejected request not counted
+set_budget("z", 10)        -> False        # constructed; unknown client
+set_budget("a", 500)       -> True         # constructed; replaces the earlier budget
+record(7, "a", 100)        -> True         # constructed; 400 + 100 = 500 fits the new budget
+```
+
+**这一级的边界**：没设预算的客户不受限（预算当作无穷大）；刚好等于预算算放得下（`<=`）。
+
+**思路**：快速做法是把预算计算直接写进 `record`；更好的做法是加 `set_budget` 和一个小方法 `used(client_id)`，返回**计入预算的 token**——此级它就等于运行总和，但它给“计数规则”一个**唯一的家 (single home)**，`record` 在计入前问它。未设预算的客户预算为无穷大。预算只和总量比，不需要时间戳，所以仍然不存每次请求。
+
 **要实现**：
 - `set_budget(client_id, max_tokens) -> bool`：给客户设预算（budget）；客户不存在返回 `False`。
 - 会让客户超预算的请求被拒绝：`record` 返回 `False`，而且这次请求不存。
 
 **新加的 field**：
 
-| 类 | field | 存什么 | 为什么要加 |
-|---|---|---|---|
-| `TokenLimiter` | `budgets` | 客户 ID → 最多能用的 token 数 | `record` 存之前要和预算比；没设预算的客户当作无穷大 |
+```python
+class TokenLimiter:
+    def __init__(self):
+        self.budgets = {}  # Level 3: client ID -> maximum tokens
+```
+
+为什么要加：
+- `budgets`：`record` 存之前要和预算比；没设预算的客户当作无穷大
 
 **改动的已有方法**：
 - `record`：计入之前先算 `used(client_id) + tokens`，不超过预算才加进 `totals` 并返回 `True`，否则返回 `False`。
@@ -2142,15 +2180,40 @@ if __name__ == "__main__":
 
 #### Level 4：滚动窗口预算
 
+**题目（Level 4）**：
+
+> Budgets now apply to a rolling window (e.g., 60 seconds): only requests with `timestamp > now - window` count against the budget. `TokenLimiter(window=None)` keeps the old behavior.
+
+**例子**：
+
+```text
+TokenLimiter(window=60); add_client("a"); set_budget("a", 100)    # from the original I/O (setup)
+record(0, "a", 80)         -> True         # from the original I/O
+record(30, "a", 30)        -> False        # from the original I/O; 80 still inside window, 110 > 100
+record(61, "a", 30)        -> True         # from the original I/O; request at t=0 left the window (0 > 61-60 is false)
+usage("a")                 -> 110          # constructed; usage still counts every accepted request
+record(90, "a", 71)        -> False        # constructed; only the request at 61 is inside, 30 + 71 = 101 > 100
+```
+
+**这一级的边界**：窗口是左开 `timestamp > now - window`，刚好在 `now - window` 的请求已经滑出窗口；只有预算按窗口算，`usage` / `top_clients` 仍是全部请求的总量。
+
+**思路**：规则本身被改写，而且这是**第一个需要每次请求时间**的级别：只有窗口内的请求计入预算，一个总数分不出哪些 token 已经滑出窗口。所以这一级才加 `requests`（客户 → `(timestamp, tokens)` 列表）：`record` 接受请求时同时更新总和和列表；`used` 改成接 `timestamp`，有窗口时只加窗口内的请求。题面只让预算按窗口算，`usage` / `top_clients` 继续读运行总和。因为 level 3 只有 `used` 知道怎么计数，改动集中在构造器、`record` 的写入和 `used`。全部 15 个测试通过。
+
 **要实现**：
 - `TokenLimiter(window=None)`：构造器多一个可选参数 `window`（秒）。设了窗口后，只有 `timestamp > now - window` 的请求计入预算；`window=None` 保持 Level 3 的行为。
 
 **新加的 field**：
 
-| 类 | field | 存什么 | 为什么要加 |
-|---|---|---|---|
-| `TokenLimiter` | `window` | 预算窗口的秒数；`None` = 不设窗口 | `used` 要知道哪些请求已经滑出窗口 |
-| `TokenLimiter` | `requests` | 客户 ID → 该客户每次被接受的请求 `(timestamp, tokens)` 列表 | 窗口规则要知道每个请求的时间：一个总数分不出哪些 token 已经滑出窗口（slid out of the window） |
+```python
+class TokenLimiter:
+    def __init__(self, window=None):
+        self.window = window  # Level 4: budget window in seconds, or None for no window
+        self.requests = {}    # Level 4: client ID -> list of (timestamp, tokens) for the window
+```
+
+为什么要加：
+- `window`：`used` 要知道哪些请求已经滑出窗口
+- `requests`：窗口规则要知道每个请求的时间：一个总数分不出哪些 token 已经滑出窗口（slid out of the window）
 
 **为什么到这一级才存每次请求**：Level 1–3 只用总量，运行总和就够；滚动窗口（rolling window）是第一个按时间筛请求的规则，所以请求列表从这一级开始存。
 
@@ -2247,6 +2310,10 @@ if __name__ == "__main__":
     check("allow once old tokens leave", windowed.record(61, "a", 30), True)  # Level 4
     check("earlier levels unchanged", limiter.top_clients(1), ["b(500)"])  # Level 4
 ```
+
+#### 复杂度
+
+- `usage` 为 O(1)，`top_clients` 为 O(C log C)；有窗口时 `used` 为 O(k)（k = 该客户请求数）。若面试追问性能，可为每个客户维护窗口内运行和 (running sum) 与 deque 滑动窗口 (sliding window)，把 `used` 降为摊还 (amortized) O(1)——但先写朴素正确版本。
 
 #### 小结：四级怎么叠起来
 <svg viewBox="0 0 760 200" xmlns="http://www.w3.org/2000/svg">
