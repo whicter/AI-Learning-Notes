@@ -1894,7 +1894,7 @@ Source: https://www.educative.io/courses/forward-deployed-engineer/multi-level-c
 
 ### 练习题：Token Limiter（English problem statement + I/O）
 
-**系统是什么**：一个 `TokenLimiter` 类，记录每个客户（client）发给模型的 token 数量，后面几级在这个计数上加排行、预算（budget）和滚动窗口（rolling window）。
+**系统是什么**：一个 `TokenLimiter` 类，记录每个客户（client）发给模型的 token 数量。
 
 **所有级别通用的约定**：
 - 只用 Python 标准库（standard library）。
@@ -1922,7 +1922,7 @@ record(3, "a", 0)          -> False        # constructed; tokens < 1
 usage("z")                 -> None         # constructed; unknown client
 ```
 
-**思路**：一个字典 `client_id -> 运行总和（running total）`。Level 1 只问总量，用不到时间戳和单次请求，所以不存请求列表——不为后面的级别预先存数据，等第一个需要它的级别再加。
+**思路**：一个字典 `client_id -> 运行总和（running total）`：`record` 把 tokens 加上去，`usage` 直接返回。
 
 **要实现**：
 - `add_client(client_id) -> bool`：注册一个客户（client）；已存在返回 `False`。
@@ -1931,11 +1931,9 @@ usage("z")                 -> None         # constructed; unknown client
 
 **需要的类和 field**：
 
-```python
-class TokenLimiter:
-    def __init__(self):
-        self.totals = {}  # client ID -> running total of tokens
-```
+| 类 | field | 存什么 |
+|---|---|---|
+| `TokenLimiter` | `totals` | 客户 ID → 该客户 token 的运行总和（running total） |
 
 **为什么只存一个总数**：Level 1 只问 `usage`（总量），用不到每次请求的时间和大小；`record` 把 tokens 加到总和上，`usage` 直接返回它。
 
@@ -2082,7 +2080,7 @@ record(7, "a", 100)        -> True         # constructed; 400 + 100 = 500 fits t
 
 **这一级的边界**：没设预算的客户不受限（预算当作无穷大）；刚好等于预算算放得下（`<=`）。
 
-**思路**：快速做法是把预算计算直接写进 `record`；更好的做法是加 `set_budget` 和一个小方法 `used(client_id)`，返回**计入预算的 token**——此级它就等于运行总和，但它给“计数规则”一个**唯一的家 (single home)**，`record` 在计入前问它。未设预算的客户预算为无穷大。预算只和总量比，不需要时间戳，所以仍然不存每次请求。
+**思路**：加 `set_budget` 和一个预算字典；`record` 计入之前先看 `totals[client_id] + tokens` 有没有超过预算，超了就拒绝、不计入。未设预算的客户预算为无穷大。预算只和总量比，运行总和就够，不用新存别的。
 
 **要实现**：
 - `set_budget(client_id, max_tokens) -> bool`：给客户设预算（budget）；客户不存在返回 `False`。
@@ -2090,19 +2088,14 @@ record(7, "a", 100)        -> True         # constructed; 400 + 100 = 500 fits t
 
 **新加的 field**：
 
-```python
-class TokenLimiter:
-    def __init__(self):
-        self.budgets = {}  # Level 3: client ID -> maximum tokens
-```
-
-为什么要加：
-- `budgets`：`record` 存之前要和预算比；没设预算的客户当作无穷大
+| 类 | field | 存什么 | 为什么要加 |
+|---|---|---|---|
+| `TokenLimiter` | `budgets` | 客户 ID → 最多能用的 token 数 | `record` 存之前要和预算比；没设预算的客户当作无穷大 |
 
 **改动的已有方法**：
-- `record`：计入之前先算 `used(client_id) + tokens`，不超过预算才加进 `totals` 并返回 `True`，否则返回 `False`。
+- `record`：计入之前先算 `totals[client_id] + tokens`，不超过预算才加进 `totals` 并返回 `True`，否则返回 `False`。
 
-**新加的方法**：`set_budget`，以及 helper `used(client_id)`：返回计入预算的 token 数。这一级它就等于 `totals` 里的总和，但计数规则只放在这一处。预算只和总量比，不需要时间戳，所以这一级仍然不存每次请求。
+**新加的方法**：`set_budget`。
 
 ```python
 class TokenLimiter:
@@ -2124,7 +2117,7 @@ class TokenLimiter:
         if client_id not in self.totals or tokens < 1:
             return False  # invalid input
         budget = self.budgets.get(client_id, float("inf"))  # Level 3: no budget means no limit
-        if self.used(client_id) + tokens <= budget:  # Level 3: the request fits the budget
+        if self.totals[client_id] + tokens <= budget:  # Level 3: the request fits the budget
             self.totals[client_id] += tokens  # only the running total is needed
             return True
         return False  # Level 3: over budget, so the request is not counted
@@ -2148,11 +2141,6 @@ class TokenLimiter:
             return False  # unknown client
         self.budgets[client_id] = max_tokens  # replaces any earlier budget
         return True
-
-    # Level 3
-    def used(self, client_id):
-        """Return the tokens that count against a client's budget (the single home of the counting rule)."""
-        return self.totals[client_id]  # every accepted token counts, so the running total is enough
 
 
 def check(name, actual, expected):
@@ -2197,34 +2185,27 @@ record(90, "a", 71)        -> False        # constructed; only the request at 61
 
 **这一级的边界**：窗口是左开 `timestamp > now - window`，刚好在 `now - window` 的请求已经滑出窗口；只有预算按窗口算，`usage` / `top_clients` 仍是全部请求的总量。
 
-**思路**：规则本身被改写，而且这是**第一个需要每次请求时间**的级别：只有窗口内的请求计入预算，一个总数分不出哪些 token 已经滑出窗口。所以这一级才加 `requests`（客户 → `(timestamp, tokens)` 列表）：`record` 接受请求时同时更新总和和列表；`used` 改成接 `timestamp`，有窗口时只加窗口内的请求。题面只让预算按窗口算，`usage` / `top_clients` 继续读运行总和。因为 level 3 只有 `used` 知道怎么计数，改动集中在构造器、`record` 的写入和 `used`。全部 15 个测试通过。
+**思路**：规则本身被改写，而且这是**第一个需要每次请求时间**的级别：只有窗口内的请求计入预算，一个总数分不出哪些 token 已经滑出窗口。所以这一级才加 `requests`（客户 → `(timestamp, tokens)` 列表）：`record` 接受请求时同时更新总和和列表。“哪些 token 计入预算”现在有两种算法（有窗口 / 没窗口），把它抽成一个新方法 `used(timestamp, client_id)`，计数规则只放这一处，`record` 改成问它。题面只让预算按窗口算，`usage` / `top_clients` 继续读运行总和。全部 15 个测试通过。
 
 **要实现**：
 - `TokenLimiter(window=None)`：构造器多一个可选参数 `window`（秒）。设了窗口后，只有 `timestamp > now - window` 的请求计入预算；`window=None` 保持 Level 3 的行为。
 
 **新加的 field**：
 
-```python
-class TokenLimiter:
-    def __init__(self, window=None):
-        self.window = window  # Level 4: budget window in seconds, or None for no window
-        self.requests = {}    # Level 4: client ID -> list of (timestamp, tokens) for the window
-```
-
-为什么要加：
-- `window`：`used` 要知道哪些请求已经滑出窗口
-- `requests`：窗口规则要知道每个请求的时间：一个总数分不出哪些 token 已经滑出窗口（slid out of the window）
+| 类 | field | 存什么 | 为什么要加 |
+|---|---|---|---|
+| `TokenLimiter` | `window` | 预算窗口的秒数；`None` = 不设窗口 | `used` 要知道哪些请求已经滑出窗口 |
+| | `requests` | 客户 ID → 该客户每次被接受的请求 `(timestamp, tokens)` 列表 | 窗口规则要知道每个请求的时间：一个总数分不出哪些 token 已经滑出窗口（slid out of the window） |
 
 **为什么到这一级才存每次请求**：Level 1–3 只用总量，运行总和就够；滚动窗口（rolling window）是第一个按时间筛请求的规则，所以请求列表从这一级开始存。
 
 **改动的已有方法**：
 - `__init__`：多一个参数 `window=None`，并建空的 `requests`。
 - `add_client`：同时给新客户一个空的请求列表。
-- `record`：调 `used(timestamp, client_id)`；接受请求时除了加 `totals`，还把 `(timestamp, tokens)` 追加到 `requests`。
-- `used`：多一个 `timestamp` 参数；有窗口时只加 `request_time > timestamp - window` 的请求，没窗口时仍返回 `totals`。
+- `record`：预算判断从直接读 `totals` 改成调 `used(timestamp, client_id)`；接受请求时除了加 `totals`，还把 `(timestamp, tokens)` 追加到 `requests`。
 - `usage`、`top_clients` 不变：题面只让预算按窗口算，总量仍是全部请求。
 
-**新加的方法**：无。
+**新加的方法**：helper `used(timestamp, client_id)`：返回计入预算的 token 数。有窗口时只加 `request_time > timestamp - window` 的请求，没窗口时返回 `totals`。
 
 ```python
 class TokenLimiter:
@@ -2249,7 +2230,7 @@ class TokenLimiter:
         if client_id not in self.totals or tokens < 1:
             return False  # invalid input
         budget = self.budgets.get(client_id, float("inf"))  # no budget means no limit
-        if self.used(timestamp, client_id) + tokens <= budget:  # Level 4: used now needs the current time
+        if self.used(timestamp, client_id) + tokens <= budget:  # Level 4: the budget count now comes from used()
             self.totals[client_id] += tokens  # usage and ranking still read the running total
             self.requests[client_id].append((timestamp, tokens))  # Level 4: the window needs each request's time
             return True
@@ -2273,7 +2254,8 @@ class TokenLimiter:
         self.budgets[client_id] = max_tokens  # replaces any earlier budget
         return True
 
-    def used(self, timestamp, client_id):  # Level 4: takes the current time
+    # Level 4
+    def used(self, timestamp, client_id):
         """Return the tokens that count against a client's budget (the single home of the counting rule)."""
         if self.window is None:
             return self.totals[client_id]  # no window: every accepted token counts
@@ -2325,9 +2307,9 @@ if __name__ == "__main__":
 <rect x="195" y="45" width="175" height="95" rx="8" fill="#e6f4ea" stroke="#34a853"/>
 <text x="282" y="68" font-weight="bold">L2 ranking｜排行</text><text x="282" y="88">top_clients(n)</text><text x="282" y="106">key = (-usage, id)</text><text x="282" y="124">"id(tokens)" exact</text>
 <rect x="380" y="45" width="175" height="95" rx="8" fill="#fef7e0" stroke="#f9ab00"/>
-<text x="467" y="68" font-weight="bold">L3 budget｜预算</text><text x="467" y="88">set_budget + used()</text><text x="467" y="106">rule has ONE home</text><text x="467" y="124">规则只放一处</text>
+<text x="467" y="68" font-weight="bold">L3 budget｜预算</text><text x="467" y="88">set_budget(id, max)</text><text x="467" y="106">total + tokens &lt;= budget</text><text x="467" y="124">超预算就拒绝</text>
 <rect x="565" y="45" width="185" height="95" rx="8" fill="#fce8e6" stroke="#d93025"/>
-<text x="657" y="68" font-weight="bold">L4 rolling window｜窗口</text><text x="657" y="88">window + request list</text><text x="657" y="106">filter in used()</text><text x="657" y="124">ts &gt; now - window</text>
+<text x="657" y="68" font-weight="bold">L4 rolling window｜窗口</text><text x="657" y="88">window + request list</text><text x="657" y="106">used() = rule's one home</text><text x="657" y="124">ts &gt; now - window</text>
 <path d="M185 92 L195 92 M370 92 L380 92 M555 92 L565 92" stroke="#555" stroke-width="2"/>
 <text x="380" y="172">Small core → new rules → time｜小核心 → 新规则 → 时间维度</text>
 </g>
@@ -2351,11 +2333,11 @@ if __name__ == "__main__":
 
 **Q: (Live version) Why not store every request from level 1? / 为什么 Level 1 不存每次请求？**
 > "Level 1 only asks for a total, so a running total is the simplest correct state. When the rolling window shows up at level 4, I add a per-request list in record, and only the budget check reads it. Storing data no level needs yet is extra code to keep correct."
-> 中文：每级只存这一级需要的；窗口出现时才加请求列表，只改 `record` 和 `used`。
+> 中文：每级只存这一级需要的；窗口出现时才加请求列表，改 `record`、加 `used`。
 
-**Q: Why add a `used` method that just returns usage? / 为什么加一个只返回 usage 的方法？**
-> "It gives the counting rule a single home. Right now budget usage equals total usage, but if a later level changes how tokens count — like a rolling window — I change one method instead of hunting through record and everything else."
-> 中文：给计数规则唯一的家，后续规则变化只改一处。
+**Q: Why does `used` only appear at level 4? / 为什么 `used` 到 Level 4 才出现？**
+> "At level 3 the budget count is just the running total, so record compares the total directly. Level 4 is the first time the count has two versions — with and without a window — so that is when I pull it into one method, used, and record asks it. The rule still lives in one place, and I didn't add an abstraction before a level needed it."
+> 中文：Level 3 直接比总数；Level 4 计数第一次有两种算法，才抽出 `used`，规则仍只放一处。
 
 **Q: How would you make `used` faster? / `used` 如何优化？**
 > "Per client I'd keep a deque of (timestamp, tokens) and a running sum. On each call I pop from the left while the oldest timestamp is outside the window and subtract it, so each request is added and removed once — amortized O(1). I'd only do that after the plain version passes, since correctness unlocks the next level."
